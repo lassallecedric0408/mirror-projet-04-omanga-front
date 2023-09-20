@@ -117,7 +117,7 @@ const Header: React.FC = () => {
               textDecoration: 'none',
             }}
           >
-            <img src={logo} alt="Logo" width="150" />
+            <img src={logo} alt="Logo" width="130" />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
