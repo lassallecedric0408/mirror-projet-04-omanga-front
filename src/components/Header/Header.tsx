@@ -1,5 +1,6 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
+import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -14,8 +15,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import logo from '../../assets/logo.png';
 
-const pages = ['Accueil', 'Produits', 'Nous contacter'];
-const settings = ['Mon compte', 'Déconnexion'];
+const pages = [{ name: 'Acceuil', link: '/' }, { name: 'Produits', link: '/products' }, { name: 'Nous contacter', link: '/contactUs' }];
+const settings = [{ name: 'Mon compte', link: '/account' }, { name: 'Déconnexion', link: '/' }];
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -95,9 +96,15 @@ const Header: React.FC = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link href={page.link} underline="none">
+                  <Button
+                    key={page.name}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    {page.name}
+                  </Button>
+                </Link>
               ))}
             </Menu>
           </Box>
@@ -121,13 +128,15 @@ const Header: React.FC = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
+              <Link href={page.link} underline="none">
+                <Button
+                  key={page.name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page.name}
+                </Button>
+              </Link>
             ))}
           </Box>
 
@@ -153,11 +162,13 @@ const Header: React.FC = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              {
+                settings.map(setting => (
+                  <MenuItem onClick={handleCloseNavMenu} >
+                    <Link href={setting.link} underline="none">{setting.name}</Link>
+                  </MenuItem>
+                ))
+              }
             </Menu>
           </Box>
         </Toolbar>

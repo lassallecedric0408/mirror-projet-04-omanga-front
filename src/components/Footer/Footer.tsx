@@ -58,9 +58,9 @@ const Footer: React.FC = () => {
       <Grid container spacing={3}>
         <Grid item xs={6} sm={6} md={3} className={classes.column}>
           <Typography style={{ marginBottom: '0.8rem', }}>Nos services</Typography>
-          <Link href="#" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>Nos Produits</Link>
-          <Link href="#" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>Votre compte</Link>
-          <Link href="#" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>FAQ / Mentions légales</Link>
+          <Link href="/products" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>Nos Produits</Link>
+          <Link href="/account" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>Votre compte</Link>
+          <Link href="/aboutUS" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>FAQ / Mentions légales</Link>
         </Grid>
         <Grid item xs={12} sm={6} md={3} className={`${classes.column} ${classes.hideOnMobile}`}>
           <Typography style={{ marginBottom: '0.8rem', fontSize: '1rem' }}>Nos coordonnées</Typography>
