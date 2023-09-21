@@ -1,20 +1,15 @@
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
-import { HomeView } from "./views/HomeView";
-import { AboutUsView } from "./views/AboutUsView";
-
-
-import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
 } from "react-router-dom";
-import { AccountView } from "./views/AccountView";
-import { ProductView } from "./views/ProductView";
-import { ContactUSView } from "./views/ContactUSView";
 
+import { AboutUsView } from "./views/AboutUsView";
+import { AccountView } from "./views/AccountView";
+import { ContactUSView } from "./views/ContactUSView";
+import { Footer } from "./components/Footer";
+import { Header } from "./components/Header";
+import { HomeView } from "./views/HomeView";
+import { ProductView } from "./views/ProductView";
 
 const router = createBrowserRouter([
   {
@@ -22,20 +17,20 @@ const router = createBrowserRouter([
     element: <HomeView />
   },
   {
-    path: "/aboutUs",
-    element: <AboutUsView />,
-  },
-  {
-    path: "/account",
-    element: <AccountView />,
+    path: "/products",
+    element: <ProductView />,
   },
   {
     path: "/contactUS",
     element: <ContactUSView />,
   },
   {
-    path: "/products",
-    element: <ProductView />,
+    path: "/account",
+    element: <AccountView />,
+  },
+  {
+    path: "/aboutUs",
+    element: <AboutUsView />,
   },
 ]);
 

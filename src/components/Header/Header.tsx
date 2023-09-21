@@ -14,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import logo from '../../assets/logo.png';
+import { materialUITheme } from '../../utils/materialUITheme'
 
 const pages = [{ name: 'Acceuil', link: '/' }, { name: 'Produits', link: '/products' }, { name: 'Nous contacter', link: '/contactUs' }];
 const settings = [{ name: 'Mon compte', link: '/account' }, { name: 'Déconnexion', link: '/' }];
@@ -22,6 +23,10 @@ const useStyles = makeStyles(() => ({
   appBar: {
     height: '8vh',
   },
+  userAvatar: {
+    background: 'white',
+    color: 'red'
+  }
 }));
 
 const Header: React.FC = () => {
@@ -143,7 +148,12 @@ const Header: React.FC = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar>TO</Avatar>
+                <Avatar style={{
+                  backgroundColor: `${materialUITheme.palette.secondary.main}`,
+                  color: `${materialUITheme.palette.primary.main}`, display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>TO</Avatar>
               </IconButton>
             </Tooltip>
             <Menu

@@ -23,6 +23,8 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
+    "react-swipeable-views": "^0.14.0",
+    "react-swipeable-views-utils": "^0.14.0",
     "styled-components": "^6.0.7",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -53,7 +55,9 @@
     ]
   },
   "devDependencies": {
-    "husky": "^8.0.0",
-    "@types/leaflet": "^1.9.4"
+    "@types/leaflet": "^1.9.4",
+    "@types/react-swipeable-views": "^0.13.2",
+    "@types/react-swipeable-views-utils": "^0.13.4",
+    "husky": "^8.0.0"
   }
 }
