@@ -1,8 +1,6 @@
 import React from 'react';
 import { footerStyle } from './FooterStyle';
-
 import Grid from '@material-ui/core/Grid';
-import Link from '@mui/material/Link/Link';
 import Typography from '@mui/material/Typography';
 
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
@@ -12,6 +10,9 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import {
+  Link as RouterLink
+} from 'react-router-dom';
 
 const useStyles = footerStyle;
 
@@ -33,9 +34,9 @@ const Footer: React.FC = () => {
       <Grid container spacing={3}>
         <Grid item xs={6} sm={6} md={3} className={classes.column}>
           <Typography style={{ marginBottom: '0.8rem', fontSize: '1.1rem', fontFamily: 'Caveat' }}>Nos services</Typography>
-          <Link href="/products" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>Nos Produits</Link>
-          <Link href="/account" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>Votre compte</Link>
-          <Link href="/aboutUS" color="secondary" underline='none' style={{ marginBottom: '0.5rem', fontSize: '0.7rem' }}>FAQ / Mentions légales</Link>
+          <RouterLink to="/products" color="secondary" style={{ marginBottom: '0.5rem', fontSize: '0.7rem', textDecoration: 'none', color: 'white' }}>Nos Produits</RouterLink>
+          <RouterLink to="/account" color="secondary" style={{ marginBottom: '0.5rem', fontSize: '0.7rem', textDecoration: 'none', color: 'white' }}>Votre compte</RouterLink>
+          <RouterLink to="/aboutUS" color="secondary" style={{ marginBottom: '0.5rem', fontSize: '0.7rem', textDecoration: 'none', color: 'white' }}>FAQ / Mentions légales</RouterLink>
         </Grid>
         <Grid item xs={12} sm={6} md={3} className={`${classes.column} ${classes.hideOnMobile}`}>
           <Typography style={{ marginBottom: '0.8rem', fontSize: '1.1rem', fontFamily: 'Caveat' }}>Nos coordonnées</Typography>
@@ -69,10 +70,10 @@ const Footer: React.FC = () => {
         <Grid item xs={6} sm={6} md={3} className={classes.column}>
           <Typography variant="h6" style={{ marginBottom: '0.8rem', fontSize: '1.1rem', fontFamily: 'Caveat' }}>Nos Réseaux</Typography>
           <Grid item className={classes.row}>
-            <Link href="https://www.instagram.com/" color="secondary" style={{ marginRight: '0.8rem' }}><InstagramIcon /></Link>
-            <Link href="https://twitter.com/home" color="secondary" style={{ marginRight: '0.8rem' }}><TwitterIcon /></Link>
-            <Link href="https://www.facebook.com/?locale=fr_FR" color="secondary" style={{ marginRight: '0.8rem' }}><FacebookIcon /></Link>
-            <Link href="https://web.telegram.org/a/" color="secondary" style={{ marginRight: '0.8rem' }}><TelegramIcon /></Link>
+            <a href="https://www.instagram.com/" style={{ marginRight: '0.8rem', color: 'white' }}><InstagramIcon /></a>
+            <a href="https://twitter.com/home" style={{ marginRight: '0.8rem', color: 'white' }}><TwitterIcon /></a>
+            <a href="https://www.facebook.com/?locale=fr_FR" style={{ marginRight: '0.8rem', color: 'white' }}><FacebookIcon /></a>
+            <a href="https://web.telegram.org/a/" style={{ marginRight: '0.8rem', color: 'white' }}><TelegramIcon /></a>
           </Grid>
         </Grid>
       </Grid>

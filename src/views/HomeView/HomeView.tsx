@@ -14,7 +14,7 @@ import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import mapPoint from '../../assets/map-point-wave-svgrepo-com.svg'
 import L from 'leaflet';
-import { homeViewStyle } from './HomeViewStyle';
+import { homeViewStyle } from './homeViewStyle';
 import 'leaflet/dist/leaflet.css';
 import katana from '../../assets/katana-154939_1280.png'
 import buddha from '../../assets/buddha-148533_1280.png'

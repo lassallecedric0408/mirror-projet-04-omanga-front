@@ -1,19 +1,19 @@
-type SetA = {
-  type: 'SET_A';
-  essai: boolean;
+type SetProductsSelectCategory = {
+  type: 'SET_PRODUCTS_SELECT_CATEGORY';
+  categoryItems: string[];
 };
 
-type SetB = {
-  type: 'SET_B';
-  essai: number;
+type SetProductsSelectUniverse = {
+  type: 'SET_PRODUCTS_SELECT_UNIVERSE';
+  universeItems: string[];
 };
 
-type SetC = {
-  type: 'SET_C';
-  essai: string;
+type SetProductsSelectSort = {
+  type: 'SET_PRODUCTS_SELECT_SORT';
+  sortItems: string;
 };
 
 export type OmangaActions =
-  | SetA
-  | SetB
-  | SetC
+  | SetProductsSelectCategory
+  | SetProductsSelectUniverse
+  | SetProductsSelectSort

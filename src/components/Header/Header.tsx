@@ -15,6 +15,9 @@ import MenuItem from '@mui/material/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import logo from '../../assets/logo.png';
 import { materialUITheme } from '../../utils/materialUITheme'
+import {
+  Link as RouterLink
+} from 'react-router-dom';
 
 const pages = [{ name: 'Acceuil', link: '/' }, { name: 'Produits', link: '/products' }, { name: 'Nous contacter', link: '/contactUs' }];
 const settings = [{ name: 'Mon compte', link: '/account' }, { name: 'Déconnexion', link: '/' }];
@@ -101,15 +104,13 @@ const Header: React.FC = () => {
               }}
             >
               {pages.map((page) => (
-                <Link href={page.link} underline="none">
-                  <Button
-                    key={page.name}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page.name}
-                  </Button>
-                </Link>
+                <Button
+                  key={page.name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  <RouterLink to={page.link} style={{ color: `${materialUITheme.palette.primary.main}`, textDecoration: 'none', fontSize: '1.1rem', fontWeight: '500', fontFamily: 'Caveat', }}>{page.name}</RouterLink>
+                </Button>
               ))}
             </Menu>
           </Box>
@@ -133,15 +134,13 @@ const Header: React.FC = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Link href={page.link} underline="none">
-                <Button
-                  key={page.name}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page.name}
-                </Button>
-              </Link>
+              <Button
+                key={page.name}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                <RouterLink to={page.link} style={{ color: `${materialUITheme.palette.secondary.main}`, textDecoration: 'none', fontSize: '1.1rem', fontWeight: '500', fontFamily: 'Caveat', }}>{page.name}</RouterLink>
+              </Button>
             ))}
           </Box>
 
@@ -175,7 +174,7 @@ const Header: React.FC = () => {
               {
                 settings.map(setting => (
                   <MenuItem onClick={handleCloseNavMenu} >
-                    <Link href={setting.link} underline="none">{setting.name}</Link>
+                    <RouterLink to={setting.link} style={{ color: `${materialUITheme.palette.primary.main}`, textDecoration: 'none', fontSize: '1.2rem', fontWeight: '500', fontFamily: 'Caveat', }}>{setting.name}</RouterLink>
                   </MenuItem>
                 ))
               }

@@ -8,6 +8,7 @@ import { materialUITheme } from './utils/materialUITheme';
 import { ThemeProvider } from '@mui/material/styles';
 
 import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,7 +17,9 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={materialUITheme}>
       <OmangaProvider>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </OmangaProvider>
     </ThemeProvider>
   </React.StrictMode>

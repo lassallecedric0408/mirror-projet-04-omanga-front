@@ -31,6 +31,12 @@ const footerStyle = makeStyles((theme) => ({
     marginBottom: '0.8rem',
     fontSize: '1rem',
   },
+  link: {
+    color: `${materialUITheme.palette.secondary.main}`,
+    testDecoration: 'none',
+    marginBottom: '0.5rem',
+    fontSize: '0.7rem',
+  },
 }));
 
 export { footerStyle };
