@@ -12,6 +12,8 @@ export const products: Product[] = [
     category: 'Statuette',
     universe: 'Japon1',
     product_creation_date: 1694295379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Katana',
@@ -20,6 +22,8 @@ export const products: Product[] = [
     category: 'Arme',
     universe: 'Japon2',
     product_creation_date: 1694868179,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Omanga Tome 01',
@@ -28,6 +32,8 @@ export const products: Product[] = [
     category: 'Livre',
     universe: 'Japon3',
     product_creation_date: 1694695379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Carte Omanga',
@@ -36,6 +42,8 @@ export const products: Product[] = [
     category: 'Carte',
     universe: 'Japon4',
     product_creation_date: 1694795379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Statuette',
@@ -44,6 +52,8 @@ export const products: Product[] = [
     category: 'Statuette',
     universe: 'Japon1',
     product_creation_date: 1694595379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Katana',
@@ -52,6 +62,8 @@ export const products: Product[] = [
     category: 'Arme',
     universe: 'Japon2',
     product_creation_date: 1694595379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Omanga Tome 01',
@@ -60,6 +72,8 @@ export const products: Product[] = [
     category: 'Livre',
     universe: 'Japon3',
     product_creation_date: 1694495379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Carte Omanga',
@@ -68,6 +82,8 @@ export const products: Product[] = [
     category: 'Carte',
     universe: 'Japon4',
     product_creation_date: 1694395379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Statuette',
@@ -76,6 +92,8 @@ export const products: Product[] = [
     category: 'Statuette',
     universe: 'Japon1',
     product_creation_date: 1694395379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Katana',
@@ -84,6 +102,8 @@ export const products: Product[] = [
     category: 'Arme',
     universe: 'Japon2',
     product_creation_date: 1694195379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Omanga Tome 01',
@@ -92,6 +112,8 @@ export const products: Product[] = [
     category: 'Livre',
     universe: 'Japon3',
     product_creation_date: 1694295379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Carte Omanga',
@@ -100,6 +122,8 @@ export const products: Product[] = [
     category: 'Carte',
     universe: 'Japon4',
     product_creation_date: 1694295379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Statuette',
@@ -108,6 +132,8 @@ export const products: Product[] = [
     category: 'Statuette',
     universe: 'Japon1',
     product_creation_date: 1694295379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Katana',
@@ -116,6 +142,8 @@ export const products: Product[] = [
     category: 'Arme',
     universe: 'Japon2',
     product_creation_date: 1694295379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Omanga Tome 01',
@@ -124,6 +152,8 @@ export const products: Product[] = [
     category: 'Livre',
     universe: 'Japon3',
     product_creation_date: 1694295379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
   {
     name: 'Carte Omanga',
@@ -132,5 +162,7 @@ export const products: Product[] = [
     category: 'Carte',
     universe: 'Japon4',
     product_creation_date: 1694295379,
+    description:
+      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
   },
 ];

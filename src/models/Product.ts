@@ -17,4 +17,5 @@ export type Product = {
   category: string;
   universe: string;
   product_creation_date: number;
+  description: string;
 };
