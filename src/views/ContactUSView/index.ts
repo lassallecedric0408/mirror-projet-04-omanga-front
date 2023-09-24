@@ -1,1 +1,1 @@
-export * from './ContactUSView'
+export * from './ContactUSView';
