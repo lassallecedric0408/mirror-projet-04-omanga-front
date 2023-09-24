@@ -11,9 +11,6 @@ import buddha from '../../assets/buddha-148533_1280.png';
 import book from '../../assets/book-2024278_1280.png';
 import board from '../../assets/board-48117_1280.png';
 import { Product } from '../../models/Product';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-
-
 
 const useStyles = productsViewStyle;
 
@@ -212,9 +209,12 @@ interface ProductsViewProps {
 }
 
 const ProductsView: React.FC<ProductsViewProps> = () => {
-  const { OmangaState } = useOmangaContex();
+
   const classes = useStyles();
+
+  const { OmangaState } = useOmangaContex();
   const { productsSelectCategory, productsSelectUniverse, productSort } = OmangaState;
+
   const getFitleredProducts = () => {
     let filteredProducts = [...products];
     if (productsSelectCategory.length > 0) {

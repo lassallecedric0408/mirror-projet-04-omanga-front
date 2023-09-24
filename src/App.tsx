@@ -7,6 +7,8 @@ import { Header } from "./components/Header";
 import { HomeView } from "./views/HomeView";
 import { ProductsView } from "./views/ProductsView";
 import { ProductView } from "./views/ProductView";
+import { LoginView } from "./views/LoginView";
+import { SignupView } from "./views/SignupView";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/contactUs" element={<ContactUSView />} />
         <Route path="/account" element={<AccountView />} />
         <Route path="/aboutUs" element={<AboutUsView />} />
+        <Route path="/login" element={<LoginView />} />
+        <Route path="/signup" element={<SignupView />} />
       </Routes>
       <Footer />
     </>

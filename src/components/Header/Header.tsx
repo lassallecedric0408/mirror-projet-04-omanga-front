@@ -17,9 +17,10 @@ import { materialUITheme } from '../../utils/materialUITheme'
 import {
   Link as RouterLink
 } from 'react-router-dom';
+import { useOmangaContex } from '../../context/OmangaContext';
 
 const pages = [{ name: 'Acceuil', link: '/' }, { name: 'Produits', link: '/products' }, { name: 'Nous contacter', link: '/contactUs' }];
-const settings = [{ name: 'Mon compte', link: '/account' }, { name: 'Déconnexion', link: '/' }];
+const settings = [{ name: 'Mon compte', link: '/account' }, { name: 'Déconnexion', link: '/' }, { name: 'Connexion', link: '/signup' }];
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -34,6 +35,9 @@ const useStyles = makeStyles(() => ({
 const Header: React.FC = () => {
 
   const classes = useStyles();
+
+  const { OmangaState } = useOmangaContex();
+  const { isLogged } = OmangaState;
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -171,11 +175,20 @@ const Header: React.FC = () => {
               onClose={handleCloseUserMenu}
             >
               {
-                settings.map(setting => (
-                  <MenuItem onClick={handleCloseNavMenu} >
-                    <RouterLink to={setting.link} style={{ color: `${materialUITheme.palette.primary.main}`, textDecoration: 'none', fontSize: '1.2rem', fontWeight: '500', fontFamily: 'Caveat', }}>{setting.name}</RouterLink>
+                isLogged ? (
+                  <>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <RouterLink to={settings[0].link} style={{ color: `${materialUITheme.palette.primary.main}`, textDecoration: 'none', fontSize: '1.2rem', fontWeight: '500', fontFamily: 'Caveat' }}>{settings[0].name}</RouterLink>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <RouterLink to={settings[1].link} style={{ color: `${materialUITheme.palette.primary.main}`, textDecoration: 'none', fontSize: '1.2rem', fontWeight: '500', fontFamily: 'Caveat' }}>{settings[1].name}</RouterLink>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <RouterLink to={settings[2].link} style={{ color: `${materialUITheme.palette.primary.main}`, textDecoration: 'none', fontSize: '1.2rem', fontWeight: '500', fontFamily: 'Caveat' }}>{settings[2].name}</RouterLink>
                   </MenuItem>
-                ))
+                )
               }
             </Menu>
           </Box>

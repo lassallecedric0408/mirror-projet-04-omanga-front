@@ -1,17 +1,12 @@
 import React, { useRef, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { TextField, FormControl, Button, Snackbar } from "@mui/material";
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { TextField, Button, Snackbar } from "@mui/material";
+import { alert } from '../../utils/snackBarAlert'
 import { contactUSViewStyle } from './contactUSViewStyle';
 
 const useStyles = contactUSViewStyle
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref,
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+const Alert = alert;
 
 interface ContactUSViewsProps {
 }
@@ -31,6 +26,10 @@ const ContactUSView: React.FC<ContactUSViewsProps> = () => {
   const [emailError, setEmailError] = useState(false);
   const [commentError, setCommentError] = useState(false);
 
+  const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
+  const [openErrorMessage, setOpenErrorMessage] = useState(false);
+
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
@@ -40,20 +39,16 @@ const ContactUSView: React.FC<ContactUSViewsProps> = () => {
     setCommentError(false);
 
     if (firstName === '') {
-      handleClick('success')
       setFirstNameError(true)
     }
     if (lastName === '') {
       setLastNameError(true)
-      handleClick('error')
     }
     if (email === '') {
       setEmailError(true)
-      handleClick('error')
     }
     if (comment === '') {
       setCommentError(true)
-      handleClick('error')
     }
 
     if (firstName && lastName && email && comment) {
@@ -62,12 +57,9 @@ const ContactUSView: React.FC<ContactUSViewsProps> = () => {
       setLastName('');
       setEmail('');
       setComment('');
-      handleClick('success')
+      handleClick('success');
     }
   }
-
-  const [openSuccessMessage, setOpenSuccessMessage] = React.useState(false);
-  const [openErrorMessage, setOpenErrorMessage] = React.useState(false);
 
   const handleClick = (e: string) => {
     if (e === 'success') { setOpenSuccessMessage(true) }
@@ -114,7 +106,7 @@ const ContactUSView: React.FC<ContactUSViewsProps> = () => {
             sx={{ mb: 3 }}
           />
           <TextField
-            label="Mail"
+            label="EMail"
             onChange={e => setEmail(e.target.value)}
             required
             variant="outlined"

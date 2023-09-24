@@ -5,6 +5,7 @@ export type OmangaState = {
   productsSelectCategory: string[];
   productsSelectUniverse: string[];
   productSort: string;
+  isLogged: boolean;
 };
 
 const OmangaDefaultState = (): OmangaState => {
@@ -12,7 +13,8 @@ const OmangaDefaultState = (): OmangaState => {
     user: undefined,
     productsSelectCategory: [],
     productsSelectUniverse: [],
-    productSort: ''
+    productSort: '',
+    isLogged: false,
   }
   return defaultState;
 }

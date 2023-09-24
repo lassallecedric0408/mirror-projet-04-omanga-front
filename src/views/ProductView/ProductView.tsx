@@ -11,6 +11,7 @@ import katana from '../../assets/katana-154939_1280.png';
 
 import { useStyles } from './productViewStyle';
 import { styled } from '@mui/material/styles';
+import { useOmangaContex } from '../../context/OmangaContext';
 
 
 
@@ -42,6 +43,10 @@ interface ProductViewProps {
 const ProductView: React.FC<ProductViewProps> = () => {
   let { id } = useParams();
   const classes = useStyles();
+
+  const { OmangaState } = useOmangaContex();
+  const { isLogged } = OmangaState;
+
   const product: Product = products[Number(id)];
 
   const [open, setOpen] = useState(false);
@@ -100,13 +105,13 @@ const ProductView: React.FC<ProductViewProps> = () => {
           </Grid >
           <Grid item className={`${classes.productImageContainer} ${classes.flexCenter}`} xs={12} sm={12} md={4} >
             <img src={katana} alt={katana} width="300" height="300" />
-            <Button variant="contained" color='primary' style={{ marginTop: '2rem' }}>Réserver le produit</Button>
+            {isLogged ?? <Button variant="contained" color='primary' style={{ marginTop: '2rem' }}>Réserver le produit</Button>}
           </Grid>
         </Grid>
         <Grid container className={classes.reviewContainer}>
           <Grid item style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
             <p className={classes.reviewTitle}>Avis</p>
-            <Button onClick={handleOpen}>Ajouter un avis</Button>
+            {isLogged ?? <Button onClick={handleOpen}>Ajouter un avis</Button>}
           </Grid>
           <Grid item>
             <Stack spacing={2}>
@@ -121,7 +126,8 @@ const ProductView: React.FC<ProductViewProps> = () => {
                         <Grid item>
                           <p>{review.review}</p>
                         </Grid>
-                      </Grid></Item>
+                      </Grid>
+                    </Item>
                   )
                 })
               }
@@ -153,9 +159,7 @@ const ProductView: React.FC<ProductViewProps> = () => {
                 value={comment}
                 error={commentError}
               />
-              <Grid className={`${classes.flexCenter}`}>
-                <Button variant="outlined" color="primary" type="submit" className={classes.formSubmitButton}>Envoyez votre Avis</Button>
-              </Grid>
+              <Button variant="outlined" color="primary" type="submit" className={classes.formSubmitButton}>Envoyez votre Avis</Button>
             </form>
           </Grid>
         </Box>
