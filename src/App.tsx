@@ -9,6 +9,11 @@ import { ProductsView } from "./views/ProductsView";
 import { ProductView } from "./views/ProductView";
 import { LoginView } from "./views/LoginView";
 import { SignupView } from "./views/SignupView";
+import { DashBoardView } from "./views/DashBoardView";
+import { UsersTableView } from "./views/UsersTableView";
+import CategoriesTableView from "./views/CategoriesTableView/CategoriesTableView";
+import { BookingsTableView } from "./views/BookingsTableView";
+import { ProductsTableView } from "./views/ProductsTableView";
 
 function App() {
   return (
@@ -23,6 +28,12 @@ function App() {
         <Route path="/aboutUs" element={<AboutUsView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/signup" element={<SignupView />} />
+        <Route path="/dashboard" element={<DashBoardView />} />
+        <Route path="/productstable" element={<ProductsTableView />} />
+        <Route path="/bookingstable" element={<BookingsTableView />} />
+        <Route path="/categoriestable" element={<CategoriesTableView />} />
+        <Route path="/universestable" element={<UsersTableView />} />
+        <Route path="/userstable" element={<UsersTableView />} />
       </Routes>
       <Footer />
     </>

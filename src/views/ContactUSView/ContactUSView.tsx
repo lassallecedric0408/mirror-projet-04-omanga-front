@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-import Grid from '@material-ui/core/Grid';
-import { TextField, Button, Snackbar } from "@mui/material";
+import { TextField, Button, Snackbar, Grid } from "@mui/material";
 import { alert } from '../../utils/snackBarAlert'
 import { contactUSViewStyle } from './contactUSViewStyle';
 
