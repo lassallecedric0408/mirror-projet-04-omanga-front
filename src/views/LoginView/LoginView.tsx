@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { loginViewStyle } from './loginViewStyle';
 import { TextField, Button, Snackbar } from "@mui/material";
-import { alert } from '../../utils/snackBarAlert'
+import { snackBarAlert } from '../../utils/snackBarAlert'
 import { Link } from "react-router-dom"
 
 const useStyles = loginViewStyle;
@@ -14,7 +14,7 @@ const LoginView: React.FC<LoginViewsProps> = () => {
 
   const classes = useStyles();
 
-  const Alert = alert;
+  const Alert = snackBarAlert;
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")

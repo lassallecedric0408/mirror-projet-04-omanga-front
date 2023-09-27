@@ -10,6 +10,7 @@ interface DashBoardViewProps { }
 const DashBoardView: React.FC<DashBoardViewProps> = () => {
 
   const classes = useStyles();
+
   const dashboardItem = [
     { name: 'Réservations', number: 10, link: '/bookingstable' },
     { name: 'Produits', number: 10, link: '/productstable' },

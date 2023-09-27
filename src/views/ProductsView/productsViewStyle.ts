@@ -19,7 +19,8 @@ const productsViewStyle = makeStyles((theme) => ({
     alignItems: 'center',
   },
   productTitle: {
-    height: '9vh',
+    marginTop: '1rem',
+    marginBottom: '1rem',
     fontSize: '1.6rem',
     flex: '0',
     color: `${materialUITheme.palette.primary.main}`,
@@ -31,7 +32,7 @@ const productsViewStyle = makeStyles((theme) => ({
     },
   },
   productSelect: {
-    height: '7vh',
+    marginTop: '1rem',
     marginBottom: '3rem',
     flex: '0',
   },

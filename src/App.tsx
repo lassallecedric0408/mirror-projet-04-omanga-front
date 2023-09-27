@@ -11,9 +11,10 @@ import { LoginView } from "./views/LoginView";
 import { SignupView } from "./views/SignupView";
 import { DashBoardView } from "./views/DashBoardView";
 import { UsersTableView } from "./views/UsersTableView";
-import CategoriesTableView from "./views/CategoriesTableView/CategoriesTableView";
+import { CategoriesTableView } from "./views/CategoriesTableView";
 import { BookingsTableView } from "./views/BookingsTableView";
 import { ProductsTableView } from "./views/ProductsTableView";
+
 
 function App() {
   return (

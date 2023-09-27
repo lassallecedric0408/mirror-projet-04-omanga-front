@@ -1,37 +1,30 @@
 import React, { useEffect } from 'react';
-import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { SelectItem } from '../../models/SelectItem';
-import { useOmangaContex } from '../../context/OmangaContext';
-
 
 
 interface SingleSelectProps {
   selectItems: SelectItem[];
   selectName: string;
-  type: string;
+  onChange: (value: string) => void;
 }
 
-const SingleSelect: React.FC<SingleSelectProps> = ({ selectItems, selectName, type }) => {
+const SingleSelect: React.FC<SingleSelectProps> = ({ selectItems, selectName, onChange }) => {
 
-  const { dispatch } = useOmangaContex();
+
   const [sort, setSort] = React.useState('');
 
   useEffect(() => {
-    if (type === 'SET_PRODUCTS_SELECT_SORT') {
-      dispatch({
-        type: type,
-        sortItems: sort
-      });
-    }
-  }, [dispatch, sort, type]);
+    onChange(sort);
+  }, [sort]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSort(event.target.value as string);
-  };
+    onChange(sort);
+  }
 
   return (
     <FormControl fullWidth>

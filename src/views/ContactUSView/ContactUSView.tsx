@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { TextField, Button, Snackbar, Grid } from "@mui/material";
-import { alert } from '../../utils/snackBarAlert'
+import { snackBarAlert } from '../../utils/snackBarAlert'
 import { contactUSViewStyle } from './contactUSViewStyle';
 
 const useStyles = contactUSViewStyle
 
-const Alert = alert;
+const Alert = snackBarAlert;
 
 interface ContactUSViewsProps {
 }

@@ -212,28 +212,29 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
 
   const classes = useStyles();
 
-  const { OmangaState } = useOmangaContex();
-  const { productsSelectCategory, productsSelectUniverse, productSort } = OmangaState;
+  const [productsSelectCategories, setProductsSelectCategories] = React.useState<string[]>([]);
+  const [productsSelectUniverses, setProductsSelectUniverses] = React.useState<string[]>([]);
+  const [productsSort, setProductsSort] = React.useState<string>('');
 
   const getFitleredProducts = () => {
     let filteredProducts = [...products];
-    if (productsSelectCategory.length > 0) {
-      filteredProducts = filteredProducts.filter(product => productsSelectCategory.includes(product.category));
+    if (productsSelectCategories.length > 0) {
+      filteredProducts = filteredProducts.filter(product => productsSelectCategories.includes(product.category));
     }
-    if (productsSelectUniverse.length > 0) {
-      filteredProducts = filteredProducts.filter(product => productsSelectUniverse.includes(product.universe));
+    if (productsSelectUniverses.length > 0) {
+      filteredProducts = filteredProducts.filter(product => productsSelectUniverses.includes(product.universe));
     }
-    if (productSort === 'date') {
+    if (productsSort === 'date') {
       filteredProducts = filteredProducts.sort((a, b) => {
         return b.product_creation_date - a.product_creation_date;
       });
     }
-    if (productSort === 'risingPrice') {
+    if (productsSort === 'risingPrice') {
       filteredProducts = filteredProducts.sort((a, b) => {
         return a.price - b.price;
       });
     }
-    if (productSort === 'decreasingPrice') {
+    if (productsSort === 'decreasingPrice') {
       filteredProducts = filteredProducts.sort((a, b) => {
         return b.price - a.price;
       });
@@ -243,6 +244,16 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
 
   const AllProducts = getFitleredProducts();
 
+  const handleCategoriesChange = (value: string[]) => {
+    setProductsSelectCategories(value);
+  }
+  const handleUniversChange = (value: string[]) => {
+    setProductsSelectUniverses(value);
+  }
+  const handleSortChange = (value: string) => {
+    setProductsSort(value);
+  }
+
   return (
     <Grid container className={`${classes.productsView}`}>
       <Grid item className={`${classes.productTitle} ${classes.flexVertCenter}`}>
@@ -251,13 +262,13 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
       </Grid>
       <Grid container spacing={2} className={`${classes.productSelect}`}>
         <Grid item xs={4}>
-          <MultipleSelect selectItems={categories} selectName={'Catégories'} type='SET_PRODUCTS_SELECT_CATEGORY' />
+          <MultipleSelect selectItems={categories} selectName={'Catégories'} onChange={handleCategoriesChange} />
         </Grid>
         <Grid item xs={4}>
-          <MultipleSelect selectItems={universe} selectName={'Univers'} type='SET_PRODUCTS_SELECT_UNIVERSE' />
+          <MultipleSelect selectItems={universe} selectName={'Univers'} onChange={handleUniversChange} />
         </Grid>
         <Grid item xs={4}>
-          <SingleSelect selectItems={productsItemsSelect} selectName={'Trier par'} type='SET_PRODUCTS_SELECT_SORT' />
+          <SingleSelect selectItems={productsItemsSelect} selectName={'Trier par'} onChange={handleSortChange} />
         </Grid>
       </Grid>
       <Grid container spacing={3} className={classes.productItems}>

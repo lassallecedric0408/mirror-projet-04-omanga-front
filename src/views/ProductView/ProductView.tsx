@@ -13,8 +13,6 @@ import { useStyles } from './productViewStyle';
 import { styled } from '@mui/material/styles';
 import { useOmangaContex } from '../../context/OmangaContext';
 
-
-
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',

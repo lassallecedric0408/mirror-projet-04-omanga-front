@@ -5,7 +5,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useOmangaContex } from '../../context/OmangaContext';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -18,20 +17,7 @@ const MenuProps = {
   },
 };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
-function getStyles(name: string, personName: string[], theme: Theme) {
+const getStyles = (name: string, personName: string[], theme: Theme): React.CSSProperties | undefined => {
   return {
     fontWeight:
       personName.indexOf(name) === -1
@@ -43,27 +29,15 @@ function getStyles(name: string, personName: string[], theme: Theme) {
 interface MultipleSelectProps {
   selectItems: string[];
   selectName: string;
-  type: string;
+  onChange: (value: string[]) => void;
 }
 
-const MultipleSelect: React.FC<MultipleSelectProps> = ({ selectItems, selectName, type }) => {
-  const { dispatch } = useOmangaContex();
+const MultipleSelect: React.FC<MultipleSelectProps> = ({ selectItems, selectName, onChange }) => {
+
   const theme = useTheme();
   const [selectItemName, setSelectItemName] = React.useState<string[]>([]);
 
-  useEffect(() => {
-    if (type === 'SET_PRODUCTS_SELECT_CATEGORY') {
-      dispatch({
-        type: type,
-        categoryItems: selectItemName
-      });
-    } else if (type === 'SET_PRODUCTS_SELECT_UNIVERSE') {
-      dispatch({
-        type: type,
-        universeItems: selectItemName
-      });
-    }
-  }, [dispatch, selectItemName, type]);
+  useEffect(() => { onChange(selectItemName) }, [onChange, selectItemName]);
 
   const handleChange = (event: SelectChangeEvent<typeof selectItemName>) => {
     const {
@@ -77,10 +51,10 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ selectItems, selectName
   return (
     <div>
       <FormControl fullWidth>
-        <InputLabel id="demo-multiple-name-label">{selectName}</InputLabel>
+        <InputLabel id="multiple-name-label">{selectName}</InputLabel>
         <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
+          labelId="multiple-name-label"
+          id="multiple-name"
           multiple
           value={selectItemName}
           onChange={handleChange}

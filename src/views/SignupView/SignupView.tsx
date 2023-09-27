@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Stack, Snackbar } from '@mui/material';
 import { Link } from "react-router-dom";
-import { alert } from '../../utils/snackBarAlert'
+import { snackBarAlert } from '../../utils/snackBarAlert'
 import { signupViewStyle } from './signupViewStyle';
-const Alert = alert;
+const Alert = snackBarAlert;
 
 const useStyles = signupViewStyle
 
