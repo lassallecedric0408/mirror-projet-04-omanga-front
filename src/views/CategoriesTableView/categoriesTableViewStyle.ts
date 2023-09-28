@@ -10,6 +10,7 @@ const categoriesTableViewStyle = makeStyles((theme) => ({
   flexVertCenter: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   title: {
     height: '7vh',

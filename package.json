@@ -21,6 +21,7 @@
     "@types/react-dom": "^18.2.7",
     "axios": "^1.5.1",
     "leaflet": "^1.9.4",
+    "material-ui-dropzone": "^3.5.0",
     "material-ui-icons": "^1.0.0-beta.36",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

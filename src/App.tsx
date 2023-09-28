@@ -14,6 +14,7 @@ import { UsersTableView } from "./views/UsersTableView";
 import { CategoriesTableView } from "./views/CategoriesTableView";
 import { BookingsTableView } from "./views/BookingsTableView";
 import { ProductsTableView } from "./views/ProductsTableView";
+import { UniversesTableView } from "./views/UniversesTableView";
 
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
         <Route path="/productstable" element={<ProductsTableView />} />
         <Route path="/bookingstable" element={<BookingsTableView />} />
         <Route path="/categoriestable" element={<CategoriesTableView />} />
-        <Route path="/universestable" element={<UsersTableView />} />
+        <Route path="/universestable" element={<UniversesTableView />} />
         <Route path="/userstable" element={<UsersTableView />} />
       </Routes>
       <Footer />

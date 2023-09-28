@@ -56,10 +56,12 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({ rowId, item, onClose })
     handleClick('success');
     setTimeout(onClose, 2000)
   }
+  const capitalizeFirstLetter = (str: string): string => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <>
-
       <Grid container className={classes.deleteRawTable}>
         <Grid item>
           <h2 className={classes.deleteRawTableTitle}>Voulez-vous supprimer {item}</h2>
@@ -72,7 +74,7 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({ rowId, item, onClose })
 
       <Snackbar open={openSuccessMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'success')}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          La réservation a bien été supprimé!
+          {capitalizeFirstLetter(item)} a bien été supprimé!
         </Alert>
       </Snackbar>
       <Snackbar open={openErrorMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'error')}>
