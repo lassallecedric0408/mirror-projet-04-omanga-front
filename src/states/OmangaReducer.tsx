@@ -17,6 +17,14 @@ const OmangaReducer: Reducer<OmangaState, OmangaActions> = (prevState, action) =
       newState.productSort = action.sortItems;
       break;
     }
+    case 'SET_USER_IS_LOGGED': {
+      newState.isLogged = action.userIsLogged;
+      break;
+    }
+    case 'SET_USER_IS_ADMIN': {
+      newState.isAdmin = action.userIsAdmin;
+      break;
+    }
     default: {
       throw new Error(`invalid action:`);
     }

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Stack, Snackbar } from '@mui/material';
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { snackBarAlert } from '../../utils/snackBarAlert'
+import { useOmangaContex } from '../../context/OmangaContext';
 import { signupViewStyle } from './signupViewStyle';
+
 const Alert = snackBarAlert;
 
 const useStyles = signupViewStyle
@@ -13,6 +15,7 @@ interface SignupViewsProps {
 const SignupView: React.FC<SignupViewsProps> = () => {
 
   const classes = useStyles();
+  const { dispatch } = useOmangaContex();
 
   const checkUserIsAdult = () => {
     const inputDate = new Date(dateOfBirth);
@@ -55,7 +58,9 @@ const SignupView: React.FC<SignupViewsProps> = () => {
 
     event.preventDefault();
     console.log(firstName, lastName, dateOfBirth, email, password, city, zipCode);
-    handleClick('success')
+    dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
+    handleClick('success');
+    setTimeout(() => redirect("/"), 2000);
   }
 
   const handleClick = (e: string) => {

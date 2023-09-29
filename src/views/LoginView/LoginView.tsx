@@ -3,7 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import { loginViewStyle } from './loginViewStyle';
 import { TextField, Button, Snackbar } from "@mui/material";
 import { snackBarAlert } from '../../utils/snackBarAlert'
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
+import { useOmangaContex } from '../../context/OmangaContext';
 
 const useStyles = loginViewStyle;
 
@@ -14,12 +15,15 @@ const LoginView: React.FC<LoginViewsProps> = () => {
 
   const classes = useStyles();
 
+  const { dispatch } = useOmangaContex();
+
   const Alert = snackBarAlert;
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
+  const [redirectUser, setRedirectUser] = useState(false)
 
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
@@ -39,7 +43,9 @@ const LoginView: React.FC<LoginViewsProps> = () => {
 
     if (email && password) {
       console.log(email, password)
-      handleClick('success')
+      dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
+      handleClick('success');
+      setTimeout(() => setRedirectUser(true), 2500)
     }
   }
 
@@ -107,6 +113,9 @@ const LoginView: React.FC<LoginViewsProps> = () => {
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>
+      {redirectUser && (
+        <Navigate to="/" />
+      )}
     </>
   );
 };

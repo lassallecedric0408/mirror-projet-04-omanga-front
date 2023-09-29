@@ -6,6 +6,7 @@ export type OmangaState = {
   productsSelectUniverse: string[];
   productSort: string;
   isLogged: boolean;
+  isAdmin: boolean;
 };
 
 const OmangaDefaultState = (): OmangaState => {
@@ -15,6 +16,7 @@ const OmangaDefaultState = (): OmangaState => {
     productsSelectUniverse: [],
     productSort: '',
     isLogged: false,
+    isAdmin: true,
   }
   return defaultState;
 }

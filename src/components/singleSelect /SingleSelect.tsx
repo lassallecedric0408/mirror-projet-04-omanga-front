@@ -8,14 +8,14 @@ import { SelectItem } from '../../models/SelectItem';
 
 interface SingleSelectProps {
   selectItems: SelectItem[];
-  selectName: string;
+  selectName: string | boolean;
   onChange: (value: string) => void;
 }
 
 const SingleSelect: React.FC<SingleSelectProps> = ({ selectItems, selectName, onChange }) => {
 
 
-  const [sort, setSort] = React.useState('');
+  const [sort, setSort] = React.useState<string>('');
 
   useEffect(() => {
     onChange(sort);

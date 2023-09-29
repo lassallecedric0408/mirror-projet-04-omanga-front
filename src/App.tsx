@@ -15,9 +15,14 @@ import { CategoriesTableView } from "./views/CategoriesTableView";
 import { BookingsTableView } from "./views/BookingsTableView";
 import { ProductsTableView } from "./views/ProductsTableView";
 import { UniversesTableView } from "./views/UniversesTableView";
+import { useOmangaContex } from "./context/OmangaContext";
+import { ErrorView } from "./views/ErrorView";
+import ProtectedRoute from "./utils/protectedRoute";
 
 
 function App() {
+  const { OmangaState } = useOmangaContex();
+  const { isLogged, isAdmin } = OmangaState;
   return (
     <>
       <Header />
@@ -30,12 +35,22 @@ function App() {
         <Route path="/aboutUs" element={<AboutUsView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/signup" element={<SignupView />} />
-        <Route path="/dashboard" element={<DashBoardView />} />
-        <Route path="/productstable" element={<ProductsTableView />} />
-        <Route path="/bookingstable" element={<BookingsTableView />} />
-        <Route path="/categoriestable" element={<CategoriesTableView />} />
-        <Route path="/universestable" element={<UniversesTableView />} />
-        <Route path="/userstable" element={<UsersTableView />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute admin={isAdmin}>
+            <DashBoardView />
+          </ProtectedRoute>
+        } />
+        {isAdmin && (
+          <>
+            <Route path="/productstable" element={<ProductsTableView />} />
+            <Route path="/bookingstable" element={<BookingsTableView />} />
+            <Route path="/categoriestable" element={<CategoriesTableView />} />
+            <Route path="/universestable" element={<UniversesTableView />} />
+            <Route path="/userstable" element={<UsersTableView />} />
+          </>
+        )}
+        <Route path="/error" element={<ErrorView />} />
+        <Route path="*" element={<ErrorView />} />
       </Routes>
       <Footer />
     </>
