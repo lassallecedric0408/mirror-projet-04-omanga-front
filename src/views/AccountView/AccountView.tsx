@@ -1,6 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { Box, Tabs, Tab, Stack } from '@mui/material';
+import { AccountInformtions } from './AccountInformation';
+import { BookingsDetails } from './BookingsDetails';
+import { Preference } from './Preference';
 
 const useStyles = makeStyles((theme) => ({
   accountView: {
@@ -9,24 +12,50 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
-  flexCenter: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+  tabContainer: {
+    height: '7vh',
   },
 }));
 
 interface AccountViewsProps {
 }
 
+type TabComponentKey = 'one' | 'two' | 'three';
+
 const AccountView: React.FC<AccountViewsProps> = () => {
 
   const classes = useStyles();
 
+  const [value, setValue] = React.useState('one');
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  const tabComponents: Record<TabComponentKey, JSX.Element> = {
+    one: <AccountInformtions />,
+    two: <BookingsDetails />,
+    three: <Preference />,
+  };
+
   return (
-    <Grid container className={`${classes.accountView} ${classes.flexCenter}`}>
-      <h1>AccountView</h1>
-    </Grid>
+    <Stack className={classes.accountView}>
+      <Box className={classes.tabContainer}>
+        <Tabs
+          value={value}
+          onChange={handleTabChange}
+          textColor="primary"
+          indicatorColor="primary"
+          aria-label="secondary tabs example"
+          centered
+        >
+          <Tab value="one" label="Informations du compte" sx={{ width: '33%' }} />
+          <Tab value="two" label="Mes réservations" sx={{ width: '33%' }} />
+          <Tab value="three" label="Mes préférences" sx={{ width: '34%' }} />
+        </Tabs>
+      </Box>
+      {tabComponents[value as TabComponentKey]}
+    </Stack>
 
   );
 };

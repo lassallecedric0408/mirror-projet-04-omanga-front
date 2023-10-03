@@ -15,6 +15,7 @@ const viewStyles = makeStyles((theme) => ({
   },
   errorTitle: {
     fontSize: '2rem',
+    marginBottom: '2rem',
     color: `${materialUITheme.palette.primary.main}`,
     textAlign: 'center',
     [theme.breakpoints.down('md')]: {
