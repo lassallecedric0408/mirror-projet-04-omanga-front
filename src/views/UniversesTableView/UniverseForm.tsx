@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   centerButton: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -46,8 +46,6 @@ const UniverseForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
   const [universeName, setUniverseName] = useState<string>(row ? row.univers : '');
-
-  const [universeNameError, setCategoryNameError] = useState(false);
 
   const [file, setFile] = useState<string | undefined>(undefined);
 
@@ -92,15 +90,9 @@ const UniverseForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (row) {
-      if (universeName === row.universe) {
-        setCategoryNameError(true);
-      }
       handleClick('successUpdate');
     }
     if (!row) {
-      if (universeName === '') {
-        setCategoryNameError(true);
-      }
       handleClick('successCreate');
     }
     setTimeout(onClose, 2000);
@@ -123,31 +115,31 @@ const UniverseForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
             onChange={(e) => setUniverseName(e.target.value)}
             value={universeName}
             defaultValue={row ? row.univers : universeName}
-            error={universeNameError}
             fullWidth
             required
             sx={{ mb: 3 }}
           />
-          <Stack spacing={2} direction='row' sx={{ mb: 3 }}>
+          <Stack spacing={2} direction='row' sx={{ mb: 3 }} style={{ width: '100%', display: 'flex', justifyContent: 'center', marginLeft: '0' }}>
             <input
               accept='image/*'
-              style={{ display: 'none' }}
+              style={{ display: 'none', marginLeft: '0' }}
               id='image-upload'
               type='file'
               onChange={handleFileChange}
             />
-            <label htmlFor='image-upload'>
+            <label htmlFor='image-upload' style={{ width: '100%', marginLeft: '0' }}>
               <Button
                 variant='contained'
                 color='primary'
                 component='span'
                 startIcon={<CloudUploadIcon />}
+                style={{ width: '100%', marginLeft: '0' }}
               >
                 Joindre la photo
               </Button>
             </label>
           </Stack>
-          <Stack spacing={10} direction='row'>
+          <Stack spacing={10} direction='row' className={classes.centerButton}>
             <Button
               variant='outlined'
               color='primary'

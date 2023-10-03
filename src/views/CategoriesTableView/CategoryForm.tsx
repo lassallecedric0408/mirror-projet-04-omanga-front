@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   centerButton: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -129,26 +129,27 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
             required
             sx={{ mb: 3 }}
           />
-          <Stack spacing={2} direction='row' sx={{ mb: 3 }}>
+          <Stack spacing={2} direction='row' sx={{ mb: 3 }} style={{ width: '100%', display: 'flex', justifyContent: 'center', marginLeft: '0' }}>
             <input
               accept='image/*'
-              style={{ display: 'none' }}
+              style={{ display: 'none', marginLeft: '0' }}
               id='image-upload'
               type='file'
               onChange={handleFileChange}
             />
-            <label htmlFor='image-upload'>
+            <label htmlFor='image-upload' style={{ width: '100%', marginLeft: '0' }}>
               <Button
                 variant='contained'
                 color='primary'
                 component='span'
                 startIcon={<CloudUploadIcon />}
+                style={{ width: '100%', marginLeft: '0' }}
               >
                 Joindre la photo
               </Button>
             </label>
           </Stack>
-          <Stack spacing={10} direction='row'>
+          <Stack spacing={10} direction='row' className={classes.centerButton}>
             <Button
               variant='outlined'
               color='primary'

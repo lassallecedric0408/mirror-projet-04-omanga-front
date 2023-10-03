@@ -10,6 +10,7 @@ import { SelectItem } from '../../models/SelectItem';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
 import { UpdateBookingStatus } from './UpdateBookingStatus';
+import { removeAccents } from '../../utils/removeAccents';
 
 const useStyles = bookingsTableViewStyle;
 
@@ -21,7 +22,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   const classes = useStyles();
 
   const [idItem, setIdItem] = React.useState<number>(0);
-  const [idProduct, setIdProduct] = React.useState<number>();
+  const [idBooking, setIdBooking] = React.useState<number>();
   const [date, setDate] = React.useState<string>('');
   const [customer, setCustomer] = React.useState<string>('');
   const [status, setStatus] = React.useState<string>('');
@@ -48,7 +49,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 1,
       date: '2021-10-10',
-      name: 'John Doee',
+      name: 'John toee',
       prix: 30,
       produit: 'Omanga Tome 01',
       state: 'active'
@@ -56,7 +57,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 2,
       date: '2021-10-10',
-      name: 'John Doeee',
+      name: 'John toeee',
       prix: 40,
       produit: 'Omanga Tome 02',
       state: 'active'
@@ -64,7 +65,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 3,
       date: '2021-10-10',
-      name: 'John Doeeee',
+      name: 'John toeeee',
       prix: 50,
       produit: 'Omanga Tome 03',
       state: 'archived'
@@ -72,7 +73,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 4,
       date: '2021-10-10',
-      name: 'John Doeee',
+      name: 'John yoeee',
       prix: 60,
       produit: 'Omanga Tome 04',
       state: 'archived'
@@ -80,7 +81,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 5,
       date: '2021-10-10',
-      name: 'John Doeeee',
+      name: 'John yoeeee',
       prix: 70,
       produit: 'Omanga Tome 05',
     }, {
@@ -94,7 +95,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 7,
       date: '2021-10-10',
-      name: 'John Doeee',
+      name: 'John poeee',
       prix: 40,
       produit: 'Omanga Tome 02',
       state: 'active'
@@ -102,7 +103,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 8,
       date: '2021-10-10',
-      name: 'John Doeeee',
+      name: 'John roeeee',
       prix: 50,
       produit: 'Omanga Tome 03',
       state: 'archived'
@@ -110,7 +111,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     {
       id: 9,
       date: '2021-10-10',
-      name: 'John Doeee',
+      name: 'John boeee',
       prix: 60,
       produit: 'Omanga Tome 04',
       state: 'archived'
@@ -127,8 +128,8 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
     handleOpenDeleteModal();
   };
 
-  const handleIdProductChange = (value: string | number) => {
-    setIdProduct(value as number);
+  const handleIdBookingChange = (value: string | number) => {
+    setIdBooking(value as number);
   };
 
   const handleDateChange = (value: string) => {
@@ -144,21 +145,21 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   };
 
   const getFitleredBookings = () => {
-    let filteredProducts = [...tableData];
-    if (idProduct) {
-      filteredProducts = filteredProducts.filter((product) => product.id === Number(idProduct));
+    let filteredRows = [...tableData];
+    if (idBooking) {
+      filteredRows = filteredRows.filter((row) => row.id === Number(idBooking));
     }
     if (date) {
-      filteredProducts = filteredProducts.filter((product) => product.date === date);
+      filteredRows = filteredRows.filter((row) => row.date === date);
     }
     if (customer) {
-      filteredProducts = filteredProducts.filter((product) => product.name === customer);
+      filteredRows = filteredRows.filter((row) => removeAccents(row.name).includes(removeAccents(customer)));
     }
 
     if (status) {
-      filteredProducts = filteredProducts.filter((product) => product.state === status);
+      filteredRows = filteredRows.filter((row) => row.state === status);
     }
-    return filteredProducts;
+    return filteredRows;
   }
 
   const AllBookings = getFitleredBookings();
@@ -179,7 +180,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
         </Grid>
         <Grid container spacing={2} className={classes.selectContainer}>
           <Grid item xs={3}>
-            <TextFieldTable label={'ID commande'} value={idProduct} onChange={handleIdProductChange} />
+            <TextFieldTable label={'ID commande'} value={idBooking} onChange={handleIdBookingChange} />
           </Grid>
           <Grid item xs={3}>
             <DateFieldTable label={'Date'} value={date} onChange={handleDateChange} />

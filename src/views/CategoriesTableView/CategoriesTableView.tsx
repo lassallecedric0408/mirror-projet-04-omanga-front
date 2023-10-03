@@ -10,6 +10,7 @@ import { CategoryForm } from './CategoryForm';
 import AddIcon from '@mui/icons-material/Add';
 
 import { categoriesTableViewStyle } from './categoriesTableViewStyle';
+import { removeAccents } from '../../utils/removeAccents';
 
 const useStyles = categoriesTableViewStyle;
 
@@ -22,7 +23,7 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
 
   const [idItem, setIdItem] = useState<number>(0);
   const [rowItem, setRowItem] = useState<any>();
-  const [idProduct, setIdProduct] = useState<number>();
+  const [idCategory, setIdCategory] = useState<number>();
   const [date, setDate] = useState<string>('');
   const [category, setCategory] = useState<string>('');
 
@@ -70,8 +71,8 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
     handleOpenDeleteModal();
   };
 
-  const handleIdProductChange = (value: string | number) => {
-    setIdProduct(value as number);
+  const handleIdCategoryChange = (value: string | number) => {
+    setIdCategory(value as number);
   };
 
   const handleDateChange = (value: string | number) => {
@@ -83,18 +84,18 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
   };
 
   const getFitleredRows = () => {
-    let filteredProducts = [...tableData];
-    if (idProduct) {
-      filteredProducts = filteredProducts.filter((product) => product.id === Number(idProduct));
+    let filteredRows = [...tableData];
+    if (idCategory) {
+      filteredRows = filteredRows.filter((row) => row.id === Number(idCategory));
     }
     if (date) {
-      filteredProducts = filteredProducts.filter((product) => product.date === date);
+      filteredRows = filteredRows.filter((row) => row.date === date);
     }
     if (category) {
-      filteredProducts = filteredProducts.filter((product) => product.category === category);
+      filteredRows = filteredRows.filter((row) => removeAccents(row.category).includes(removeAccents(category)));
     }
 
-    return filteredProducts;
+    return filteredRows;
   }
 
   const AllData = getFitleredRows();
@@ -116,7 +117,7 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
         </Grid>
         <Grid container spacing={2} className={classes.selectContainer}>
           <Grid item xs={4}>
-            <TextFieldTable label={'ID commande'} value={idProduct} onChange={handleIdProductChange} />
+            <TextFieldTable label={'ID commande'} value={idCategory} onChange={handleIdCategoryChange} />
           </Grid>
           <Grid item xs={4}>
             <DateFieldTable label={'Date'} value={date} onChange={handleDateChange} />

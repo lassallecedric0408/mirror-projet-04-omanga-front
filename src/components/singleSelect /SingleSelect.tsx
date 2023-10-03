@@ -8,8 +8,8 @@ import { SelectItem } from '../../models/SelectItem';
 
 interface SingleSelectProps {
   selectItems: SelectItem[];
-  selectName: string | boolean;
-  onChange: (value: string) => void;
+  selectName: string | 'users' | 'admin' | 'user';
+  onChange: (value: string | 'users' | 'admin' | 'user') => void;
 }
 
 const SingleSelect: React.FC<SingleSelectProps> = ({ selectItems, selectName, onChange }) => {

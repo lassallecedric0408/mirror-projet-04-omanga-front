@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { productsTableViewStyle } from './productsTableViewStyle';
 import { ProductForm } from './ProductForm';
+import { removeAccents } from '../../utils/removeAccents';
 
 const useStyles = productsTableViewStyle;
 
@@ -43,14 +44,14 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
   const tableData = [
     {
       id: 1,
-      nameProduct: 'produit 1',
+      nameProduct: 'statue',
       price: 20,
       category: '1',
       universe: '1',
     },
     {
       id: 2,
-      nameProduct: 'produit 2',
+      nameProduct: 'épée',
       price: 10,
       category: '2',
       universe: '2',
@@ -85,15 +86,15 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
   };
 
   const getFitleredRows = () => {
-    let filteredProducts = [...tableData];
+    let filteredRows = [...tableData];
     if (idProduct) {
-      filteredProducts = filteredProducts.filter((product) => product.id === Number(idProduct));
+      filteredRows = filteredRows.filter((row) => row.id === Number(idProduct));
     }
     if (nameProduct) {
-      filteredProducts = filteredProducts.filter((product) => product.nameProduct === nameProduct);
+      filteredRows = filteredRows.filter((row) => removeAccents(row.nameProduct).includes(removeAccents(nameProduct)));
     }
 
-    return filteredProducts;
+    return filteredRows;
   }
 
   const AllData = getFitleredRows();

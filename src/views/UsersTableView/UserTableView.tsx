@@ -2,20 +2,15 @@ import React from 'react';
 import { usersTableViewStyle } from './userTableViewStyle';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { TextFieldTable } from '../../components/TextFieldTable';
-import { DateFieldTable } from '../../components/DateFieldTable';
 import { SingleSelect } from '../../components/singleSelect ';
 import { SelectItem } from '../../models/SelectItem';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
+import { removeAccents } from '../../utils/removeAccents';
 
 const useStyles = usersTableViewStyle;
 
-interface IsAdminSelectItem {
-  value: boolean;
-  slug: string;
-}
 interface UsersTableViewProps {
 }
 
@@ -24,10 +19,9 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
   const classes = useStyles();
 
   const [idItem, setIdItem] = React.useState<number>(0);
-  const [idProduct, setIdProduct] = React.useState<number>();
   const [userName, setUserName] = React.useState<string>('');
   const [city, setCity] = React.useState<string>('');
-  const [isAdminUser, setIsAdminUser] = React.useState<boolean>(false);
+  const [isAdminUser, setIsAdminUser] = React.useState<string | 'users' | 'admin' | 'user'>('users');
 
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
@@ -35,12 +29,17 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
 
   const selectStatus: SelectItem[] = [
     {
-      value: 'true',
-      slug: 'Administrateur'
+      value: 'users',
+      slug: 'Administrateurs et utilisateurs'
+    },
+
+    {
+      value: 'admin',
+      slug: 'Administrateurs'
     },
     {
-      value: 'false',
-      slug: 'Utilisateur'
+      value: 'user',
+      slug: 'Utilisateurs'
     },
   ];
 
@@ -78,32 +77,30 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
     setCity(value as string);
   };
 
-  const handleIsAdminChange = (value: string) => {
-    if (value === 'true') {
-      setIsAdminUser(true);
-    }
-    if (value === 'false') {
-      setIsAdminUser(false);
-    }
+  const handleIsAdminChange = (value: string | 'users' | 'admin' | 'user') => {
+    setIsAdminUser(value);
   };
 
-  const getFitleredBookings = () => {
-    let filteredUsers = [...tableData];
+  const getFitleredRows = () => {
+    let filteredRows = [...tableData];
 
     if (userName) {
-      filteredUsers = filteredUsers.filter((user) => user.lastName === userName);
+      filteredRows = filteredRows.filter((row) => removeAccents(row.lastName).includes(removeAccents(userName)));
     }
     if (city) {
-      filteredUsers = filteredUsers.filter((user) => user.city === city);
+      filteredRows = filteredRows.filter((row) => removeAccents(row.city).includes(removeAccents(city)));
     }
-    if (isAdminUser !== undefined) {
-      filteredUsers = filteredUsers.filter((user) => user.isAdmin === isAdminUser);
+    if (isAdminUser === 'admin') {
+      filteredRows = filteredRows.filter((row) => row.isAdmin);
+    }
+    if (isAdminUser === 'user') {
+      filteredRows = filteredRows.filter((row) => !row.isAdmin);
     }
 
-    return filteredUsers;
+    return filteredRows;
   }
 
-  const AllBookings = getFitleredBookings();
+  const AllBookings = getFitleredRows();
 
   return (
     <>
@@ -123,10 +120,10 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
             <TextFieldTable label={'Nom'} value={userName} onChange={handleUserNameChange} />
           </Grid>
           <Grid item xs={4}>
-            <TextFieldTable label={'Nom'} value={city} onChange={handleCityChange} />
+            <TextFieldTable label={'Ville'} value={city} onChange={handleCityChange} />
           </Grid>
           <Grid item xs={4}>
-            <SingleSelect selectItems={selectStatus} selectName={'Administrateur'} onChange={handleIsAdminChange} />
+            <SingleSelect selectItems={selectStatus} selectName={'Admin et utilisateurs'} onChange={handleIsAdminChange} />
           </Grid>
         </Grid>
         <Grid item className={classes.tableContainer}>
@@ -140,7 +137,7 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
                   <TableCell>Prénom</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Ville</TableCell>
-                  <TableCell>Admin</TableCell>
+                  <TableCell>Droit</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>

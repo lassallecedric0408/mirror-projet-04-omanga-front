@@ -5,8 +5,6 @@ import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { TextFieldTable } from '../../components/TextFieldTable';
 import { DateFieldTable } from '../../components/DateFieldTable';
-import { SingleSelect } from '../../components/singleSelect ';
-import { SelectItem } from '../../models/SelectItem';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
 import { useNavigate } from 'react-router-dom';
@@ -104,7 +102,7 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
       filteredBookings = filteredBookings.filter((booking) => booking.date === date);
     }
     if (article) {
-      filteredBookings = filteredBookings.filter((booking) => booking.productName.includes(article));
+      filteredBookings = filteredBookings.filter((booking) => booking.productName.toLocaleLowerCase().includes(article.toLocaleLowerCase()));
     }
     return filteredBookings;
   }

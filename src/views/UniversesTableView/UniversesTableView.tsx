@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Grid,
+} from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { TextFieldTable } from '../../components/TextFieldTable';
@@ -13,11 +22,9 @@ import { universesTableViewStyle } from './universesTableViewStyle';
 
 const useStyles = universesTableViewStyle;
 
-interface UniversesTableViewProps {
-}
+interface UniversesTableViewProps { }
 
 const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
-
   const classes = useStyles();
 
   const [idItem, setIdItem] = useState<number>(0);
@@ -42,21 +49,20 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
     {
       id: 1,
       date: '2021-10-10',
-      univers: 'univers 1',
+      univers: 'Héroic Fantasy',
       categoryNumber: 2,
       productNumber: 3,
     },
     {
       id: 2,
       date: '2021-10-10',
-      univers: 'univers 1',
+      univers: 'Super Héros',
       categoryNumber: 2,
       productNumber: 3,
-    }
+    },
   ];
 
   const handleCreate = () => {
-
     handleOpenCreateModal();
   };
 
@@ -82,46 +88,79 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
     setUniverse(value as string);
   };
 
+  const removeAccents = (research: string): string =>
+    research
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
   const getFitleredRows = () => {
-    let filteredProducts = [...tableData];
+    let filteredRows = [...tableData];
     if (idProduct) {
-      filteredProducts = filteredProducts.filter((product) => product.id === Number(idProduct));
+      filteredRows = filteredRows.filter(
+        (row) => row.id === Number(idProduct)
+      );
     }
     if (date) {
-      filteredProducts = filteredProducts.filter((product) => product.date === date);
+      filteredRows = filteredRows.filter(
+        (row) => row.date === date
+      );
     }
     if (universe) {
-      filteredProducts = filteredProducts.filter((product) => product.univers === universe);
+      filteredRows = filteredRows.filter((row) =>
+        removeAccents(row.univers).includes(removeAccents(universe))
+      );
     }
 
-    return filteredProducts;
-  }
+    return filteredRows;
+  };
 
   const AllData = getFitleredRows();
 
   return (
     <>
-      <Grid container style={{
-        height: '77vh',
-        width: '85%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
+      <Grid
+        container
+        style={{
+          height: '77vh',
+          width: '85%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Grid item className={`${classes.title} ${classes.flexVertCenter}`}>
           <p> Univers </p>
-          <Button variant="outlined" size="small" onClick={() => handleCreate()}><AddIcon /> Ajouter un univers</Button>
+          <Button
+            variant='outlined'
+            size='small'
+            onClick={() => handleCreate()}
+          >
+            <AddIcon /> Ajouter un univers
+          </Button>
         </Grid>
         <Grid container spacing={2} className={classes.selectContainer}>
           <Grid item xs={4}>
-            <TextFieldTable label={'ID commande'} value={idProduct} onChange={handleIdProductChange} />
+            <TextFieldTable
+              label={'ID commande'}
+              value={idProduct}
+              onChange={handleIdProductChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <DateFieldTable label={'Date'} value={date} onChange={handleDateChange} />
+            <DateFieldTable
+              label={'Date'}
+              value={date}
+              onChange={handleDateChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextFieldTable label={'Univers'} value={universe} onChange={handleUniverseChange} />
+            <TextFieldTable
+              label={'Univers'}
+              value={universe}
+              onChange={handleUniverseChange}
+            />
           </Grid>
         </Grid>
         <Grid item className={classes.tableContainer}>
@@ -146,8 +185,21 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
                     <TableCell>{row.categoryNumber}</TableCell>
                     <TableCell>{row.productNumber}</TableCell>
                     <TableCell>
-                      <Button variant="outlined" size="small" onClick={() => handleUpdate(row)} style={{ marginRight: '1rem' }}><SystemUpdateAltIcon /></Button>
-                      <Button variant="outlined" size="small" onClick={() => handleDelete(row.id)}><DeleteOutlineIcon /></Button>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleUpdate(row)}
+                        style={{ marginRight: '1rem' }}
+                      >
+                        <SystemUpdateAltIcon />
+                      </Button>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleDelete(row.id)}
+                      >
+                        <DeleteOutlineIcon />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -156,17 +208,24 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
           </TableContainer>
         </Grid>
       </Grid>
-      <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal} >
+      <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal}>
         <UniverseForm item={"l'univers"} onClose={handleCloseCreateModal} />
       </ModalTable>
-      <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal} >
-        <UniverseForm row={rowItem} item={"l'univers"} onClose={handleCloseUpdateModal} />
+      <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal}>
+        <UniverseForm
+          row={rowItem}
+          item={"l'univers"}
+          onClose={handleCloseUpdateModal}
+        />
       </ModalTable>
-      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal} >
-        <DeleteRawTable rowId={idItem} item={"l'univers"} onClose={handleCloseDeleteModal} />
+      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
+        <DeleteRawTable
+          rowId={idItem}
+          item={"l'univers"}
+          onClose={handleCloseDeleteModal}
+        />
       </ModalTable>
     </>
-
   );
 };
 
