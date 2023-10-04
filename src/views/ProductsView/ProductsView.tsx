@@ -17,30 +17,20 @@ const useStyles = productsViewStyle;
 const productsItemsSelect: SelectItem[] = [
   {
     value: 'date',
-    slug: 'Plus Récent'
+    slug: 'Plus Récent',
   },
   {
     value: 'risingPrice',
-    slug: 'Prix : ordre croissant'
+    slug: 'Prix : ordre croissant',
   },
   {
     value: 'decreasingPrice',
-    slug: 'Prix : ordre décroissant'
+    slug: 'Prix : ordre décroissant',
   },
-]
-const categories = [
-  'Statuette',
-  'Arme',
-  'Livre',
-  'Carte',
 ];
+const categories = ['Statuette', 'Arme', 'Livre', 'Carte'];
 
-const universe = [
-  'Japon1',
-  'Japon2',
-  'Japon3',
-  'Japon4',
-];
+const universe = ['Japon1', 'Japon2', 'Japon3', 'Japon4'];
 
 const products: Product[] = [
   {
@@ -205,24 +195,29 @@ const products: Product[] = [
   },
 ];
 
-interface ProductsViewProps {
-}
+interface ProductsViewProps {}
 
 const ProductsView: React.FC<ProductsViewProps> = () => {
-
   const classes = useStyles();
 
-  const [productsSelectCategories, setProductsSelectCategories] = React.useState<string[]>([]);
-  const [productsSelectUniverses, setProductsSelectUniverses] = React.useState<string[]>([]);
+  const [productsSelectCategories, setProductsSelectCategories] =
+    React.useState<string[]>([]);
+  const [productsSelectUniverses, setProductsSelectUniverses] = React.useState<
+    string[]
+  >([]);
   const [productsSort, setProductsSort] = React.useState<string>('');
 
   const getFitleredProducts = () => {
     let filteredProducts = [...products];
     if (productsSelectCategories.length > 0) {
-      filteredProducts = filteredProducts.filter(product => productsSelectCategories.includes(product.category));
+      filteredProducts = filteredProducts.filter((product) =>
+        productsSelectCategories.includes(product.category)
+      );
     }
     if (productsSelectUniverses.length > 0) {
-      filteredProducts = filteredProducts.filter(product => productsSelectUniverses.includes(product.universe));
+      filteredProducts = filteredProducts.filter((product) =>
+        productsSelectUniverses.includes(product.universe)
+      );
     }
     if (productsSort === 'date') {
       filteredProducts = filteredProducts.sort((a, b) => {
@@ -240,47 +235,64 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
       });
     }
     return filteredProducts;
-  }
+  };
 
   const AllProducts = getFitleredProducts();
 
   const handleCategoriesChange = (value: string[]) => {
     setProductsSelectCategories(value);
-  }
+  };
   const handleUniversChange = (value: string[]) => {
     setProductsSelectUniverses(value);
-  }
+  };
   const handleSortChange = (value: string) => {
     setProductsSort(value);
-  }
+  };
 
   return (
     <Grid container className={`${classes.productsView}`}>
-      <Grid item className={`${classes.productTitle} ${classes.flexVertCenter}`}>
-        <p> Découvrer les articles dans notre boutique
-        </p>
+      <Grid
+        item
+        className={`${classes.productTitle} ${classes.flexVertCenter}`}
+      >
+        <p> Découvrer les articles dans notre boutique</p>
       </Grid>
       <Grid container spacing={2} className={`${classes.productSelect}`}>
         <Grid item xs={4}>
-          <MultipleSelect selectItems={categories} selectName={'Catégories'} onChange={handleCategoriesChange} />
+          <MultipleSelect
+            selectItems={categories}
+            selectName={'Catégories'}
+            onChange={handleCategoriesChange}
+          />
         </Grid>
         <Grid item xs={4}>
-          <MultipleSelect selectItems={universe} selectName={'Univers'} onChange={handleUniversChange} />
+          <MultipleSelect
+            selectItems={universe}
+            selectName={'Univers'}
+            onChange={handleUniversChange}
+          />
         </Grid>
         <Grid item xs={4}>
-          <SingleSelect selectItems={productsItemsSelect} selectName={'Trier par'} onChange={handleSortChange} />
+          <SingleSelect
+            selectItems={productsItemsSelect}
+            selectName={'Trier par'}
+            onChange={handleSortChange}
+          />
         </Grid>
       </Grid>
       <Grid container spacing={3} className={classes.productItems}>
-        {
-          AllProducts.map((product, index) => {
-            return (
-              <Grid item xs={12} sm={6} md={4}>
-                <ProductCard index={index} name={product.name} price={product.price} imageLink={product.imgPath} />
-              </Grid>
-            )
-          })
-        }
+        {AllProducts.map((product, index) => {
+          return (
+            <Grid item xs={12} sm={6} md={2}>
+              <ProductCard
+                index={index}
+                name={product.name}
+                price={product.price}
+                imageLink={product.imgPath}
+              />
+            </Grid>
+          );
+        })}
       </Grid>
     </Grid>
   );
