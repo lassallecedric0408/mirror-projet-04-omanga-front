@@ -2,25 +2,12 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@mui/material/Typography';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import HomeIcon from '@mui/icons-material/Home';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TelegramIcon from '@mui/icons-material/Telegram';
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { Link as RouterLink } from 'react-router-dom';
 import { openingHoursData } from './openingHoursData';
 import { footerStyle } from './FooterStyle';
 import { servicesLinks } from './servicesLinks';
 import { socialMediaLinks } from './socialMediaLinks';
-import {
-  contactInformations,
-  contactInformationsType,
-} from './contactInformations';
+import { contactInformations } from './contactInformations';
 
 const useStyles = footerStyle;
 

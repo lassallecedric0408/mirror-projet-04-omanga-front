@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   reviewTitle: {
     fontSize: '1.6rem',
+    marginRight: '3rem',
     color: `${materialUITheme.palette.primary.main}`,
     [theme.breakpoints.down('md')]: {
       fontSize: '1.3rem',

@@ -1,5 +1,15 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { TextField, Button, Snackbar, Stack, Grid, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Snackbar,
+  Stack,
+  Grid,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
 import { materialUITheme } from '../../utils/materialUITheme';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -9,24 +19,24 @@ import { makeStyles } from '@material-ui/core/styles';
 const universesArray = [
   {
     value: 1,
-    slug: 'Univers 1'
+    slug: 'Univers 1',
   },
   {
     value: 2,
-    slug: 'Univers 2'
+    slug: 'Univers 2',
   },
-]
+];
 
 const categoriesArray = [
   {
     value: 1,
-    slug: 'Categorie 1'
+    slug: 'Categorie 1',
   },
   {
     value: 2,
-    slug: 'Categorie 2'
+    slug: 'Categorie 2',
   },
-]
+];
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -67,16 +77,24 @@ const ProductForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
     useState(false);
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
-  const [productName, setProductName] = useState<string>(row ? row.productName : '');
+  const [productName, setProductName] = useState<string>(
+    row ? row.productName : ''
+  );
   const [productNameError, setProductNameError] = useState(false);
 
-  const [productPrice, setProductPrice] = useState<string>(row ? row.price : '');
+  const [productPrice, setProductPrice] = useState<string>(
+    row ? row.price : ''
+  );
   const [productPriceError, setProductPriceError] = useState(false);
 
-  const [universSelect, setUniversSelect] = useState<string>(row ? row.universe : '');
+  const [universSelect, setUniversSelect] = useState<string>(
+    row ? row.universe : ''
+  );
   const [universSelectError, setUniversSelectError] = useState(false);
 
-  const [categorySelect, setCategorySelect] = useState<string>(row ? row.category : '');
+  const [categorySelect, setCategorySelect] = useState<string>(
+    row ? row.category : ''
+  );
   const [categorySelectError, setCategorySelectError] = useState(false);
 
   const [file, setFile] = useState<string | undefined>(undefined);
@@ -90,11 +108,11 @@ const ProductForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
 
   const handleChangeUnivers = (event: SelectChangeEvent) => {
     setUniversSelect(event.target.value as string);
-  }
+  };
 
   const handleChangeCategory = (event: SelectChangeEvent) => {
     setCategorySelect(event.target.value as string);
-  }
+  };
 
   const handleClick = (e: string) => {
     if (e === 'successCreate') {
@@ -199,48 +217,53 @@ const ProductForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
             required
             sx={{ mb: 3 }}
           />
-          <InputLabel id="univers-select">Univers</InputLabel>
+          <InputLabel id='univers-select'>Univers</InputLabel>
           <Select
-            labelId="univers-select"
-            id="univers-select-disabled"
+            labelId='univers-select'
+            id='univers-select-disabled'
             value={universSelect}
-            label="Univers"
+            label='Univers'
             onChange={handleChangeUnivers}
             error={universSelectError}
             fullWidth
             required
             sx={{ mb: 3 }}
           >
-            {
-              universesArray.map((item, index) => (
-                <MenuItem key={index} value={item.value}>{item.slug}</MenuItem>
-              ))
-            }
+            {Array.from({ length: 10 }, (_, index) => (
+              <MenuItem key={index} value={index}>
+                {index}
+              </MenuItem>
+            ))}
           </Select>
-          <InputLabel id="univers-select">Catégorie</InputLabel>
+          <InputLabel id='univers-select'>Catégorie</InputLabel>
           <Select
-            labelId="univers-select"
-            id="category-select-disabled"
+            labelId='univers-select'
+            id='category-select-disabled'
             value={categorySelect}
-            label="Catégorie"
+            label='Catégorie'
             onChange={handleChangeCategory}
             error={categorySelectError}
             fullWidth
             required
             sx={{ mb: 3 }}
           >
-            {
-              categoriesArray.map((item, index) => (
-                <MenuItem key={index} value={item.value}>{item.slug}</MenuItem>
-              ))
-            }
+            {categoriesArray.map((item, index) => (
+              <MenuItem key={index} value={item.value}>
+                {item.slug}
+              </MenuItem>
+            ))}
           </Select>
 
           <Stack
             spacing={2}
             direction='row'
             sx={{ mb: 3 }}
-            style={{ width: '100%', display: 'flex', justifyContent: 'center', marginLeft: '0' }}
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              marginLeft: '0',
+            }}
           >
             <input
               accept='image/*'
@@ -249,7 +272,10 @@ const ProductForm: React.FC<CategoryFormProps> = ({ row, item, onClose }) => {
               type='file'
               onChange={handleFileChange}
             />
-            <label htmlFor='image-upload' style={{ width: '100%', marginLeft: '0' }}>
+            <label
+              htmlFor='image-upload'
+              style={{ width: '100%', marginLeft: '0' }}
+            >
               <Button
                 variant='contained'
                 color='primary'

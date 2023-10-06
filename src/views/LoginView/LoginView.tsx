@@ -1,80 +1,95 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { loginViewStyle } from './loginViewStyle';
-import { TextField, Button, Snackbar } from "@mui/material";
-import { snackBarAlert } from '../../utils/snackBarAlert'
-import { Link, Navigate } from "react-router-dom"
+import { TextField, Button, Snackbar } from '@mui/material';
+import { snackBarAlert } from '../../utils/snackBarAlert';
+import { Link, Navigate } from 'react-router-dom';
 import { useOmangaContex } from '../../context/OmangaContext';
 
 const useStyles = loginViewStyle;
 
-interface LoginViewsProps {
-}
+interface LoginViewsProps {}
 
 const LoginView: React.FC<LoginViewsProps> = () => {
-
   const classes = useStyles();
 
   const { dispatch } = useOmangaContex();
 
   const Alert = snackBarAlert;
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [emailError, setEmailError] = useState(false)
-  const [passwordError, setPasswordError] = useState(false)
-  const [redirectUser, setRedirectUser] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [redirectUser, setRedirectUser] = useState(false);
 
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
-    event.preventDefault()
+  const handleSubmit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
 
-    setEmailError(false)
-    setPasswordError(false)
+    setEmailError(false);
+    setPasswordError(false);
 
     if (email === '') {
-      setEmailError(true)
+      setEmailError(true);
     }
     if (password === '') {
-      setPasswordError(true)
+      setPasswordError(true);
     }
 
     if (email && password) {
-      console.log(email, password)
+      console.log(email, password);
+      localStorage.setItem('userIsLogged', 'true');
       dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
       handleClick('success');
-      setTimeout(() => setRedirectUser(true), 2500)
+      setTimeout(() => setRedirectUser(true), 2500);
     }
-  }
-
-  const handleClick = (e: string) => {
-    if (e === 'success') { setOpenSuccessMessage(true) }
-    if (e === 'error') { setOpenErrorMessage(true) }
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string, state?: string) => {
+  const handleClick = (e: string) => {
+    if (e === 'success') {
+      setOpenSuccessMessage(true);
+    }
+    if (e === 'error') {
+      setOpenErrorMessage(true);
+    }
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+    state?: string
+  ) => {
     if (reason === 'clickaway') {
       return;
     }
     if (state === 'success') {
-      setOpenSuccessMessage(false)
+      setOpenSuccessMessage(false);
     }
-    if (state === 'error') { setOpenErrorMessage(false) }
+    if (state === 'error') {
+      setOpenErrorMessage(false);
+    }
   };
 
   return (
     <>
       <Grid container className={`${classes.loginView} ${classes.flexCenter}`}>
-        <form autoComplete="off" onSubmit={handleSubmit} className={`${classes.loginViewForm}`}>
-          <h2 className={classes.formTitle}>Connectez vous à la communauté O'manga </h2>
+        <form
+          autoComplete='off'
+          onSubmit={handleSubmit}
+          className={`${classes.loginViewForm}`}
+        >
+          <h2 className={classes.formTitle}>
+            Connectez vous à la communauté O'manga{' '}
+          </h2>
           <TextField
-            type="email"
+            type='email'
             variant='outlined'
             color='primary'
-            label="Email"
-            onChange={e => setEmail(e.target.value)}
+            label='Email'
+            onChange={(e) => setEmail(e.target.value)}
             value={email}
             error={emailError}
             fullWidth
@@ -82,11 +97,11 @@ const LoginView: React.FC<LoginViewsProps> = () => {
             sx={{ mb: 3 }}
           />
           <TextField
-            type="password"
+            type='password'
             variant='outlined'
             color='primary'
-            label="Mot de passe"
-            onChange={e => setPassword(e.target.value)}
+            label='Mot de passe'
+            onChange={(e) => setPassword(e.target.value)}
             value={password}
             error={passwordError}
             required
@@ -95,27 +110,38 @@ const LoginView: React.FC<LoginViewsProps> = () => {
           />
           <Grid className={`${classes.submitContainer}`}>
             <Grid item xs={6}>
-              <Button variant="outlined" color="primary" type="submit">Connexion</Button>
+              <Button variant='outlined' color='primary' type='submit'>
+                Connexion
+              </Button>
             </Grid>
             <Grid item xs={6} className={`${classes.flexCenter}`}>
-              <small>Pas encore de compte? <Link to="/signup">Inscrivez-vous ici</Link></small>
+              <small>
+                Pas encore de compte?{' '}
+                <Link to='/signup'>Inscrivez-vous ici</Link>
+              </small>
             </Grid>
           </Grid>
         </form>
       </Grid>
-      <Snackbar open={openSuccessMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'success')}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        open={openSuccessMessage}
+        autoHideDuration={2000}
+        onClose={(event, reason) => handleClose(event, reason, 'success')}
+      >
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           La connexion est validée. Ravis de vous revoir!
         </Alert>
       </Snackbar>
-      <Snackbar open={openErrorMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'error')}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+      <Snackbar
+        open={openErrorMessage}
+        autoHideDuration={2000}
+        onClose={(event, reason) => handleClose(event, reason, 'error')}
+      >
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>
-      {redirectUser && (
-        <Navigate to="/" />
-      )}
+      {redirectUser && <Navigate to='/' />}
     </>
   );
 };
