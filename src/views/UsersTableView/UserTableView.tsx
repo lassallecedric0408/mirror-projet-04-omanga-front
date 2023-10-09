@@ -1,9 +1,18 @@
 import React from 'react';
 import { usersTableViewStyle } from './userTableViewStyle';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Grid,
+} from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { TextFieldTable } from '../../components/TextFieldTable';
-import { SingleSelect } from '../../components/singleSelect ';
+import { SingleSelect } from '../../components/singleSelect';
 import { SelectItem } from '../../models/SelectItem';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
@@ -11,17 +20,17 @@ import { removeAccents } from '../../utils/removeAccents';
 
 const useStyles = usersTableViewStyle;
 
-interface UsersTableViewProps {
-}
+interface UsersTableViewProps {}
 
 const UsersTableView: React.FC<UsersTableViewProps> = () => {
-
   const classes = useStyles();
 
   const [idItem, setIdItem] = React.useState<number>(0);
   const [userName, setUserName] = React.useState<string>('');
   const [city, setCity] = React.useState<string>('');
-  const [isAdminUser, setIsAdminUser] = React.useState<string | 'users' | 'admin' | 'user'>('users');
+  const [isAdminUser, setIsAdminUser] = React.useState<
+    string | 'users' | 'admin' | 'user'
+  >('users');
 
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
@@ -30,16 +39,16 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
   const selectStatus: SelectItem[] = [
     {
       value: 'users',
-      slug: 'Administrateurs et utilisateurs'
+      slug: 'Administrateurs et utilisateurs',
     },
 
     {
       value: 'admin',
-      slug: 'Administrateurs'
+      slug: 'Administrateurs',
     },
     {
       value: 'user',
-      slug: 'Utilisateurs'
+      slug: 'Utilisateurs',
     },
   ];
 
@@ -85,10 +94,14 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
     let filteredRows = [...tableData];
 
     if (userName) {
-      filteredRows = filteredRows.filter((row) => removeAccents(row.lastName).includes(removeAccents(userName)));
+      filteredRows = filteredRows.filter((row) =>
+        removeAccents(row.lastName).includes(removeAccents(userName))
+      );
     }
     if (city) {
-      filteredRows = filteredRows.filter((row) => removeAccents(row.city).includes(removeAccents(city)));
+      filteredRows = filteredRows.filter((row) =>
+        removeAccents(row.city).includes(removeAccents(city))
+      );
     }
     if (isAdminUser === 'admin') {
       filteredRows = filteredRows.filter((row) => row.isAdmin);
@@ -98,32 +111,50 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
     }
 
     return filteredRows;
-  }
+  };
 
   const AllBookings = getFitleredRows();
 
   return (
     <>
-      <Grid container style={{
-        height: '77vh',
-        width: '85%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-        <Grid item className={`${classes.bookingsTitle} ${classes.flexVertCenter}`}>
+      <Grid
+        container
+        style={{
+          height: '77vh',
+          width: '85%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Grid
+          item
+          className={`${classes.bookingsTitle} ${classes.flexVertCenter}`}
+        >
           <p> Utilisateur </p>
         </Grid>
         <Grid container spacing={2} className={classes.selectContainer}>
           <Grid item xs={4}>
-            <TextFieldTable label={'Nom'} value={userName} onChange={handleUserNameChange} />
+            <TextFieldTable
+              label={'Nom'}
+              value={userName}
+              onChange={handleUserNameChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextFieldTable label={'Ville'} value={city} onChange={handleCityChange} />
+            <TextFieldTable
+              label={'Ville'}
+              value={city}
+              onChange={handleCityChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <SingleSelect selectItems={selectStatus} selectName={'Admin et utilisateurs'} onChange={handleIsAdminChange} />
+            <SingleSelect
+              selectItems={selectStatus}
+              selectName={'Admin et utilisateurs'}
+              onChange={handleIsAdminChange}
+            />
           </Grid>
         </Grid>
         <Grid item className={classes.tableContainer}>
@@ -150,9 +181,17 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
                     <TableCell>{row.lastName}</TableCell>
                     <TableCell>{row.email}</TableCell>
                     <TableCell>{row.city}</TableCell>
-                    <TableCell>{row.isAdmin ? 'Administrateur' : 'Utilisateur'}</TableCell>
                     <TableCell>
-                      <Button variant="outlined" size="small" onClick={() => handleDeleteUser(row.id)}><DeleteOutlineIcon /></Button>
+                      {row.isAdmin ? 'Administrateur' : 'Utilisateur'}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleDeleteUser(row.id)}
+                      >
+                        <DeleteOutlineIcon />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -161,8 +200,12 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
           </TableContainer>
         </Grid>
       </Grid>
-      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal} >
-        <DeleteRawTable rowId={idItem} item={"l'utilisateur"} onClose={handleCloseDeleteModal} />
+      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
+        <DeleteRawTable
+          rowId={idItem}
+          item={"l'utilisateur"}
+          onClose={handleCloseDeleteModal}
+        />
       </ModalTable>
     </>
   );

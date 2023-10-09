@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { OmangaProvider } from './context/OmangaContext';
 import { materialUITheme } from './utils/materialUITheme';
 import { ThemeProvider } from '@mui/material/styles';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,15 +14,20 @@ import { BrowserRouter } from 'react-router-dom';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={materialUITheme}>
-      <OmangaProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </OmangaProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={materialUITheme}>
+        <OmangaProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </OmangaProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

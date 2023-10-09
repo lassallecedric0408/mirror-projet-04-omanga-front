@@ -2,7 +2,7 @@ import React from 'react';
 import { productsViewStyle } from './productsViewStyle';
 import Grid from '@material-ui/core/Grid';
 import { MultipleSelect } from '../../components/multipleSelect';
-import { SingleSelect } from '../../components/singleSelect ';
+import { SingleSelect } from '../../components/singleSelect';
 import { ProductCard } from '../../components/productCard';
 import { SelectItem } from '../../models/SelectItem';
 import { useOmangaContex } from '../../context/OmangaContext';
