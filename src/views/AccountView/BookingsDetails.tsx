@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ViewsProps {
+
 }
 
 const BookingsDetails: React.FC<ViewsProps> = () => {
