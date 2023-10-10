@@ -1,25 +1,44 @@
 import React, { useState } from 'react';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { useQuery } from 'react-query';
+import { redirect } from 'react-router';
+
 import { TextFieldTable } from '../../components/TextFieldTable';
 import { DateFieldTable } from '../../components/DateFieldTable';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
+import { removeAccents } from '../../utils/removeAccents';
+import { deleteOneCategory, getAllCategories } from '../../services/categories';
+
 import { CategoryForm } from './CategoryForm';
+
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Grid,
+  CircularProgress,
+} from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import AddIcon from '@mui/icons-material/Add';
 
 import { categoriesTableViewStyle } from './categoriesTableViewStyle';
-import { removeAccents } from '../../utils/removeAccents';
 
 const useStyles = categoriesTableViewStyle;
 
-interface CategoriesTableViewProps {
-}
+interface CategoriesTableViewProps {}
 
 const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
-
   const classes = useStyles();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getAllCategories'],
+    queryFn: () => getAllCategories(),
+  });
 
   const [idItem, setIdItem] = useState<number>(0);
   const [rowItem, setRowItem] = useState<any>();
@@ -39,25 +58,7 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
   const handleCloseDeleteModal = () => setOpenDeleteModal(false);
 
-  const tableData = [
-    {
-      id: 1,
-      date: '2021-10-10',
-      category: 'category 1',
-      universeNumber: 2,
-      productNumber: 3,
-    },
-    {
-      id: 2,
-      date: '2021-10-10',
-      category: 'category 2',
-      universeNumber: 2,
-      productNumber: 3,
-    }
-  ];
-
   const handleCreate = () => {
-
     handleOpenCreateModal();
   };
 
@@ -84,46 +85,78 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
   };
 
   const getFitleredRows = () => {
-    let filteredRows = [...tableData];
+    let filteredRows = [...data];
     if (idCategory) {
-      filteredRows = filteredRows.filter((row) => row.id === Number(idCategory));
+      filteredRows = filteredRows.filter(
+        (row) => row.id === Number(idCategory)
+      );
     }
     if (date) {
       filteredRows = filteredRows.filter((row) => row.date === date);
     }
     if (category) {
-      filteredRows = filteredRows.filter((row) => removeAccents(row.category).includes(removeAccents(category)));
+      filteredRows = filteredRows.filter((row) =>
+        removeAccents(row.category).includes(removeAccents(category))
+      );
     }
 
     return filteredRows;
-  }
+  };
 
   const AllData = getFitleredRows();
 
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    redirect('/error');
+  }
+
   return (
     <>
-      <Grid container style={{
-        height: '77vh',
-        width: '85%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
+      <Grid
+        container
+        style={{
+          height: '77vh',
+          width: '85%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Grid item className={`${classes.title} ${classes.flexVertCenter}`}>
-          <p> Catégories
-          </p>
-          <Button variant="outlined" size="small" onClick={() => handleCreate()}><AddIcon /> Ajouter une catégorie</Button>
+          <p> Catégories</p>
+          <Button
+            variant='outlined'
+            size='small'
+            onClick={() => handleCreate()}
+          >
+            <AddIcon /> Ajouter une catégorie
+          </Button>
         </Grid>
         <Grid container spacing={2} className={classes.selectContainer}>
           <Grid item xs={4}>
-            <TextFieldTable label={'ID commande'} value={idCategory} onChange={handleIdCategoryChange} />
+            <TextFieldTable
+              label={'ID commande'}
+              value={idCategory}
+              onChange={handleIdCategoryChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <DateFieldTable label={'Date'} value={date} onChange={handleDateChange} />
+            <DateFieldTable
+              label={'Date'}
+              value={date}
+              onChange={handleDateChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextFieldTable label={'Catégorie'} value={category} onChange={handleCategoryChange} />
+            <TextFieldTable
+              label={'Catégorie'}
+              value={category}
+              onChange={handleCategoryChange}
+            />
           </Grid>
         </Grid>
         <Grid item className={classes.tableContainer}>
@@ -148,8 +181,21 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
                     <TableCell>{row.universeNumber}</TableCell>
                     <TableCell>{row.productNumber}</TableCell>
                     <TableCell>
-                      <Button variant="outlined" size="small" onClick={() => handleUpdate(row)} style={{ marginRight: '1rem' }}><SystemUpdateAltIcon /></Button>
-                      <Button variant="outlined" size="small" onClick={() => handleDelete(row.id)}><DeleteOutlineIcon /></Button>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleUpdate(row)}
+                        style={{ marginRight: '1rem' }}
+                      >
+                        <SystemUpdateAltIcon />
+                      </Button>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleDelete(row.id)}
+                      >
+                        <DeleteOutlineIcon />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -158,17 +204,25 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
           </TableContainer>
         </Grid>
       </Grid>
-      <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal} >
-        <CategoryForm item={"la catégorie"} onClose={handleCloseCreateModal} />
+      <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal}>
+        <CategoryForm item={'la catégorie'} onClose={handleCloseCreateModal} />
       </ModalTable>
-      <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal} >
-        <CategoryForm row={rowItem} item={"la catégorie"} onClose={handleCloseUpdateModal} />
+      <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal}>
+        <CategoryForm
+          row={rowItem}
+          item={'la catégorie'}
+          onClose={handleCloseUpdateModal}
+        />
       </ModalTable>
-      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal} >
-        <DeleteRawTable rowId={idItem} item={"la catégorie"} onClose={handleCloseDeleteModal} />
+      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
+        <DeleteRawTable
+          rowId={idItem}
+          item={'la catégorie'}
+          onClose={handleCloseDeleteModal}
+          deleteRow={(idItem: number) => deleteOneCategory(idItem)}
+        />
       </ModalTable>
     </>
-
   );
 };
 

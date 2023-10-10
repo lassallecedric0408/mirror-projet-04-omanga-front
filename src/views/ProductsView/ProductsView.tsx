@@ -1,229 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
+import { redirect } from 'react-router-dom';
+
 import { productsViewStyle } from './productsViewStyle';
-import Grid from '@material-ui/core/Grid';
 import { MultipleSelect } from '../../components/multipleSelect';
 import { SingleSelect } from '../../components/singleSelect';
 import { ProductCard } from '../../components/productCard';
-import { SelectItem } from '../../models/SelectItem';
-import { useOmangaContex } from '../../context/OmangaContext';
-import katana from '../../assets/katana-154939_1280.png';
-import buddha from '../../assets/buddha-148533_1280.png';
-import book from '../../assets/book-2024278_1280.png';
-import board from '../../assets/board-48117_1280.png';
-import { Product } from '../../models/Product';
+import { productsItemsSelect } from './productItemsSelect';
+
+import Grid from '@material-ui/core/Grid';
+import { getAllProducts } from '../../services/products';
+import { CircularProgress } from '@mui/material';
 
 const useStyles = productsViewStyle;
 
-const productsItemsSelect: SelectItem[] = [
-  {
-    value: 'date',
-    slug: 'Plus Récent',
-  },
-  {
-    value: 'risingPrice',
-    slug: 'Prix : ordre croissant',
-  },
-  {
-    value: 'decreasingPrice',
-    slug: 'Prix : ordre décroissant',
-  },
-];
 const categories = ['Statuette', 'Arme', 'Livre', 'Carte'];
 
 const universe = ['Japon1', 'Japon2', 'Japon3', 'Japon4'];
-
-const products: Product[] = [
-  {
-    name: 'Statuette',
-    price: 150.0,
-    imgPath: `${buddha}`,
-    category: 'Statuette',
-    universe: 'Japon1',
-    product_creation_date: 1694295379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Katana',
-    price: 1500.0,
-    imgPath: `${katana}`,
-    category: 'Arme',
-    universe: 'Japon2',
-    product_creation_date: 1694868179,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Omanga Tome 01',
-    price: 60.0,
-    imgPath: `${book}`,
-    category: 'Livre',
-    universe: 'Japon3',
-    product_creation_date: 1694695379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Carte Omanga',
-    price: 80.0,
-    imgPath: `${board}`,
-    category: 'Carte',
-    universe: 'Japon4',
-    product_creation_date: 1694795379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Statuette',
-    price: 800.0,
-    imgPath: `${buddha}`,
-    category: 'Statuette',
-    universe: 'Japon1',
-    product_creation_date: 1694595379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Katana',
-    price: 600.0,
-    imgPath: `${katana}`,
-    category: 'Arme',
-    universe: 'Japon2',
-    product_creation_date: 1694595379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Omanga Tome 01',
-    price: 500.0,
-    imgPath: `${book}`,
-    category: 'Livre',
-    universe: 'Japon3',
-    product_creation_date: 1694495379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Carte Omanga',
-    price: 1000.0,
-    imgPath: `${board}`,
-    category: 'Carte',
-    universe: 'Japon4',
-    product_creation_date: 1694395379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Statuette',
-    price: 500.0,
-    imgPath: `${buddha}`,
-    category: 'Statuette',
-    universe: 'Japon1',
-    product_creation_date: 1694395379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Katana',
-    price: 220.0,
-    imgPath: `${katana}`,
-    category: 'Arme',
-    universe: 'Japon2',
-    product_creation_date: 1694195379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Omanga Tome 01',
-    price: 15.0,
-    imgPath: `${book}`,
-    category: 'Livre',
-    universe: 'Japon3',
-    product_creation_date: 1694295379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Carte Omanga',
-    price: 11.0,
-    imgPath: `${board}`,
-    category: 'Carte',
-    universe: 'Japon4',
-    product_creation_date: 1694295379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Statuette',
-    price: 120.0,
-    imgPath: `${buddha}`,
-    category: 'Statuette',
-    universe: 'Japon1',
-    product_creation_date: 1694295379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Katana',
-    price: 300.0,
-    imgPath: `${katana}`,
-    category: 'Arme',
-    universe: 'Japon2',
-    product_creation_date: 1694295379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Omanga Tome 01',
-    price: 10.0,
-    imgPath: `${book}`,
-    category: 'Livre',
-    universe: 'Japon3',
-    product_creation_date: 1694295379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-  {
-    name: 'Carte Omanga',
-    price: 15.0,
-    imgPath: `${board}`,
-    category: 'Carte',
-    universe: 'Japon4',
-    product_creation_date: 1694295379,
-    description:
-      'Lorem ipsum dolor sit amet. Id assumenda nihil est maiores galisum non dicta odio qui iure dolorem. Aut nihil asperiores sed tempora omnis et nulla alias qui iure voluptatum ut illum ullam qui velit accusantium et perferendis quia. 33 distinctio consequatur eum mollitia nihil est voluptas rerum aut laborum similique.',
-  },
-];
 
 interface ProductsViewProps {}
 
 const ProductsView: React.FC<ProductsViewProps> = () => {
   const classes = useStyles();
 
-  const [productsSelectCategories, setProductsSelectCategories] =
-    React.useState<string[]>([]);
-  const [productsSelectUniverses, setProductsSelectUniverses] = React.useState<
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getAllProducts'],
+    queryFn: () => getAllProducts(),
+  });
+
+  console.log(getAllProducts());
+  const productsData = data?.data || [];
+
+  const [productsSelectCategories, setProductsSelectCategories] = useState<
     string[]
   >([]);
-  const [productsSort, setProductsSort] = React.useState<string>('');
+  const [productsSelectUniverses, setProductsSelectUniverses] = useState<
+    string[]
+  >([]);
+  const [productsSort, setProductsSort] = useState<string>('');
 
   const getFitleredProducts = () => {
-    let filteredProducts = [...products];
+    let filteredProducts = [...productsData];
     if (productsSelectCategories.length > 0) {
       filteredProducts = filteredProducts.filter((product) =>
-        productsSelectCategories.includes(product.category)
+        productsSelectCategories.includes(product.category.name)
       );
     }
     if (productsSelectUniverses.length > 0) {
       filteredProducts = filteredProducts.filter((product) =>
-        productsSelectUniverses.includes(product.universe)
+        productsSelectUniverses.includes(product.universe.name)
       );
     }
-    if (productsSort === 'date') {
-      filteredProducts = filteredProducts.sort((a, b) => {
-        return b.product_creation_date - a.product_creation_date;
-      });
-    }
+    // if (productsSort === 'date') {
+    //   filteredProducts = filteredProducts.sort((a, b) => {
+    //     return b.product_creation_date - a.product_creation_date;
+    //   });
+    // }
     if (productsSort === 'risingPrice') {
       filteredProducts = filteredProducts.sort((a, b) => {
         return a.price - b.price;
@@ -248,6 +80,14 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
   const handleSortChange = (value: string) => {
     setProductsSort(value);
   };
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    redirect('/error');
+  }
 
   return (
     <Grid container className={`${classes.productsView}`}>
@@ -288,7 +128,7 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
                 index={index}
                 name={product.name}
                 price={product.price}
-                imageLink={product.imgPath}
+                imageLink={product.image_url}
               />
             </Grid>
           );

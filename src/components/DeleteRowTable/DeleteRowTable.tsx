@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useMutation } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Stack, Button, Snackbar, Alert } from "@mui/material";
+import { Stack, Button, Snackbar, CircularProgress } from '@mui/material';
 import { materialUITheme } from '../../utils/materialUITheme';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 
@@ -25,10 +26,15 @@ interface DeleteRawTableProps {
   rowId: number;
   item: string;
   onClose: () => void;
+  deleteRow: (id: number) => Promise<any>;
 }
 
-const DeleteRawTable: React.FC<DeleteRawTableProps> = ({ rowId, item, onClose }) => {
-
+const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
+  rowId,
+  item,
+  onClose,
+  deleteRow,
+}) => {
   const classes = useStyles();
 
   const Alert = snackBarAlert;
@@ -37,48 +43,84 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({ rowId, item, onClose })
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
   const handleClick = (e: string) => {
-    if (e === 'success') { setOpenSuccessMessage(true) }
-    if (e === 'error') { setOpenErrorMessage(true) }
+    if (e === 'success') {
+      setOpenSuccessMessage(true);
+    }
+    if (e === 'error') {
+      setOpenErrorMessage(true);
+    }
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string, state?: string) => {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+    state?: string
+  ) => {
     if (reason === 'clickaway') {
       return;
     }
     if (state === 'success') {
-      setOpenSuccessMessage(false)
+      setOpenSuccessMessage(false);
     }
-    if (state === 'error') { setOpenErrorMessage(false) }
+    if (state === 'error') {
+      setOpenErrorMessage(false);
+    }
   };
 
+  const { mutate, isLoading, isError, isSuccess } = useMutation({
+    mutationKey: ['signupUser', { rowId }],
+    mutationFn: () => deleteRow(rowId),
+  });
+
   const HandleDeleteRow = () => {
-    console.log(rowId);
-    handleClick('success');
-    setTimeout(onClose, 2000)
-  }
+    if (isSuccess) {
+      mutate();
+      handleClick('success');
+      setTimeout(() => onClose, 2500);
+    }
+    if (isError) {
+      handleClick('error');
+    }
+  };
   const capitalizeFirstLetter = (str: string): string => {
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  };
+
+  if (isLoading) return <CircularProgress />;
 
   return (
     <>
       <Grid container className={classes.deleteRawTable}>
         <Grid item>
-          <h2 className={classes.deleteRawTableTitle}>Voulez-vous supprimer {item}</h2>
+          <h2 className={classes.deleteRawTableTitle}>
+            Voulez-vous supprimer {item}
+          </h2>
         </Grid>
-        <Stack spacing={10} direction="row">
-          <Button variant="contained" onClick={HandleDeleteRow}>Supprimer</Button>
-          <Button variant="outlined" onClick={onClose}>Annuler</Button>
+        <Stack spacing={10} direction='row'>
+          <Button variant='contained' onClick={HandleDeleteRow}>
+            Supprimer
+          </Button>
+          <Button variant='outlined' onClick={onClose}>
+            Annuler
+          </Button>
         </Stack>
       </Grid>
 
-      <Snackbar open={openSuccessMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'success')}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        open={openSuccessMessage}
+        autoHideDuration={2000}
+        onClose={(event, reason) => handleClose(event, reason, 'success')}
+      >
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           {capitalizeFirstLetter(item)} a bien été supprimé!
         </Alert>
       </Snackbar>
-      <Snackbar open={openErrorMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'error')}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+      <Snackbar
+        open={openErrorMessage}
+        autoHideDuration={2000}
+        onClose={(event, reason) => handleClose(event, reason, 'error')}
+      >
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>

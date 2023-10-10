@@ -1,28 +1,43 @@
 import React, { useState } from 'react';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { useQuery } from 'react-query';
+import { redirect, useNavigate } from 'react-router-dom';
+
+import { deleteOneProduct, getAllProducts } from '../../services/products';
 import { TextFieldTable } from '../../components/TextFieldTable';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
-import { useNavigate } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
-
-
 import { productsTableViewStyle } from './productsTableViewStyle';
 import { ProductForm } from './ProductForm';
 import { removeAccents } from '../../utils/removeAccents';
 
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Grid,
+  CircularProgress,
+} from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import AddIcon from '@mui/icons-material/Add';
+
 const useStyles = productsTableViewStyle;
 
-interface ProductsTableViewProps {
-}
+interface ProductsTableViewProps {}
 
 const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
-
   const classes = useStyles();
 
   const navigate = useNavigate();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getAllProducts'],
+    queryFn: () => getAllProducts(),
+  });
 
   const [idItem, setIdItem] = useState<number>(0);
   const [rowItem, setRowItem] = useState<any>();
@@ -41,25 +56,7 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
   const handleCloseDeleteModal = () => setOpenDeleteModal(false);
 
-  const tableData = [
-    {
-      id: 1,
-      nameProduct: 'statue',
-      price: 20,
-      category: '1',
-      universe: '1',
-    },
-    {
-      id: 2,
-      nameProduct: 'épée',
-      price: 10,
-      category: '2',
-      universe: '2',
-    }
-  ];
-
   const handleCreate = () => {
-
     handleOpenCreateModal();
   };
 
@@ -86,39 +83,68 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
   };
 
   const getFitleredRows = () => {
-    let filteredRows = [...tableData];
+    let filteredRows = [...(data?.data ?? [])];
     if (idProduct) {
       filteredRows = filteredRows.filter((row) => row.id === Number(idProduct));
     }
     if (nameProduct) {
-      filteredRows = filteredRows.filter((row) => removeAccents(row.nameProduct).includes(removeAccents(nameProduct)));
+      filteredRows = filteredRows.filter((row) =>
+        removeAccents(row.name).includes(removeAccents(nameProduct))
+      );
     }
 
     return filteredRows;
-  }
+  };
 
   const AllData = getFitleredRows();
 
+  // if (!user.isAdmin) {redirect('/error')};
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    redirect('/error');
+  }
+
   return (
     <>
-      <Grid container style={{
-        height: '77vh',
-        width: '85%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
+      <Grid
+        container
+        style={{
+          height: '77vh',
+          width: '85%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Grid item className={`${classes.title} ${classes.flexVertCenter}`}>
-          <p> Univers </p>
-          <Button variant="outlined" size="small" onClick={() => handleCreate()}><AddIcon /> Ajouter un univers</Button>
+          <p> Produit </p>
+          <Button
+            variant='outlined'
+            size='small'
+            onClick={() => handleCreate()}
+          >
+            <AddIcon /> Ajouter un Produit
+          </Button>
         </Grid>
         <Grid container spacing={2} className={classes.selectContainer}>
           <Grid item xs={3}>
-            <TextFieldTable label={'ID commande'} value={idProduct} onChange={handleIdProductChange} />
+            <TextFieldTable
+              label={'ID commande'}
+              value={idProduct}
+              onChange={handleIdProductChange}
+            />
           </Grid>
           <Grid item xs={3}>
-            <TextFieldTable label={'Nom du produit'} value={nameProduct} onChange={handleNameProductChange} />
+            <TextFieldTable
+              label={'Nom du produit'}
+              value={nameProduct}
+              onChange={handleNameProductChange}
+            />
           </Grid>
         </Grid>
         <Grid item className={classes.tableContainer}>
@@ -137,14 +163,32 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
                 {AllData.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.nameProduct}</TableCell>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell>{row.price}</TableCell>
                     <TableCell>
-                      <Button variant="text" onClick={() => navigateToProductId(row.id)}>Afficher le produit</Button>
+                      <Button
+                        variant='text'
+                        onClick={() => navigateToProductId(row.id)}
+                      >
+                        Afficher le produit
+                      </Button>
                     </TableCell>
                     <TableCell>
-                      <Button variant="outlined" size="small" onClick={() => handleUpdate(row)} style={{ marginRight: '1rem' }}><SystemUpdateAltIcon /></Button>
-                      <Button variant="outlined" size="small" onClick={() => handleDelete(row.id)}><DeleteOutlineIcon /></Button>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleUpdate(row)}
+                        style={{ marginRight: '1rem' }}
+                      >
+                        <SystemUpdateAltIcon />
+                      </Button>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleDelete(row.id)}
+                      >
+                        <DeleteOutlineIcon />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -153,17 +197,25 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
           </TableContainer>
         </Grid>
       </Grid>
-      <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal} >
-        <ProductForm item={"le produit"} onClose={handleCloseCreateModal} />
+      <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal}>
+        <ProductForm item={'le produit'} onClose={handleCloseCreateModal} />
       </ModalTable>
-      <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal} >
-        <ProductForm row={rowItem} item={"le produit"} onClose={handleCloseUpdateModal} />
+      <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal}>
+        <ProductForm
+          row={rowItem}
+          item={'le produit'}
+          onClose={handleCloseUpdateModal}
+        />
       </ModalTable>
-      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal} >
-        <DeleteRawTable rowId={idItem} item={"le produit"} onClose={handleCloseDeleteModal} />
+      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
+        <DeleteRawTable
+          rowId={idItem}
+          item={'le produit'}
+          onClose={handleCloseDeleteModal}
+          deleteRow={(idItem: number) => deleteOneProduct(idItem)}
+        />
       </ModalTable>
     </>
-
   );
 };
 

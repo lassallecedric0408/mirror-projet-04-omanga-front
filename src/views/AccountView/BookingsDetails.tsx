@@ -1,17 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { useOmangaContex } from '../../context/OmangaContext';
 
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { TextFieldTable } from '../../components/TextFieldTable';
 import { DateFieldTable } from '../../components/DateFieldTable';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
-import { useNavigate } from 'react-router-dom';
+
+import { deleteOneUserOrder } from '../../services/users';
+
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Grid,
+} from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { materialUITheme } from '../../utils/materialUITheme';
 import { makeStyles } from '@material-ui/core/styles';
-
 
 const useStyles = makeStyles((theme) => ({
   flexCenter: {
@@ -49,12 +61,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface ViewsProps {
-
-}
+interface ViewsProps {}
 
 const BookingsDetails: React.FC<ViewsProps> = () => {
-
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -62,14 +71,16 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
   const { user } = OmangaState;
   const userBookings = user?.bookings ?? [];
 
-  const [bookingsUserData, setBookingsUserData] = React.useState(user?.bookings ?? []);
+  const [bookingsUserData, setBookingsUserData] = useState(
+    user?.bookings ?? []
+  );
 
-  const [idItem, setIdItem] = React.useState<number>(0);
-  const [idProduct, setIdProduct] = React.useState<number>();
-  const [date, setDate] = React.useState<string>('');
-  const [article, setArticle] = React.useState<string>('');
+  const [idItem, setIdItem] = useState<number>(0);
+  const [idProduct, setIdProduct] = useState<number>();
+  const [date, setDate] = useState<string>('');
+  const [article, setArticle] = useState<string>('');
 
-  const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
   const handleCloseDeleteModal = () => setOpenDeleteModal(false);
 
@@ -97,47 +108,71 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
   const getFitleredBookings = () => {
     let filteredBookings = [...userBookings];
     if (idProduct) {
-      filteredBookings = filteredBookings.filter((booking) => booking.id === Number(idProduct));
+      filteredBookings = filteredBookings.filter(
+        (booking) => booking.id === Number(idProduct)
+      );
     }
     if (date) {
-      filteredBookings = filteredBookings.filter((booking) => booking.date === date);
+      filteredBookings = filteredBookings.filter(
+        (booking) => booking.date === date
+      );
     }
     if (article) {
-      filteredBookings = filteredBookings.filter((booking) => booking.productName.toLocaleLowerCase().includes(article.toLocaleLowerCase()));
+      filteredBookings = filteredBookings.filter((booking) =>
+        booking.productName
+          .toLocaleLowerCase()
+          .includes(article.toLocaleLowerCase())
+      );
     }
     return filteredBookings;
-  }
+  };
 
   // useEffect(() => {
   //   const filteredBookings = getFitleredBookings();
   //   setBookingsUserData(filteredBookings);
   // }, [bookings, idProduct, date, article]);
 
-
   const filteredBookings = getFitleredBookings();
   return (
     <>
-      <Grid container style={{
-        height: '67vh',
-        width: '100%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-        <Grid item className={`${classes.bookingsTitle} ${classes.flexVertCenter}`}>
-          <p> Réservations
-          </p>
+      <Grid
+        container
+        style={{
+          height: '67vh',
+          width: '100%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Grid
+          item
+          className={`${classes.bookingsTitle} ${classes.flexVertCenter}`}
+        >
+          <p> Réservations</p>
         </Grid>
         <Grid container spacing={2} className={classes.selectContainer}>
           <Grid item xs={4}>
-            <TextFieldTable label={'ID commande'} value={idProduct} onChange={handleIdProductChange} />
+            <TextFieldTable
+              label={'ID commande'}
+              value={idProduct}
+              onChange={handleIdProductChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <DateFieldTable label={'Date'} value={date} onChange={handleDateChange} />
+            <DateFieldTable
+              label={'Date'}
+              value={date}
+              onChange={handleDateChange}
+            />
           </Grid>
           <Grid item xs={4}>
-            <TextFieldTable label={'Article'} value={article} onChange={handleArticleChange} />
+            <TextFieldTable
+              label={'Article'}
+              value={article}
+              onChange={handleArticleChange}
+            />
           </Grid>
         </Grid>
         <Grid item className={classes.tableContainer}>
@@ -165,10 +200,21 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
                     <TableCell>{row.productnumber}</TableCell>
                     <TableCell>{row.totalProductPrice}</TableCell>
                     <TableCell>
-                      <Button variant="text" onClick={() => navigateToProductId(row.id)}>Afficher le produit</Button>
+                      <Button
+                        variant='text'
+                        onClick={() => navigateToProductId(row.id)}
+                      >
+                        Afficher le produit
+                      </Button>
                     </TableCell>
                     <TableCell>
-                      <Button variant="outlined" size="small" onClick={() => handleDeleteBooking(row.id)}><DeleteOutlineIcon /></Button>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleDeleteBooking(row.id)}
+                      >
+                        <DeleteOutlineIcon />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -177,8 +223,13 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
           </TableContainer>
         </Grid>
       </Grid>
-      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal} >
-        <DeleteRawTable rowId={idItem} item={"la réservation"} onClose={handleCloseDeleteModal} />
+      <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
+        <DeleteRawTable
+          rowId={idItem}
+          item={'la réservation'}
+          onClose={handleCloseDeleteModal}
+          deleteRow={(idItem) => deleteOneUserOrder({ id: idItem })}
+        />
       </ModalTable>
     </>
   );

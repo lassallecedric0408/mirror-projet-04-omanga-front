@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import Grid from '@material-ui/core/Grid';
+import { useMutation } from 'react-query';
 import { loginViewStyle } from './loginViewStyle';
-import { TextField, Button, Snackbar } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Snackbar,
+  Grid,
+  CircularProgress,
+} from '@mui/material';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 import { Link, Navigate } from 'react-router-dom';
 import { useOmangaContex } from '../../context/OmangaContext';
+import { loginUser } from '../../services/users';
 
 const useStyles = loginViewStyle;
 
@@ -19,32 +26,33 @@ const LoginView: React.FC<LoginViewsProps> = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
   const [redirectUser, setRedirectUser] = useState(false);
 
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
+  const { mutate, isLoading, isError, isSuccess, data } = useMutation({
+    mutationKey: ['signupUser', { email, password }],
+    mutationFn: () =>
+      loginUser({
+        email,
+        password,
+      }),
+  });
+
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-
-    setEmailError(false);
-    setPasswordError(false);
-
-    if (email === '') {
-      setEmailError(true);
-    }
-    if (password === '') {
-      setPasswordError(true);
-    }
-
-    if (email && password) {
-      console.log(email, password);
+    const token = data?.data?.token;
+    if (isSuccess) {
+      mutate();
       localStorage.setItem('userIsLogged', 'true');
+      localStorage.setItem('token', `${token}`);
       dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
       handleClick('success');
       setTimeout(() => setRedirectUser(true), 2500);
+    }
+    if (isError) {
+      handleClick('error');
     }
   };
 
@@ -73,6 +81,8 @@ const LoginView: React.FC<LoginViewsProps> = () => {
     }
   };
 
+  if (isLoading) return <CircularProgress />;
+
   return (
     <>
       <Grid container className={`${classes.loginView} ${classes.flexCenter}`}>
@@ -91,7 +101,6 @@ const LoginView: React.FC<LoginViewsProps> = () => {
             label='Email'
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            error={emailError}
             fullWidth
             required
             sx={{ mb: 3 }}
@@ -103,7 +112,6 @@ const LoginView: React.FC<LoginViewsProps> = () => {
             label='Mot de passe'
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            error={passwordError}
             required
             fullWidth
             sx={{ mb: 3 }}

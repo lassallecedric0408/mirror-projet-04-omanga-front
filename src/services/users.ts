@@ -1,19 +1,21 @@
 import bcrypt from 'bcryptjs';
+const API_URL = process.env.REACT_APP_API_URL;
+const token = localStorage.getItem('token');
 
-type LoginFormValues = {
-  username: string;
+type LoginUser = {
+  email: string;
   password: string;
 };
 
-const loginUser = async ({ username, password }: LoginFormValues) => {
+const loginUser = async ({ email, password }: LoginUser) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const response = await fetch('/login', {
+  const response = await fetch(`${API_URL}/user/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password: hashedPassword }),
+    body: JSON.stringify({ email, password: hashedPassword }),
   });
 
   if (!response.ok) {
@@ -25,14 +27,14 @@ const loginUser = async ({ username, password }: LoginFormValues) => {
   return data;
 };
 
-type SignUpUserFormValues = {
+type SignUpUser = {
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   email: string;
   password: string;
   city: string;
-  zipCode: number;
+  zipCode: number | undefined;
 };
 
 async function signUpUser({
@@ -43,10 +45,10 @@ async function signUpUser({
   password,
   city,
   zipCode,
-}: SignUpUserFormValues): Promise<SignUpUserFormValues> {
+}: SignUpUser) {
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const response = await fetch('/signup', {
+  const response = await fetch(`${API_URL}/orders/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -71,4 +73,49 @@ async function signUpUser({
   return data;
 }
 
-export { loginUser, signUpUser };
+type DeleteUser = {
+  id: number;
+};
+
+const deleteOneUser = async ({ id }: DeleteUser) => {
+  const response = await fetch(`/users/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('User deletion failed');
+  }
+
+  const data = await response.json();
+
+  return data;
+};
+
+type DeleteUserOrder = {
+  id: number;
+};
+
+const deleteOneUserOrder = async ({ id }: DeleteUserOrder) => {
+  const response = await fetch(`/users/order/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('User deletion failed');
+  }
+
+  const data = await response.json();
+
+  return data;
+};
+
+
+export { loginUser, signUpUser, deleteOneUser, deleteOneUserOrder };

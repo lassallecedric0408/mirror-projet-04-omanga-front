@@ -1,4 +1,6 @@
 import React from 'react';
+import { useQuery } from 'react-query';
+import { redirect } from 'react-router-dom';
 import {
   Button,
   Table,
@@ -8,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Grid,
+  CircularProgress,
 } from '@mui/material';
 import { bookingsTableViewStyle } from './bookingsTableViewStyle';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -15,11 +18,12 @@ import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { TextFieldTable } from '../../components/TextFieldTable';
 import { DateFieldTable } from '../../components/DateFieldTable';
 import { SingleSelect } from '../../components/singleSelect';
-import { SelectItem } from '../../models/SelectItem';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
 import { UpdateBookingStatus } from './UpdateBookingStatus';
 import { removeAccents } from '../../utils/removeAccents';
+import { selectStatus } from './selectStatus';
+import { deleteOneBooking, getAllBookings } from '../../services/bookings';
 
 const useStyles = bookingsTableViewStyle;
 
@@ -27,6 +31,11 @@ interface BookingsTableViewProps {}
 
 const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   const classes = useStyles();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getAllBookings'],
+    queryFn: () => getAllBookings(),
+  });
 
   const [idItem, setIdItem] = React.useState<number>(0);
   const [idBooking, setIdBooking] = React.useState<number>();
@@ -41,90 +50,6 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
   const handleCloseDeleteModal = () => setOpenDeleteModal(false);
-
-  const selectStatus: SelectItem[] = [
-    {
-      value: 'active',
-      slug: 'Réservation en cours',
-    },
-    {
-      value: 'archived',
-      slug: 'Réservation archivée',
-    },
-  ];
-  const tableData = [
-    {
-      id: 1,
-      date: '2021-10-10',
-      name: 'John toee',
-      prix: 30,
-      produit: 'Omanga Tome 01',
-      state: 'active',
-    },
-    {
-      id: 2,
-      date: '2021-10-10',
-      name: 'John toeee',
-      prix: 40,
-      produit: 'Omanga Tome 02',
-      state: 'active',
-    },
-    {
-      id: 3,
-      date: '2021-10-10',
-      name: 'John toeeee',
-      prix: 50,
-      produit: 'Omanga Tome 03',
-      state: 'archived',
-    },
-    {
-      id: 4,
-      date: '2021-10-10',
-      name: 'John yoeee',
-      prix: 60,
-      produit: 'Omanga Tome 04',
-      state: 'archived',
-    },
-    {
-      id: 5,
-      date: '2021-10-10',
-      name: 'John yoeeee',
-      prix: 70,
-      produit: 'Omanga Tome 05',
-    },
-    {
-      id: 6,
-      date: '2021-10-10',
-      name: 'John Doee',
-      prix: 30,
-      produit: 'Omanga Tome 01',
-      state: 'active',
-    },
-    {
-      id: 7,
-      date: '2021-10-10',
-      name: 'John poeee',
-      prix: 40,
-      produit: 'Omanga Tome 02',
-      state: 'active',
-    },
-    {
-      id: 8,
-      date: '2021-10-10',
-      name: 'John roeeee',
-      prix: 50,
-      produit: 'Omanga Tome 03',
-      state: 'archived',
-    },
-    {
-      id: 9,
-      date: '2021-10-10',
-      name: 'John boeee',
-      prix: 60,
-      produit: 'Omanga Tome 04',
-      state: 'archived',
-    },
-  ];
 
   const handleBookingArchivate = (id: number) => {
     setIdItem(id);
@@ -153,7 +78,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   };
 
   const getFitleredBookings = () => {
-    let filteredRows = [...tableData];
+    let filteredRows = [...data];
     if (idBooking) {
       filteredRows = filteredRows.filter((row) => row.id === Number(idBooking));
     }
@@ -173,6 +98,16 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   };
 
   const AllBookings = getFitleredBookings();
+
+  // if (!user.isAdmin) {redirect('/error')};
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    redirect('/error');
+  }
 
   return (
     <>
@@ -280,6 +215,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
           rowId={idItem}
           item={'la réservation'}
           onClose={handleCloseDeleteModal}
+          deleteRow={(idItem: number) => deleteOneBooking(idItem)}
         />
       </ModalTable>
     </>

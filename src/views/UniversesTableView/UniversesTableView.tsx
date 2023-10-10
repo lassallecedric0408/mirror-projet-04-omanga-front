@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
   Grid,
+  CircularProgress,
 } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
@@ -19,13 +20,21 @@ import { UniverseForm } from './UniverseForm';
 import AddIcon from '@mui/icons-material/Add';
 
 import { universesTableViewStyle } from './universesTableViewStyle';
+import { redirect } from 'react-router';
+import { deleteOneUniverse, getAllUniverses } from '../../services/universes';
+import { useQuery } from 'react-query';
 
 const useStyles = universesTableViewStyle;
 
-interface UniversesTableViewProps { }
+interface UniversesTableViewProps {}
 
 const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
   const classes = useStyles();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getAllBookings'],
+    queryFn: () => getAllUniverses(),
+  });
 
   const [idItem, setIdItem] = useState<number>(0);
   const [rowItem, setRowItem] = useState<any>();
@@ -44,23 +53,6 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
   const handleCloseDeleteModal = () => setOpenDeleteModal(false);
-
-  const tableData = [
-    {
-      id: 1,
-      date: '2021-10-10',
-      univers: 'Héroic Fantasy',
-      categoryNumber: 2,
-      productNumber: 3,
-    },
-    {
-      id: 2,
-      date: '2021-10-10',
-      univers: 'Super Héros',
-      categoryNumber: 2,
-      productNumber: 3,
-    },
-  ];
 
   const handleCreate = () => {
     handleOpenCreateModal();
@@ -95,16 +87,12 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
       .replace(/[\u0300-\u036f]/g, '');
 
   const getFitleredRows = () => {
-    let filteredRows = [...tableData];
+    let filteredRows = [...data];
     if (idProduct) {
-      filteredRows = filteredRows.filter(
-        (row) => row.id === Number(idProduct)
-      );
+      filteredRows = filteredRows.filter((row) => row.id === Number(idProduct));
     }
     if (date) {
-      filteredRows = filteredRows.filter(
-        (row) => row.date === date
-      );
+      filteredRows = filteredRows.filter((row) => row.date === date);
     }
     if (universe) {
       filteredRows = filteredRows.filter((row) =>
@@ -116,6 +104,16 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
   };
 
   const AllData = getFitleredRows();
+
+  // if (!user.isAdmin) {redirect('/error')};
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    redirect('/error');
+  }
 
   return (
     <>
@@ -223,6 +221,7 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
           rowId={idItem}
           item={"l'univers"}
           onClose={handleCloseDeleteModal}
+          deleteRow={(idItem: number) => deleteOneUniverse(idItem)}
         />
       </ModalTable>
     </>

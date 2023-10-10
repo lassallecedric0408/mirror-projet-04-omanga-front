@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface OrderProductFormProps {
   row?: any;
-  name: string;
+  name: string | undefined;
   onClose: () => void;
 }
 

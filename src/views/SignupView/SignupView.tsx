@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Stack, Snackbar } from '@mui/material';
+import { useMutation } from 'react-query';
+import {
+  TextField,
+  Button,
+  Grid,
+  Stack,
+  Snackbar,
+  CircularProgress,
+} from '@mui/material';
 import { Link, redirect } from 'react-router-dom';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 import { useOmangaContex } from '../../context/OmangaContext';
 import { signupViewStyle } from './signupViewStyle';
+import { signUpUser } from '../../services/users';
 
 const Alert = snackBarAlert;
 
@@ -38,22 +47,37 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   const [openErrorMessage, setOpenErrorMessage] = React.useState(false);
   const [openWarningMessage, setOpenWarningMessage] = useState(false);
 
+  const { mutate, isLoading, isError, isSuccess, data } = useMutation({
+    mutationKey: [
+      'signupUser',
+      { firstName, lastName, dateOfBirth, email, password, city, zipCode },
+    ],
+    mutationFn: () =>
+      signUpUser({
+        firstName,
+        lastName,
+        dateOfBirth,
+        email,
+        password,
+        city,
+        zipCode,
+      }),
+  });
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     checkUserIsAdult();
 
-    event.preventDefault();
-    console.log(
-      firstName,
-      lastName,
-      dateOfBirth,
-      email,
-      password,
-      city,
-      zipCode
-    );
-    dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
-    handleClick('success');
-    setTimeout(() => redirect('/'), 2000);
+    mutate();
+    if (isSuccess) {
+      mutate();
+      dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
+      handleClick('success');
+      setTimeout(() => redirect('/'), 2000);
+    }
+    if (isError) {
+      handleClick('error');
+    }
   };
 
   const handleClick = (e: string) => {
@@ -86,7 +110,7 @@ const SignupView: React.FC<SignupViewsProps> = () => {
       setOpenWarningMessage(false);
     }
   };
-
+  if (isLoading) return <CircularProgress />;
   return (
     <Grid container className={`${classes.signupView} ${classes.flexCenter}`}>
       <form

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import Grid from '@material-ui/core/Grid';
-import { useParams } from 'react-router-dom';
-import { products } from '../ProductsView/products';
+import { useQuery } from 'react-query';
+import { redirect, useParams } from 'react-router-dom';
+
+import { getOneProduct } from '../../services/products';
 import { ModalTable } from '../../components/ModalTable';
 import { AddReviewForm } from './AddReviewForm';
 import { OrderProductForm } from './OrderProductForm';
-import { Product } from '../../models/Product';
-import { materialUITheme } from '../../utils/materialUITheme';
-import AddIcon from '@mui/icons-material/Add';
-import { Button, Stack, Paper } from '@mui/material';
-import katana from '../../assets/katana-154939_1280.png';
 
-import { useStyles } from './productViewStyle';
+import { Button, Stack, Paper, CircularProgress, Grid } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
+import { materialUITheme } from '../../utils/materialUITheme';
+import classes from './productViewStyle.module.css';
 import { styled } from '@mui/material/styles';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -20,28 +20,19 @@ const Item = styled(Paper)(({ theme }) => ({
   color: `${materialUITheme.palette.secondary.main}`,
 }));
 
-const reviews = [
-  { userName: 'John Doe', review: 'Lorem ipsum dolor sit amet, consectet' },
-  { userName: 'John Doe', review: 'Lorem ipsum dolor sit amet, consectet' },
-  { userName: 'John Doe', review: 'Lorem ipsum dolor sit amet, consectet' },
-  { userName: 'John Doe', review: 'Lorem ipsum dolor sit amet, consectet' },
-  { userName: 'John Doe', review: 'Lorem ipsum dolor sit amet, consectet' },
-  { userName: 'John Doe', review: 'Lorem ipsum dolor sit amet, consectet' },
-  { userName: 'John Doe', review: 'Lorem ipsum dolor sit amet, consectet' },
-];
-
 interface ProductViewProps {}
 
 const ProductView: React.FC<ProductViewProps> = () => {
   let { id } = useParams();
-  const classes = useStyles();
 
-  // const { OmangaState } = useOmangaContex();
-  // const { isLogged } = OmangaState;
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getOneProduct', id],
+    queryFn: () => getOneProduct(Number(id)),
+  });
+
   const isLogged =
     localStorage.getItem('userIsLogged') === 'true' ? true : false;
   console.log(isLogged);
-  const product: Product = products[Number(id)];
 
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const handleOpenReviewModal = () => setOpenReviewModal(true);
@@ -51,11 +42,19 @@ const ProductView: React.FC<ProductViewProps> = () => {
   const handleOpenOrderModal = () => setOpenOrderModal(true);
   const handleCloseOrderModal = () => setOpenOrderModal(false);
 
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    redirect('/error');
+  }
+
   return (
     <>
       <Grid container className={`${classes.ProductView}`}>
         <Grid item className={`${classes.productTitle} ${classes.flexCenter}`}>
-          <p> {product.name}</p>
+          <p> {data?.data.name}</p>
         </Grid>
         <Grid
           container
@@ -63,20 +62,7 @@ const ProductView: React.FC<ProductViewProps> = () => {
         >
           <Grid item xs={12} sm={12} md={8}>
             <p className={classes.productDescription}>
-              Lorem ipsum dolor sit amet. Sit officiis itaque sed molestias
-              veritatis est dolore incidunt. Id expedita rerum ut itaque totam
-              non alias dolor. Est sint voluptatem non sequi odit eos quos
-              deleniti et iusto provident ad aliquam inventore. Et galisum
-              itaque quo reprehenderit libero hic voluptatem unde in earum
-              debitis et quos magni. Ut galisum dicta ab quod nihil 33 sequi
-              enim id officiis quisquam aut error dolor. Qui totam neque et
-              quibusdam internos qui dignissimos saepe eos voluptas autem 33
-              perspiciatis harum. Aut dicta architecto et saepe voluptatem et
-              blanditiis voluptas in saepe molestiae aut officiis quaerat. Aut
-              eaque quia et voluptatem ipsa est quidem dolore At minima ullam
-              quo voluptate explicabo et eveniet laboriosam. Ut consequatur
-              labore est officia repellendus eum omnis natus et consequuntur
-              dolor non voluptate sapiente sed sint eius.
+              {data?.data.description}
             </p>
           </Grid>
           <Grid
@@ -86,7 +72,12 @@ const ProductView: React.FC<ProductViewProps> = () => {
             sm={12}
             md={4}
           >
-            <img src={katana} alt={katana} width='300' height='300' />
+            <img
+              src={data?.data.image_url}
+              alt={data?.data.name}
+              width='300'
+              height='300'
+            />
             {isLogged && (
               <Button
                 variant='contained'
@@ -118,15 +109,15 @@ const ProductView: React.FC<ProductViewProps> = () => {
           </Grid>
           <Grid item>
             <Stack spacing={2}>
-              {reviews.map((review, index) => {
+              {data?.data.reviews.map((review, index) => {
                 return (
                   <Item>
                     <Grid container className={classes.reviewDetails}>
                       <Grid item>
-                        <p>{review.userName}</p>
+                        <p>{review.user_id}</p>
                       </Grid>
                       <Grid item>
-                        <p>{review.review}</p>
+                        <p>{review.content}</p>
                       </Grid>
                     </Grid>
                   </Item>
@@ -140,7 +131,10 @@ const ProductView: React.FC<ProductViewProps> = () => {
         <AddReviewForm onClose={handleCloseReviewModal} />
       </ModalTable>
       <ModalTable open={openOrderModal} handleClose={handleCloseOrderModal}>
-        <OrderProductForm name={product.name} onClose={handleCloseOrderModal} />
+        <OrderProductForm
+          name={data?.data.name}
+          onClose={handleCloseOrderModal}
+        />
       </ModalTable>
     </>
   );
