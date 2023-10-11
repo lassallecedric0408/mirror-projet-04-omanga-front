@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
-const API_URL = process.env.REACT_APP_API_URL;
+// const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = 'http://localhost:3005';
 const token = localStorage.getItem('token');
 
 type LoginUser = {
@@ -30,47 +31,61 @@ const loginUser = async ({ email, password }: LoginUser) => {
 type SignUpUser = {
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth?: string;
   email: string;
   password: string;
-  city: string;
-  zipCode: number | undefined;
+  city?: string | null;
+  zipCode?: number | null;
 };
-
+type usersignupBody = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  city?: null | string;
+  zip_code?: null | string;
+}
 async function signUpUser({
   firstName,
   lastName,
-  dateOfBirth,
   email,
   password,
   city,
   zipCode,
 }: SignUpUser) {
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+    const usersignup: usersignupBody = {
+      firstname: firstName,
+      lastname: lastName,
+      email: email,
+      password: password,
+    };
+    // if (city !== null) {
+    //   usersignup.city = city;
+    // }
+    // if (zipCode !== null) {
+    //   usersignup.zip_code = `${zipCode}`;
+    // }
+    console.log(usersignup);
+    const response = await fetch(`http://localhost:3005/users/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(usersignup),
+    });
 
-  const response = await fetch(`${API_URL}/orders/signup`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      firstName,
-      lastName,
-      dateOfBirth,
-      email,
-      city,
-      zipCode,
-      password: hashedPassword,
-    }),
-  });
+    if (!response.ok) {
+      throw new Error('SignUp failed');
+    }
 
-  if (!response.ok) {
-    throw new Error('Registration failed');
+    const data = await response.json();
+
+    return { data: data };
+  } catch (error) {
+    throw new Error(`User signup failed: ${(error as Error).message}`);
   }
-
-  const data = await response.json();
-
-  return data;
 }
 
 type DeleteUser = {

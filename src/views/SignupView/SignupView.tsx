@@ -40,8 +40,8 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   const [email, setEmail] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [password, setPassword] = useState('');
-  const [city, setCity] = useState('');
-  const [zipCode, setZipCode] = useState<number>();
+  const [city, setCity] = useState<string | null>(null);
+  const [zipCode, setZipCode] = useState<number | null>(null);
 
   const [openSuccessMessage, setOpenSuccessMessage] = React.useState(false);
   const [openErrorMessage, setOpenErrorMessage] = React.useState(false);
@@ -50,7 +50,7 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   const { mutate, isLoading, isError, isSuccess, data } = useMutation({
     mutationKey: [
       'signupUser',
-      { firstName, lastName, dateOfBirth, email, password, city, zipCode },
+      { firstName, lastName, email, password, city, zipCode },
     ],
     mutationFn: () =>
       signUpUser({
@@ -67,11 +67,9 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     checkUserIsAdult();
-
     mutate();
     if (isSuccess) {
-      mutate();
-      dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
+      console.log(data, 'data');
       handleClick('success');
       setTimeout(() => redirect('/'), 2000);
     }
@@ -110,7 +108,8 @@ const SignupView: React.FC<SignupViewsProps> = () => {
       setOpenWarningMessage(false);
     }
   };
-  if (isLoading) return <CircularProgress />;
+  // if (isLoading) return <CircularProgress />;
+
   return (
     <Grid container className={`${classes.signupView} ${classes.flexCenter}`}>
       <form

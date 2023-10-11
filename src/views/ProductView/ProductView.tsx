@@ -7,11 +7,18 @@ import { ModalTable } from '../../components/ModalTable';
 import { AddReviewForm } from './AddReviewForm';
 import { OrderProductForm } from './OrderProductForm';
 
-import { Button, Stack, Paper, CircularProgress, Grid } from '@mui/material';
+import {
+  Button,
+  Stack,
+  Paper,
+  CircularProgress,
+  Grid,
+  Typography,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 import { materialUITheme } from '../../utils/materialUITheme';
-import classes from './productViewStyle.module.css';
+import { productViewStyle } from './productViewStyle';
 import { styled } from '@mui/material/styles';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -20,9 +27,13 @@ const Item = styled(Paper)(({ theme }) => ({
   color: `${materialUITheme.palette.secondary.main}`,
 }));
 
+const useStyles = productViewStyle;
+
 interface ProductViewProps {}
 
 const ProductView: React.FC<ProductViewProps> = () => {
+  const classes = useStyles();
+
   let { id } = useParams();
 
   const { data, isLoading, error } = useQuery({
@@ -32,7 +43,6 @@ const ProductView: React.FC<ProductViewProps> = () => {
 
   const isLogged =
     localStorage.getItem('userIsLogged') === 'true' ? true : false;
-  console.log(isLogged);
 
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const handleOpenReviewModal = () => setOpenReviewModal(true);
@@ -52,8 +62,17 @@ const ProductView: React.FC<ProductViewProps> = () => {
 
   return (
     <>
-      <Grid container className={`${classes.ProductView}`}>
-        <Grid item className={`${classes.productTitle} ${classes.flexCenter}`}>
+      <Grid
+        container
+        sx={{
+          height: '77vh',
+          width: '90%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          overflow: 'hidden',
+        }}
+      >
+        <Grid item className={classes.productTitle} xs={12} sm={12} md={12}>
           <p> {data?.data.name}</p>
         </Grid>
         <Grid
@@ -67,10 +86,15 @@ const ProductView: React.FC<ProductViewProps> = () => {
           </Grid>
           <Grid
             item
-            className={`${classes.productImageContainer} ${classes.flexCenter}`}
+            className={classes.productImageContainer}
             xs={12}
             sm={12}
             md={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
             <img
               src={data?.data.image_url}
@@ -107,24 +131,33 @@ const ProductView: React.FC<ProductViewProps> = () => {
               </Button>
             )}
           </Grid>
-          <Grid item>
-            <Stack spacing={2}>
-              {data?.data.reviews.map((review, index) => {
-                return (
-                  <Item>
-                    <Grid container className={classes.reviewDetails}>
-                      <Grid item>
-                        <p>{review.user_id}</p>
-                      </Grid>
-                      <Grid item>
-                        <p>{review.content}</p>
-                      </Grid>
-                    </Grid>
-                  </Item>
-                );
-              })}
-            </Stack>
-          </Grid>
+
+          <Stack spacing={2} sx={{ width: '100%', overflow: 'auto' }}>
+            {data?.data.reviews.map((review, index) => {
+              return (
+                <Item key={index}>
+                  <Stack>
+                    <Typography
+                      variant='subtitle1'
+                      display='block'
+                      gutterBottom
+                      sx={{ fontFamily: 'Caveat' }}
+                    >
+                      {review.user_id}
+                    </Typography>
+                    <Typography
+                      variant='subtitle2'
+                      display='block'
+                      gutterBottom
+                      sx={{ fontFamily: 'Caveat' }}
+                    >
+                      {review.content}
+                    </Typography>
+                  </Stack>
+                </Item>
+              );
+            })}
+          </Stack>
         </Grid>
       </Grid>
       <ModalTable open={openReviewModal} handleClose={handleCloseReviewModal}>

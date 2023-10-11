@@ -51,7 +51,7 @@ const ProductCard: React.FC<ProductsCardProps> = ({
   const roundedPrice = (price * 100).toFixed(2);
   return (
     <Paper elevation={5} style={{ height: '100%', textDecoration: 'none' }}>
-      <RouterLink to={`/product/${index}`}>
+      <RouterLink to={`/product/${index + 1}`}>
         <Card className={classes.root}>
           <CardActionArea>
             <div style={{ position: 'relative', paddingBottom: '100%' }}>
@@ -59,7 +59,7 @@ const ProductCard: React.FC<ProductsCardProps> = ({
                 component='img'
                 image={imageLink}
                 alt="Image de l'article"
-                style={{
+                sx={{
                   position: 'absolute',
                   width: '70%',
                   height: '70%',

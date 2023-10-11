@@ -28,7 +28,6 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
     queryFn: () => getAllProducts(),
   });
 
-  console.log(getAllProducts());
   const productsData = data?.data || [];
 
   const [productsSelectCategories, setProductsSelectCategories] = useState<

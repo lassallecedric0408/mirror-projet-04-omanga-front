@@ -69,11 +69,9 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
 
   const { dispatch, OmangaState } = useOmangaContex();
   const { user } = OmangaState;
-  const userBookings = user?.bookings ?? [];
+  const userBookings: any[] = [];
 
-  const [bookingsUserData, setBookingsUserData] = useState(
-    user?.bookings ?? []
-  );
+  const [bookingsUserData, setBookingsUserData] = useState([]);
 
   const [idItem, setIdItem] = useState<number>(0);
   const [idProduct, setIdProduct] = useState<number>();

@@ -1,13 +1,7 @@
 import { materialUITheme } from '../../utils/materialUITheme';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-  ProductView: {
-    height: '77vh',
-    width: '90%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
+const productViewStyle = makeStyles((theme) => ({
   flexCenter: {
     display: 'flex',
     alignItems: 'center',
@@ -20,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
   productTitle: {
     height: '10vh',
     fontSize: '1.6rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     color: `${materialUITheme.palette.primary.main}`,
     [theme.breakpoints.down('md')]: {
       fontSize: '1.3rem',
@@ -84,4 +81,4 @@ const useStyles = makeStyles((theme) => ({
   formSubmitButton: { marginTop: '2rem' },
 }));
 
-export { useStyles };
+export { productViewStyle };

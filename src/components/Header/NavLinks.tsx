@@ -16,55 +16,58 @@ interface NavLinksProps {
 }
 
 const NavLinks: React.FC<NavLinksProps> = ({ handleCloseNavMenu, state }) => {
-
   const { OmangaState } = useOmangaContex();
   const { user } = OmangaState;
 
   return (
     <>
-      {
-        pages.map((page) => (
-          <Button
-            key={page.name}
-            onClick={handleCloseNavMenu}
-            sx={{ my: 2, color: 'white', display: 'block' }}
+      {pages.map((page) => (
+        <Button
+          key={page.name}
+          onClick={handleCloseNavMenu}
+          sx={{ my: 2, color: 'white', display: 'block' }}
+        >
+          <RouterLink
+            to={page.link}
+            style={{
+              color: `${
+                state === 'mobile'
+                  ? materialUITheme.palette.primary.main
+                  : materialUITheme.palette.secondary.main
+              }`,
+              textDecoration: 'none',
+              fontSize: '1.1rem',
+              fontWeight: '500',
+              fontFamily: 'Caveat',
+            }}
           >
-            <RouterLink
-              to={page.link}
-              style={{
-                color: `${state === 'mobile' ? materialUITheme.palette.primary.main : materialUITheme.palette.secondary.main}`,
-                textDecoration: 'none',
-                fontSize: '1.1rem',
-                fontWeight: '500',
-                fontFamily: 'Caveat',
-              }}
-            >
-              {page.name}
-            </RouterLink>
-          </Button>
-        ))
-      }
-      {
-        user?.is_admin && (
-          <Button
-            onClick={handleCloseNavMenu}
-            sx={{ my: 2, color: 'white', display: 'block' }}
+            {page.name}
+          </RouterLink>
+        </Button>
+      ))}
+      {user?.user.role === 'ADMIN' && (
+        <Button
+          onClick={handleCloseNavMenu}
+          sx={{ my: 2, color: 'white', display: 'block' }}
+        >
+          <RouterLink
+            to='/dashboard'
+            style={{
+              color: `${
+                state === 'mobile'
+                  ? materialUITheme.palette.primary.main
+                  : materialUITheme.palette.secondary.main
+              }`,
+              textDecoration: 'none',
+              fontSize: '1.1rem',
+              fontWeight: '500',
+              fontFamily: 'Caveat',
+            }}
           >
-            <RouterLink
-              to="/dashboard"
-              style={{
-                color: `${state === 'mobile' ? materialUITheme.palette.primary.main : materialUITheme.palette.secondary.main}`,
-                textDecoration: 'none',
-                fontSize: '1.1rem',
-                fontWeight: '500',
-                fontFamily: 'Caveat',
-              }}
-            >
-              Tableaud de bord
-            </RouterLink>
-          </Button>
-        )
-      }
+            Tableaud de bord
+          </RouterLink>
+        </Button>
+      )}
     </>
   );
 };
