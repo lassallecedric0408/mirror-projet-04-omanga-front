@@ -1,42 +1,34 @@
 import { Product } from "../models/Product";
 
-// const API_URL = process.env.REACT_APP_API_URL;
 const API_URL = 'http://localhost:3005';
-const token = localStorage.getItem('token');
+const token = localStorage.getItem('accessToken')
 
-const getAllProducts = async () => {
-  try {
-    const response = await fetch(`${API_URL}/products`, {
-      method: 'GET'
-    });
-    const data = await response.json();
-    return { data: data };
-  } catch (error) {
-    throw new Error(`Get all products failed: ${(error as Error).message}`);
-  }
+type GetAllProductsReturn = {
+  data: Product[];
+};
+
+const getAllProducts = async (): Promise<GetAllProductsReturn> => {
+  const response = await fetch(API_URL + '/products', {
+    method: 'GET'
+  });
+  const data = await response.json();
+  return { data };
 };
 
 const getOneProduct = async (id: number) => {
-  try {
-    const response = await fetch(`${API_URL}/products/${id}`, {
-      method: 'GET',
-    });
-
-    const data: Product = await response.json();
-
-    return { data: data };
-
-  } catch (error) {
-    throw new Error(`Get all products failed: ${(error as Error).message}`);
-  }
+  const response = await fetch(API_URL + '/products/' + id, {
+    method: 'GET',
+  });
+  const data: Product = await response.json();
+  return { data };
 };
 
 const createOneProduct = async (product: Product) => {
-  const response = await fetch(`${API_URL}/products`, {
+  const response = await fetch(`${API_URL} /products`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      // 'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(product),
   });
@@ -55,7 +47,7 @@ const updateOneProduct = async (id: number, product: any) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      // 'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(product),
   });
@@ -74,7 +66,7 @@ const deleteOneProduct = async (id: number) => {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      // 'Authorization': `Bearer ${token}`,
     },
   });
 

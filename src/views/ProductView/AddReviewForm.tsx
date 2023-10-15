@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useOmangaContex } from '../../context/OmangaContext';
+import { useMutation } from 'react-query';
 import { TextField, Button, Snackbar, Stack, Grid } from '@mui/material';
 import { materialUITheme } from '../../utils/materialUITheme';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { createOneReview } from '../../services/reviews';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -29,9 +32,13 @@ const useStyles = makeStyles((theme) => ({
 
 interface AddReviewFormProps {
   onClose: () => void;
+  id: string | undefined;
 }
 
-const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose }) => {
+const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
+  const { OmangaState } = useOmangaContex();
+  const { user } = OmangaState;
+
   const classes = useStyles();
 
   const Alert = snackBarAlert;
@@ -41,6 +48,21 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose }) => {
 
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
   const [comment, setComment] = useState('');
+
+  const productId = Number(id);
+  const userId = user?.user.id;
+  const userMail = user?.user.email;
+
+  const { mutate, data, isLoading } = useMutation({
+    mutationKey: ['loginUser', { comment, productId, userId, userMail }],
+    mutationFn: () =>
+      createOneReview({
+        comment,
+        productId,
+        userId,
+        userMail,
+      }),
+  });
 
   const handleClick = (e: string) => {
     if (e === 'successCreate') {
@@ -69,9 +91,15 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleClick('successCreate');
-    console.log(comment);
-    setTimeout(onClose, 2000);
+    mutate();
+    console.log(data);
+    if (data) {
+      handleClick('success');
+      setTimeout(onClose, 2000);
+    }
+    if (!data?.data.message) {
+      handleClick('error');
+    }
   };
 
   return (

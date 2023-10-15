@@ -1,25 +1,17 @@
-const API_URL = process.env.REACT_APP_API_URL;
-const token = localStorage.getItem('token');
+import { Category } from "../models/Category";
+
+const API_URL = 'http://localhost:3005';
+const token = localStorage.getItem('accessToken');
 
 const getAllCategories = async () => {
-  const response = await fetch(`${API_URL}/categories`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
+  const response = await fetch(API_URL + '/categories', {
+    method: 'GET'
   });
-
-  if (!response.ok) {
-    throw new Error('Get all categories failed');
-  }
-
-  const data = await response.json();
-
-  return data;
+  const data: Category[] = await response.json();
+  return { data };
 };
 
-const createOneCategory = async (category: any) => {
+const createOneCategory = async (category: Category) => {
   const response = await fetch(`${API_URL}/categories`, {
     method: 'POST',
     headers: {
@@ -38,14 +30,14 @@ const createOneCategory = async (category: any) => {
   return data;
 };
 
-const updateOneCategory = async (id: number, order: any) => {
+const updateOneCategory = async (id: number, category: Category) => {
   const response = await fetch(`${API_URL}/categories/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify(order),
+    body: JSON.stringify(category),
   });
 
   if (!response.ok) {

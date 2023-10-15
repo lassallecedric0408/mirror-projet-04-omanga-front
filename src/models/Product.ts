@@ -34,3 +34,4 @@ export type Product = {
   reviews: Review[];
   orders: Order[];
 }
+

@@ -17,7 +17,7 @@ import { SelectItem } from '../../models/SelectItem';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
 import { removeAccents } from '../../utils/removeAccents';
-import { deleteOneUser } from '../../services/users';
+import { deleteOneUser } from '../../services/user';
 
 const useStyles = usersTableViewStyle;
 
@@ -207,6 +207,7 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
           item={"l'utilisateur"}
           onClose={handleCloseDeleteModal}
           deleteRow={(idItem) => deleteOneUser({ id: idItem })}
+          userMail={''}
         />
       </ModalTable>
     </>

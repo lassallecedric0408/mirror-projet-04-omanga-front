@@ -1,41 +1,48 @@
-const API_URL = process.env.REACT_APP_API_URL;
-const token = localStorage.getItem('token');
+import { Booking } from "../models/Booking";
+
+const API_URL = 'http://localhost:3005';
 
 const getAllBookings = async () => {
-  const response = await fetch(`${API_URL}/orders`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Get all orders failed');
+  try {
+    const response = await fetch(API_URL + '/orders', {
+      method: 'GET'
+    });
+    const data: Booking[] = await response.json();
+    return { data: data };
+  } catch (error) {
+    throw new Error(`Get all products failed: ${(error as Error).message}`);
   }
-
-  const data = await response.json();
-
-  return data;
 };
 
-const createOneBooking = async (product: any) => {
+type CreateOneBooking = {
+  productQuantity: number | undefined;
+  productId: number | undefined;
+  userId: number | undefined;
+  userMail: string | undefined;
+};
+type UserBooking = {
+  product_quantity: number | undefined;
+  product_id: number | undefined;
+  user_id: number | undefined;
+}
+const createOneBooking = async ({ productQuantity, productId, userId, userMail }: CreateOneBooking) => {
+  const userBooking: UserBooking = {
+    product_quantity: productQuantity,
+    product_id: productId,
+    user_id: userId
+  }
+
   const response = await fetch(`${API_URL}/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': 'accessToken' + userMail,
     },
-    body: JSON.stringify(product),
+    body: JSON.stringify(userBooking),
   });
-
-  if (!response.ok) {
-    throw new Error('Order creation failed');
-  }
-
   const data = await response.json();
-
-  return data;
+  console.log(data);
+  return { data };
 };
 
 const updateOneBooking = async (id: number, order: any) => {
@@ -43,7 +50,7 @@ const updateOneBooking = async (id: number, order: any) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      // 'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(order),
   });
@@ -57,22 +64,18 @@ const updateOneBooking = async (id: number, order: any) => {
   return data;
 };
 
-const deleteOneBooking = async (id: number) => {
-  const response = await fetch(`${API_URL}/orders/${id}`, {
+const deleteOneBooking = async (id: number, userMail: string | undefined) => {
+  console.log('lancement de la suppression');
+  const response = await fetch(API_URL + '/orders/' + id, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': 'accessToken' + userMail,
     },
   });
-
-  if (!response.ok) {
-    throw new Error('Product deletion failed');
-  }
-
   const data = await response.json();
-
-  return data;
+  console.log(data);
+  return { data };
 };
 
 export { getAllBookings, createOneBooking, updateOneBooking, deleteOneBooking };

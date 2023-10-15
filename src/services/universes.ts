@@ -1,22 +1,14 @@
-const API_URL = process.env.REACT_APP_API_URL;
-const token = localStorage.getItem('token');
+import { Universe } from "../models/Universe";
+
+const API_URL = 'http://localhost:3005';
+const token = localStorage.getItem('accessToken');
 
 const getAllUniverses = async () => {
-  const response = await fetch(`${API_URL}/universes`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
+  const response = await fetch(API_URL + '/universes', {
+    method: 'GET'
   });
-
-  if (!response.ok) {
-    throw new Error('Get all universe failed');
-  }
-
-  const data = await response.json();
-
-  return data;
+  const data: Universe[] = await response.json();
+  return { data };
 };
 
 const createOneUniverse = async (universe: any) => {

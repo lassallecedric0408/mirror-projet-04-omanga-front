@@ -1,8 +1,0 @@
-export type Booking = {
-  id: number;
-  date: string;
-  userName: string;
-  price: number;
-  productName: string;
-  state: 'active' | 'archived';
-};

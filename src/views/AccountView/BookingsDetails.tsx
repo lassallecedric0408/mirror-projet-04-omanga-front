@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { useOmangaContex } from '../../context/OmangaContext';
@@ -8,7 +9,7 @@ import { DateFieldTable } from '../../components/DateFieldTable';
 import { ModalTable } from '../../components/ModalTable/ModalTable';
 import { DeleteRawTable } from '../../components/DeleteRowTable';
 
-import { deleteOneUserOrder } from '../../services/users';
+import { deleteOneUserOrder } from '../../services/user';
 
 import {
   Button,
@@ -19,11 +20,14 @@ import {
   TableHead,
   TableRow,
   Grid,
+  CircularProgress,
 } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { materialUITheme } from '../../utils/materialUITheme';
 import { makeStyles } from '@material-ui/core/styles';
+import { getAllBookings } from '../../services/bookings';
+import { DeleteUserBooking } from './DeleteUserBooking';
 
 const useStyles = makeStyles((theme) => ({
   flexCenter: {
@@ -67,6 +71,11 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
   const classes = useStyles();
   const navigate = useNavigate();
 
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getAllBookings'],
+    queryFn: () => getAllBookings(),
+  });
+
   const { dispatch, OmangaState } = useOmangaContex();
   const { user } = OmangaState;
   const userBookings: any[] = [];
@@ -104,32 +113,47 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
   };
 
   const getFitleredBookings = () => {
-    let filteredBookings = [...userBookings];
-    if (idProduct) {
-      filteredBookings = filteredBookings.filter(
-        (booking) => booking.id === Number(idProduct)
-      );
-    }
+    let filteredBookings = [
+      ...(data?.data.filter((booking) => booking.user_id === user?.user.id) ??
+        []),
+    ];
+    // if (idProduct) {
+    //   filteredBookings = filteredBookings.filter(
+    //     (booking) => booking.id === Number(idProduct)
+    //   );
+    // }
     if (date) {
       filteredBookings = filteredBookings.filter(
-        (booking) => booking.date === date
+        (booking) => booking.order_date.split('T')[0] === date
       );
     }
-    if (article) {
-      filteredBookings = filteredBookings.filter((booking) =>
-        booking.productName
-          .toLocaleLowerCase()
-          .includes(article.toLocaleLowerCase())
-      );
-    }
+    // if (article) {
+    //   filteredBookings = filteredBookings.filter((booking) =>
+    //     booking.productName
+    //       .toLocaleLowerCase()
+    //       .includes(article.toLocaleLowerCase())
+    //   );
+    // }
     return filteredBookings;
   };
 
-  // useEffect(() => {
-  //   const filteredBookings = getFitleredBookings();
-  //   setBookingsUserData(filteredBookings);
-  // }, [bookings, idProduct, date, article]);
-
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
   const filteredBookings = getFitleredBookings();
   return (
     <>
@@ -165,13 +189,13 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
               onChange={handleDateChange}
             />
           </Grid>
-          <Grid item xs={4}>
+          {/* <Grid item xs={4}>
             <TextFieldTable
               label={'Article'}
               value={article}
               onChange={handleArticleChange}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid item className={classes.tableContainer}>
           <TableContainer>
@@ -180,10 +204,10 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
                 <TableRow>
                   <TableCell>ID commande</TableCell>
                   <TableCell>Date</TableCell>
-                  <TableCell>Article</TableCell>
+                  {/* <TableCell>Article</TableCell>
                   <TableCell>Prix</TableCell>
                   <TableCell>Nombre</TableCell>
-                  <TableCell>Total</TableCell>
+                  <TableCell>Total</TableCell> */}
                   <TableCell>Lien</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
@@ -192,11 +216,11 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
                 {filteredBookings.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.productName}</TableCell>
+                    <TableCell>{row.order_date.split('T')[0]}</TableCell>
+                    {/* <TableCell>{row.productName}</TableCell>
                     <TableCell>{row.price}</TableCell>
                     <TableCell>{row.productnumber}</TableCell>
-                    <TableCell>{row.totalProductPrice}</TableCell>
+                    <TableCell>{row.totalProductPrice}</TableCell> */}
                     <TableCell>
                       <Button
                         variant='text'
@@ -222,11 +246,10 @@ const BookingsDetails: React.FC<ViewsProps> = () => {
         </Grid>
       </Grid>
       <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
-        <DeleteRawTable
+        <DeleteUserBooking
           rowId={idItem}
-          item={'la réservation'}
           onClose={handleCloseDeleteModal}
-          deleteRow={(idItem) => deleteOneUserOrder({ id: idItem })}
+          userMail={user?.user.email}
         />
       </ModalTable>
     </>

@@ -9,9 +9,9 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { snackBarAlert } from '../../utils/snackBarAlert';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useOmangaContex } from '../../context/OmangaContext';
-import { loginUser } from '../../services/users';
+import { loginUser } from '../../services/user';
 
 const useStyles = loginViewStyle;
 
@@ -19,7 +19,7 @@ interface LoginViewsProps {}
 
 const LoginView: React.FC<LoginViewsProps> = () => {
   const classes = useStyles();
-
+  const navigate = useNavigate();
   const { dispatch } = useOmangaContex();
 
   const Alert = snackBarAlert;
@@ -31,8 +31,8 @@ const LoginView: React.FC<LoginViewsProps> = () => {
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
-  const { mutate, isLoading, isError, isSuccess, data } = useMutation({
-    mutationKey: ['signupUser', { email, password }],
+  const { mutate, data, isLoading } = useMutation({
+    mutationKey: ['loginUser', { email, password }],
     mutationFn: () =>
       loginUser({
         email,
@@ -40,19 +40,36 @@ const LoginView: React.FC<LoginViewsProps> = () => {
       }),
   });
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    const token = data?.data?.token;
-    if (isSuccess) {
-      mutate();
-      localStorage.setItem('userIsLogged', 'true');
-      localStorage.setItem('token', `${token}`);
-      dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: true });
-      handleClick('success');
-      setTimeout(() => setRedirectUser(true), 2500);
+    await mutate();
+    console.log(data);
+    if (data?.data.user) {
+      await dispatch({
+        type: 'SET_LOGGED_USER',
+        id: data.data.user.id,
+        firstname: data.data.user.firstname,
+        lastname: data.data.user.lastname,
+        email: data.data.user.email,
+        image_url: data.data.user.image_url,
+        role: data.data.user.role,
+        city: data.data.user.city,
+        zip_code: data.data.user.zip_code,
+      });
+      await localStorage.setItem('userIsLogged', 'true');
+      await localStorage.setItem(
+        `accessToken/${data.data.user.email}`,
+        `${data.data.accessToken}`
+      );
+      await localStorage.setItem(
+        `refreshToken/${data.data.user.email}`,
+        `${data.data.refreshToken}`
+      );
+      await handleClick('success');
+      setTimeout(() => navigate(`/`), 2500);
     }
-    if (isError) {
-      handleClick('error');
+    if (!data?.data.user) {
+      await handleClick('error');
     }
   };
 
@@ -81,7 +98,23 @@ const LoginView: React.FC<LoginViewsProps> = () => {
     }
   };
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <>

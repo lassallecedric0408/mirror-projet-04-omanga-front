@@ -12,45 +12,18 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
-import mapPoint from '../../assets/map-point-wave-svgrepo-com.svg'
+import mapPoint from '../../assets/map-point-wave-svgrepo-com.svg';
 import L from 'leaflet';
 import { homeViewStyle } from './homeViewStyle';
+import { images } from './images';
 import 'leaflet/dist/leaflet.css';
-import katana from '../../assets/katana-154939_1280.png'
-import buddha from '../../assets/buddha-148533_1280.png'
-import book from '../../assets/book-2024278_1280.png'
-import board from '../../assets/board-48117_1280.png'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const useStyles = homeViewStyle;
 
 const HomeView: React.FC = () => {
-
   const classes = useStyles();
-
-  const images = [
-    {
-      label: 'Statuette – 100.00€',
-      imgPath:
-        `${buddha}`,
-    },
-    {
-      label: 'Katana – 150.00€',
-      imgPath:
-        `${katana}`,
-    },
-    {
-      label: 'Omanga Tome 01 – 8.50€',
-      imgPath:
-        `${book}`,
-    },
-    {
-      label: 'Carte Omanga n°1 –',
-      imgPath:
-        `${board}`,
-    },
-  ];
 
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -68,7 +41,7 @@ const HomeView: React.FC = () => {
     setActiveStep(step);
   };
 
-  const position: LatLngExpression = [48.897899, 2.096092]
+  const position: LatLngExpression = [48.897899, 2.096092];
 
   const mapIcon = new L.Icon({
     iconUrl: mapPoint,
@@ -79,17 +52,32 @@ const HomeView: React.FC = () => {
   return (
     <Grid container className={classes.home}>
       <Grid item xs={12} className={`${classes.presentation} `}>
-        <Grid container className={`${classes.presentationTitle} ${classes.flexVertCenter}`}>
-          <p> Bienvenue chez O'Manga, Votre Destination Manga et Culture Japonaise !
+        <Grid
+          container
+          className={`${classes.presentationTitle} ${classes.flexVertCenter}`}
+        >
+          <p>
+            {' '}
+            Bienvenue chez O'Manga, Votre Destination Manga et Culture Japonaise
+            !
           </p>
         </Grid>
         <Grid container className={`${classes.presentationContent}`}>
-          <Grid item md={8} className={`${classes.presentationMessageContainer} ${classes.flexCenter}`}>
+          <Grid
+            item
+            md={8}
+            className={`${classes.presentationMessageContainer} ${classes.flexCenter}`}
+          >
             <p className={`${classes.presentationMessage}`}>
-              Chez O'Manga, nous sommes votre passerelle vers le monde captivant des mangas et de la culture japonaise. <br />
-              Découvrez notre collection de mangas variée, des produits dérivés uniques, des éléments de la culture japonaise traditionnelle, ainsi que des événements spéciaux. <br />
-              Notre équipe passionnée est là pour vous guider et partager notre amour pour le Japon. <br />
-              Explorez O'Manga et plongez dans l'univers fascinant du manga et de la japanisation dès aujourd'hui !
+              Chez O'Manga, nous sommes votre passerelle vers le monde captivant
+              des mangas et de la culture japonaise. <br />
+              Découvrez notre collection de mangas variée, des produits dérivés
+              uniques, des éléments de la culture japonaise traditionnelle,
+              ainsi que des événements spéciaux. <br />
+              Notre équipe passionnée est là pour vous guider et partager notre
+              amour pour le Japon. <br />
+              Explorez O'Manga et plongez dans l'univers fascinant du manga et
+              de la japanisation dès aujourd'hui !
             </p>
           </Grid>
           <Grid item md={4} className={classes.mapContainer}>
@@ -102,7 +90,7 @@ const HomeView: React.FC = () => {
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
                 <Marker position={position} icon={mapIcon}></Marker>
               </MapContainer>
@@ -111,13 +99,24 @@ const HomeView: React.FC = () => {
         </Grid>
       </Grid>
       <Grid item xs={12} className={`${classes.products}`}>
-        <Grid container className={`${classes.productsTitle} ${classes.flexVertCenter}`}>
-          <p> Produit bientôt dans la boutique
-          </p>
+        <Grid
+          container
+          className={`${classes.productsTitle} ${classes.flexVertCenter}`}
+        >
+          <p> Produit bientôt dans la boutique</p>
         </Grid>
-        <Grid container className={`${classes.productsSlippers} ${classes.flexCenter}`}>
+        <Grid
+          container
+          className={`${classes.productsSlippers} ${classes.flexCenter}`}
+        >
           <Box sx={{ maxWidth: '70%', height: '100%' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
               <p className={classes.textBox}>{images[activeStep].label}</p>
               <AutoPlaySwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -126,10 +125,17 @@ const HomeView: React.FC = () => {
                 enableMouseEvents
               >
                 {images.map((step, index) => (
-                  <div key={step.label} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <div
+                    key={step.label}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     {Math.abs(activeStep - index) <= 2 ? (
                       <Box
-                        component="img"
+                        component='img'
                         src={step.imgPath}
                         alt={step.label}
                         style={{ width: '25vh' }}
@@ -141,11 +147,11 @@ const HomeView: React.FC = () => {
             </div>
             <MobileStepper
               steps={maxSteps}
-              position="static"
+              position='static'
               activeStep={activeStep}
               nextButton={
                 <Button
-                  size="small"
+                  size='small'
                   onClick={handleNext}
                   disabled={activeStep === maxSteps - 1}
                 >
@@ -157,7 +163,11 @@ const HomeView: React.FC = () => {
                 </Button>
               }
               backButton={
-                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                <Button
+                  size='small'
+                  onClick={handleBack}
+                  disabled={activeStep === 0}
+                >
                   {theme.direction === 'rtl' ? (
                     <KeyboardArrowRight />
                   ) : (
@@ -170,7 +180,6 @@ const HomeView: React.FC = () => {
         </Grid>
       </Grid>
     </Grid>
-
   );
 };
 

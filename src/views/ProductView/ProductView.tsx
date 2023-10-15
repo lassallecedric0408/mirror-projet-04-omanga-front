@@ -53,7 +53,21 @@ const ProductView: React.FC<ProductViewProps> = () => {
   const handleCloseOrderModal = () => setOpenOrderModal(false);
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (error) {
@@ -102,6 +116,13 @@ const ProductView: React.FC<ProductViewProps> = () => {
               width='300'
               height='300'
             />
+            <Typography
+              variant='h6'
+              color='primary'
+              sx={{ margin: '1rem 0 1rem 0' }}
+            >
+              {data?.data.price} €
+            </Typography>
             {isLogged && (
               <Button
                 variant='contained'
@@ -124,7 +145,13 @@ const ProductView: React.FC<ProductViewProps> = () => {
               justifyContent: 'space-between',
             }}
           >
-            <p className={classes.reviewTitle}>Avis</p>
+            <Typography
+              variant='h5'
+              color='primary'
+              sx={{ margin: '0 0 1rem 0' }}
+            >
+              Avis
+            </Typography>
             {isLogged && (
               <Button onClick={handleOpenReviewModal}>
                 <AddIcon sx={{ fontSize: 30 }} /> Ajouter un avis
@@ -132,13 +159,16 @@ const ProductView: React.FC<ProductViewProps> = () => {
             )}
           </Grid>
 
-          <Stack spacing={2} sx={{ width: '100%', overflow: 'auto' }}>
+          <Stack
+            spacing={2}
+            sx={{ width: '100%', height: '100%', overflowY: 'auto' }}
+          >
             {data?.data.reviews.map((review, index) => {
               return (
                 <Item key={index}>
                   <Stack>
                     <Typography
-                      variant='subtitle1'
+                      variant='h6'
                       display='block'
                       gutterBottom
                       sx={{ fontFamily: 'Caveat' }}
@@ -146,7 +176,7 @@ const ProductView: React.FC<ProductViewProps> = () => {
                       {review.user_id}
                     </Typography>
                     <Typography
-                      variant='subtitle2'
+                      variant='subtitle1'
                       display='block'
                       gutterBottom
                       sx={{ fontFamily: 'Caveat' }}
@@ -161,12 +191,13 @@ const ProductView: React.FC<ProductViewProps> = () => {
         </Grid>
       </Grid>
       <ModalTable open={openReviewModal} handleClose={handleCloseReviewModal}>
-        <AddReviewForm onClose={handleCloseReviewModal} />
+        <AddReviewForm onClose={handleCloseReviewModal} id={id} />
       </ModalTable>
       <ModalTable open={openOrderModal} handleClose={handleCloseOrderModal}>
         <OrderProductForm
           name={data?.data.name}
           onClose={handleCloseOrderModal}
+          id={id}
         />
       </ModalTable>
     </>

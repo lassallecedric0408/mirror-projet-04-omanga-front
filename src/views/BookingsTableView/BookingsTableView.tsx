@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { redirect } from 'react-router-dom';
+import { useOmangaContex } from '../../context/OmangaContext';
+import { redirect, useNavigate } from 'react-router-dom';
 import {
   Button,
   Table,
@@ -31,6 +32,8 @@ interface BookingsTableViewProps {}
 
 const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   const classes = useStyles();
+  const { OmangaState } = useOmangaContex();
+  const { user } = OmangaState;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['getAllBookings'],
@@ -78,22 +81,22 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   };
 
   const getFitleredBookings = () => {
-    let filteredRows = [...data];
+    let filteredRows = [...(data?.data ?? [])];
     if (idBooking) {
       filteredRows = filteredRows.filter((row) => row.id === Number(idBooking));
     }
     if (date) {
-      filteredRows = filteredRows.filter((row) => row.date === date);
+      filteredRows = filteredRows.filter((row) => row.order_date === date);
     }
-    if (customer) {
-      filteredRows = filteredRows.filter((row) =>
-        removeAccents(row.name).includes(removeAccents(customer))
-      );
-    }
+    // if (customer) {
+    //   filteredRows = filteredRows.filter((row) =>
+    //     removeAccents(row.name).includes(removeAccents(customer))
+    //   );
+    // }
 
-    if (status) {
-      filteredRows = filteredRows.filter((row) => row.state === status);
-    }
+    // if (status) {
+    //   filteredRows = filteredRows.filter((row) => row.state === status);
+    // }
     return filteredRows;
   };
 
@@ -102,7 +105,21 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   // if (!user.isAdmin) {redirect('/error')};
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (error) {
@@ -167,18 +184,18 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
                   <TableCell>Date</TableCell>
                   <TableCell>Client</TableCell>
                   <TableCell>Prix</TableCell>
-                  <TableCell>Produit</TableCell>
-                  <TableCell>Action</TableCell>
+                  {/* <TableCell>Produit</TableCell>
+                  <TableCell>Action</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {AllBookings.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.prix}</TableCell>
-                    <TableCell>{row.produit}</TableCell>
+                    <TableCell>{row.order_date}</TableCell>
+                    <TableCell>{row.user_id}</TableCell>
+                    {/* <TableCell>{row.prix}</TableCell>
+                    <TableCell>{row.produit}</TableCell> */}
                     <TableCell>
                       <Button
                         variant='outlined'
@@ -215,7 +232,10 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
           rowId={idItem}
           item={'la réservation'}
           onClose={handleCloseDeleteModal}
-          deleteRow={(idItem: number) => deleteOneBooking(idItem)}
+          deleteRow={(idItem: number) =>
+            deleteOneBooking(idItem, user?.user.email)
+          }
+          userMail={''}
         />
       </ModalTable>
     </>

@@ -87,16 +87,16 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
       .replace(/[\u0300-\u036f]/g, '');
 
   const getFitleredRows = () => {
-    let filteredRows = [...data];
+    let filteredRows = [...(data?.data ?? [])];
     if (idProduct) {
       filteredRows = filteredRows.filter((row) => row.id === Number(idProduct));
     }
     if (date) {
-      filteredRows = filteredRows.filter((row) => row.date === date);
+      filteredRows = filteredRows.filter((row) => row.created_at === date);
     }
     if (universe) {
       filteredRows = filteredRows.filter((row) =>
-        removeAccents(row.univers).includes(removeAccents(universe))
+        removeAccents(row.name).includes(removeAccents(universe))
       );
     }
 
@@ -108,7 +108,21 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
   // if (!user.isAdmin) {redirect('/error')};
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (error) {
@@ -166,11 +180,11 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
+                  <TableCell>ID univers</TableCell>
                   <TableCell>Date de création</TableCell>
                   <TableCell>Univers</TableCell>
-                  <TableCell>Nb Catégorie</TableCell>
-                  <TableCell>Nb Produits</TableCell>
+                  {/* <TableCell>Nb Catégorie</TableCell>
+                  <TableCell>Nb Produits</TableCell> */}
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -178,10 +192,10 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
                 {AllData.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.univers}</TableCell>
-                    <TableCell>{row.categoryNumber}</TableCell>
-                    <TableCell>{row.productNumber}</TableCell>
+                    <TableCell>{row.created_at}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    {/* <TableCell>{row.categoryNumber}</TableCell>
+                    <TableCell>{row.productNumber}</TableCell> */}
                     <TableCell>
                       <Button
                         variant='outlined'
@@ -222,6 +236,7 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
           item={"l'univers"}
           onClose={handleCloseDeleteModal}
           deleteRow={(idItem: number) => deleteOneUniverse(idItem)}
+          userMail={''}
         />
       </ModalTable>
     </>

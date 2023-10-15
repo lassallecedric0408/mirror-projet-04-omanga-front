@@ -1,30 +1,38 @@
-import { Reducer } from "react";
-import { OmangaActions } from "./OmangaActions";
-import { OmangaState } from "./OmangaState";
+import { Reducer } from 'react';
+import { OmangaActions } from './OmangaActions';
+import { OmangaState } from './OmangaState';
 
-const OmangaReducer: Reducer<OmangaState, OmangaActions> = (prevState, action) => {
+const OmangaReducer: Reducer<OmangaState, OmangaActions> = (
+  prevState,
+  action
+) => {
   const newState = { ...prevState };
   switch (action.type) {
-    case 'SET_PRODUCTS_SELECT_CATEGORY': {
-      newState.productsSelectCategory = action.categoryItems;
+    case 'SET_LOGGED_USER': {
+      if (newState.user) {
+        newState.user.user.id = action.id;
+        newState.user.user.firstname = action.firstname;
+        newState.user.user.lastname = action.lastname;
+        newState.user.user.email = action.email;
+        newState.user.user.image_url = action.image_url;
+        newState.user.user.role = action.role;
+        newState.user.user.city = action.city;
+        newState.user.user.zip_code = action.zip_code;
+      }
       break;
     }
-    case 'SET_PRODUCTS_SELECT_UNIVERSE': {
-      newState.productsSelectUniverse = action.universeItems;
+    case 'SET_UPDATE_USER': {
+      if (newState.user) {
+        newState.user.user.firstname = action.firstname;
+        newState.user.user.lastname = action.lastname;
+        newState.user.user.email = action.email;
+        newState.user.user.image_url = action.image_url;
+        newState.user.user.city = action.city;
+        newState.user.user.zip_code = action.zip_code;
+      }
       break;
     }
-    case 'SET_PRODUCTS_SELECT_SORT': {
-      newState.productSort = action.sortItems;
-      break;
-    }
-    case 'SET_USER_IS_LOGGED': {
-      newState.isLogged = action.userIsLogged;
-      break;
-    }
-    case 'SET_USER_IS_ADMIN': {
-      newState.isAdmin = action.userIsAdmin;
-      break;
-    }
+
     default: {
       throw new Error(`invalid action:`);
     }
@@ -34,4 +42,3 @@ const OmangaReducer: Reducer<OmangaState, OmangaActions> = (prevState, action) =
 };
 
 export { OmangaReducer };
-

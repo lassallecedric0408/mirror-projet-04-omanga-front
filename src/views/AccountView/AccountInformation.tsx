@@ -1,56 +1,32 @@
 import React, { useState } from 'react';
-import Grid from '@material-ui/core/Grid';
-import { TextField, Button, Snackbar, Stack } from '@mui/material';
+import { useMutation } from 'react-query';
+import {
+  TextField,
+  Button,
+  Snackbar,
+  Stack,
+  Grid,
+  CircularProgress,
+  Typography,
+  Switch,
+} from '@mui/material';
+
 import { snackBarAlert } from '../../utils/snackBarAlert';
 import { useOmangaContex } from '../../context/OmangaContext';
 
-import { materialUITheme } from '../../utils/materialUITheme';
-import { makeStyles } from '@material-ui/core/styles';
+import { updateUser } from '../../services/user';
 
 const Alert = snackBarAlert;
 
 interface ViewsProps {}
 
-const useStyles = makeStyles((theme) => ({
-  signupView: {
-    height: '70vh',
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  signupForm: {
-    width: '80%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  flexCenter: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  formTitle: {
-    color: `${materialUITheme.palette.primary.main}`,
-    paddingBottom: '2rem',
-    [theme.breakpoints.down('sm')]: {
-      paddingBottom: '0rem',
-      fontSize: '1rem',
-    },
-  },
-  submitContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-}));
-
 const AccountInformtions: React.FC<ViewsProps> = () => {
-  const classes = useStyles();
   const { dispatch, OmangaState } = useOmangaContex();
   const { user } = OmangaState;
 
   const [firstName, setFirstName] = useState(user?.user?.firstname ?? '');
   const [lastName, setLastName] = useState(user?.user?.lastname ?? '');
   const [email, setEmail] = useState(user?.user?.email ?? '');
-  const [dateOfBirth, setDateOfBirth] = useState('');
   const [city, setCity] = useState(user?.user?.city ?? '');
   const [zipCode, setZipCode] = useState(user?.user?.zip_code ?? 0);
 
@@ -58,15 +34,62 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
   const [openErrorMessage, setOpenErrorMessage] = React.useState(false);
 
   const [enableInput, setEnableInput] = useState(true);
+  const [checked, setChecked] = React.useState(false);
+
   const handleToogleInput = () => {
+    setChecked(!checked);
     setEnableInput(!enableInput);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleInitInput = () => {
+    setFirstName(user?.user?.firstname ?? '');
+    setLastName(user?.user?.lastname ?? '');
+    setEmail(user?.user?.email ?? '');
+    setCity(user?.user?.city ?? '');
+    setZipCode(user?.user?.zip_code ?? 0);
+    setEnableInput(!enableInput);
+    setChecked(!checked);
+  };
 
-    console.log(firstName, lastName, dateOfBirth, email, city, zipCode);
-    handleClick('success');
+  const id = user?.user?.id ?? 0;
+
+  const { mutate, isLoading, isError, data, isSuccess } = useMutation({
+    mutationKey: [
+      'signupUser',
+      { firstName, lastName, email, city, zipCode, id },
+    ],
+    mutationFn: () =>
+      updateUser({
+        firstName,
+        lastName,
+        email,
+        city,
+        zipCode,
+        id,
+      }),
+  });
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await mutate();
+    if (isSuccess) {
+      await dispatch({
+        type: 'SET_UPDATE_USER',
+        firstname: data.data.result.firstname,
+        lastname: data.data.result.lastname,
+        email: data.data.result.email,
+        image_url: data.data.result.image_url,
+        city: data.data.result.city,
+        zip_code: data.data.result.zip_code,
+      });
+      await handleClick('success');
+      await handleToogleInput();
+    }
+
+    if (isError) {
+      console.log(data, 'error');
+      handleClick('error');
+    }
   };
 
   const handleClick = (e: string) => {
@@ -94,12 +117,55 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
-    <Grid container className={`${classes.signupView} ${classes.flexCenter}`}>
+    <Stack
+      sx={{
+        height: '70vh',
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Grid container sx={{ width: '80%', ml: 'auto', mr: 'auto', mb: 3 }}>
+        <Grid item xs={6}>
+          <Typography variant='h5' gutterBottom color='primary'>
+            Mettre à jour mes informations
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Switch
+            color='primary'
+            checked={checked}
+            onChange={handleToogleInput}
+          />
+        </Grid>
+      </Grid>
+
       <form
         autoComplete='off'
         onSubmit={handleSubmit}
-        className={`${classes.signupForm}`}
+        style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto' }}
       >
         <TextField
           type='text'
@@ -108,6 +174,7 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
           label='Nom'
           onChange={(e) => setFirstName(e.target.value)}
           value={firstName}
+          defaultValue={user?.user?.firstname ?? ''}
           fullWidth
           required
           disabled={enableInput}
@@ -124,21 +191,6 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
           required
           disabled={enableInput}
           sx={{ mb: 3 }}
-        />
-        <TextField
-          type='date'
-          variant='outlined'
-          color='primary'
-          label='Date de naissance'
-          onChange={(e) => setDateOfBirth(e.target.value)}
-          value={dateOfBirth}
-          fullWidth
-          required
-          disabled={enableInput}
-          sx={{ mb: 3 }}
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
         <TextField
           type='email'
@@ -174,37 +226,28 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
             disabled={enableInput}
           />
         </Stack>
-        <Grid className={`${classes.submitContainer}`}>
-          {enableInput ? (
-            <Grid item xs={6}>
-              <Button
-                variant='outlined'
-                color='primary'
-                type='button'
-                onClick={handleToogleInput}
-              >
-                Mettre votre profil jour
-              </Button>
-            </Grid>
-          ) : (
-            <>
-              <Grid item xs={6}>
-                <Button variant='outlined' color='primary' type='submit'>
-                  Soumettre
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  variant='outlined'
-                  color='primary'
-                  type='button'
-                  onClick={handleToogleInput}
-                >
-                  Annuler
-                </Button>
-              </Grid>
-            </>
-          )}
+        <Grid container sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Grid item xs={6}>
+            <Button
+              variant='outlined'
+              color='primary'
+              type='submit'
+              disabled={enableInput}
+            >
+              Envoyer
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              variant='outlined'
+              color='primary'
+              type='button'
+              onClick={handleInitInput}
+              disabled={enableInput}
+            >
+              Annuler
+            </Button>
+          </Grid>
         </Grid>
       </form>
       <Snackbar
@@ -225,7 +268,7 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
           Un prolème est survenu, veuillez réessayer plus tard.
         </Alert>
       </Snackbar>
-    </Grid>
+    </Stack>
   );
 };
 

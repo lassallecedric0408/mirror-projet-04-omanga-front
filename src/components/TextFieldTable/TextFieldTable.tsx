@@ -1,6 +1,5 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import { TextField, FormControl } from "@mui/material";
+import { TextField, FormControl, Grid } from '@mui/material';
 
 interface ViewsProps {
   label: string;
@@ -9,7 +8,6 @@ interface ViewsProps {
 }
 
 const TextFieldTable: React.FC<ViewsProps> = ({ label, value, onChange }) => {
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
@@ -20,9 +18,9 @@ const TextFieldTable: React.FC<ViewsProps> = ({ label, value, onChange }) => {
         <TextField
           label={label}
           onChange={handleChange}
-          variant="outlined"
-          color="primary"
-          type="text"
+          variant='outlined'
+          color='primary'
+          type='text'
           sx={{ mb: 3 }}
           fullWidth
           value={value}

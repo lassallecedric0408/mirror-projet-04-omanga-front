@@ -27,18 +27,14 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
 
   const Alert = snackBarAlert;
 
-  const { dispatch } = useOmangaContex();
-
   const isLogged =
     localStorage.getItem('userIsLogged') === 'true' ? true : false;
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  console.log(isLogged);
   const handleDisconnectUser = () => {
     localStorage.setItem('userIsLogged', 'false');
-    dispatch({ type: 'SET_USER_IS_LOGGED', userIsLogged: false });
     handleClick('success');
     setTimeout(() => setRedirectUser(true), 2500);
   };

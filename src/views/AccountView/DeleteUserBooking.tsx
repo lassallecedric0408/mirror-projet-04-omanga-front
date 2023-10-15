@@ -1,45 +1,29 @@
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { Stack, Button, Snackbar, CircularProgress } from '@mui/material';
-import { materialUITheme } from '../../utils/materialUITheme';
+
+import {
+  Stack,
+  Button,
+  Snackbar,
+  CircularProgress,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 import { deleteOneBooking } from '../../services/bookings';
 
-const useStyles = makeStyles((theme) => ({
-  deleteRawTable: {
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-  },
-  deleteRawTableTitle: {
-    color: `${materialUITheme.palette.primary.main}`,
-    fontSize: '1.6rem',
-    marginBottom: '2rem',
-  },
-}));
-
-interface DeleteRawTableProps {
+interface DeleteUserBookingProps {
   rowId: number;
-  item: string;
   onClose: () => void;
-  deleteRow: (id: number) => Promise<any>;
-  userMail: string;
+  userMail: string | undefined;
 }
 
-const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
+const DeleteUserBooking: React.FC<DeleteUserBookingProps> = ({
   rowId,
-  item,
   onClose,
-  deleteRow,
   userMail,
 }) => {
-  const classes = useStyles();
-
   const Alert = snackBarAlert;
 
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
@@ -77,7 +61,7 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
 
   const HandleDeleteRow = async () => {
     await mutate();
-    console.log(data);
+
     if (data) {
       handleClick('success');
       setTimeout(() => onClose, 2500);
@@ -85,9 +69,6 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
     if (isError) {
       handleClick('error');
     }
-  };
-  const capitalizeFirstLetter = (str: string): string => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
   if (isLoading) {
@@ -110,21 +91,52 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
 
   return (
     <>
-      <Grid container className={classes.deleteRawTable}>
-        <Grid item>
-          <h2 className={classes.deleteRawTableTitle}>
-            Voulez-vous supprimer {item}
-          </h2>
+      <Stack
+        sx={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant='h5' color='primary' gutterBottom>
+          Voulez-vous supprimer la reservation
+        </Typography>
+
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={6}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Button variant='contained' onClick={HandleDeleteRow}>
+              Supprimer
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={6}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Button variant='outlined' onClick={onClose}>
+              Annuler
+            </Button>
+          </Grid>
         </Grid>
-        <Stack spacing={10} direction='row'>
-          <Button variant='contained' onClick={HandleDeleteRow}>
-            Supprimer
-          </Button>
-          <Button variant='outlined' onClick={onClose}>
-            Annuler
-          </Button>
-        </Stack>
-      </Grid>
+      </Stack>
 
       <Snackbar
         open={openSuccessMessage}
@@ -132,7 +144,7 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
         onClose={(event, reason) => handleClose(event, reason, 'success')}
       >
         <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
-          {capitalizeFirstLetter(item)} a bien été supprimé!
+          La réservation a bien été supprimé!
         </Alert>
       </Snackbar>
       <Snackbar
@@ -148,4 +160,4 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
   );
 };
 
-export { DeleteRawTable };
+export { DeleteUserBooking };

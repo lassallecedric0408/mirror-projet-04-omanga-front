@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { Stack, Button, Snackbar } from "@mui/material";
+import { Stack, Button, Snackbar, Grid } from '@mui/material';
 import { materialUITheme } from '../../utils/materialUITheme';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 
@@ -27,8 +26,11 @@ interface DeleteRawTableProps {
   onClose: () => void;
 }
 
-const UpdateBookingStatus: React.FC<DeleteRawTableProps> = ({ rowId, item, onClose }) => {
-
+const UpdateBookingStatus: React.FC<DeleteRawTableProps> = ({
+  rowId,
+  item,
+  onClose,
+}) => {
   const classes = useStyles();
 
   const Alert = snackBarAlert;
@@ -37,47 +39,68 @@ const UpdateBookingStatus: React.FC<DeleteRawTableProps> = ({ rowId, item, onClo
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
   const handleClick = (e: string) => {
-    if (e === 'success') { setOpenSuccessMessage(true) }
-    if (e === 'error') { setOpenErrorMessage(true) }
+    if (e === 'success') {
+      setOpenSuccessMessage(true);
+    }
+    if (e === 'error') {
+      setOpenErrorMessage(true);
+    }
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string, state?: string) => {
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+    state?: string
+  ) => {
     if (reason === 'clickaway') {
       return;
     }
     if (state === 'success') {
-      setOpenSuccessMessage(false)
+      setOpenSuccessMessage(false);
     }
-    if (state === 'error') { setOpenErrorMessage(false) }
+    if (state === 'error') {
+      setOpenErrorMessage(false);
+    }
   };
 
-
   const HandleDeleteRow = () => {
-    console.log(rowId);
     handleClick('success');
-    setTimeout(onClose, 2000)
-  }
+    setTimeout(onClose, 2000);
+  };
 
   return (
     <>
-
       <Grid container className={classes.updateBookingStatus}>
         <Grid item>
-          <h2 className={classes.updateBookingStatusTitle}>Voulez-vous archiver {item}</h2>
+          <h2 className={classes.updateBookingStatusTitle}>
+            Voulez-vous archiver {item}
+          </h2>
         </Grid>
-        <Stack spacing={10} direction="row">
-          <Button variant="contained" onClick={HandleDeleteRow}>Archiver</Button>
-          <Button variant="outlined" onClick={onClose}>Annuler</Button>
+        <Stack spacing={10} direction='row'>
+          <Button variant='contained' onClick={HandleDeleteRow}>
+            Archiver
+          </Button>
+          <Button variant='outlined' onClick={onClose}>
+            Annuler
+          </Button>
         </Stack>
       </Grid>
 
-      <Snackbar open={openSuccessMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'success')}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        open={openSuccessMessage}
+        autoHideDuration={2000}
+        onClose={(event, reason) => handleClose(event, reason, 'success')}
+      >
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           La réservation a bien été archivée!
         </Alert>
       </Snackbar>
-      <Snackbar open={openErrorMessage} autoHideDuration={2000} onClose={(event, reason) => handleClose(event, reason, 'error')}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+      <Snackbar
+        open={openErrorMessage}
+        autoHideDuration={2000}
+        onClose={(event, reason) => handleClose(event, reason, 'error')}
+      >
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>

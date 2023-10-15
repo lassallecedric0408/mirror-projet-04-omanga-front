@@ -1,28 +1,22 @@
-type SetProductsSelectCategory = {
-  type: 'SET_PRODUCTS_SELECT_CATEGORY';
-  categoryItems: string[];
+type SetLoggedUser = {
+  type: 'SET_LOGGED_USER';
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  image_url: string | undefined | null;
+  role: 'USER' | 'ADMIN';
+  city?: string | undefined | null;
+  zip_code?: string | undefined | null;
 };
 
-type SetProductsSelectUniverse = {
-  type: 'SET_PRODUCTS_SELECT_UNIVERSE';
-  universeItems: string[];
+type SetUpdateUser = {
+  type: 'SET_UPDATE_USER';
+  firstname: string;
+  lastname: string;
+  email: string;
+  image_url: string | undefined | null;
+  city?: string | undefined | null;
+  zip_code?: string | undefined | null;
 };
-
-type SetProductsSelectSort = {
-  type: 'SET_PRODUCTS_SELECT_SORT';
-  sortItems: string;
-};
-type SetUserISLogged = {
-  type: 'SET_USER_IS_LOGGED';
-  userIsLogged: boolean;
-};
-type SetUserIsAdmin = {
-  type: 'SET_USER_IS_ADMIN';
-  userIsAdmin: boolean;
-};
-export type OmangaActions =
-  | SetProductsSelectCategory
-  | SetProductsSelectUniverse
-  | SetProductsSelectSort
-  | SetUserISLogged
-  | SetUserIsAdmin;
+export type OmangaActions = SetLoggedUser | SetUpdateUser;

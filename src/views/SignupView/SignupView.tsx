@@ -8,11 +8,12 @@ import {
   Snackbar,
   CircularProgress,
 } from '@mui/material';
-import { Link, redirect } from 'react-router-dom';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 import { useOmangaContex } from '../../context/OmangaContext';
 import { signupViewStyle } from './signupViewStyle';
-import { signUpUser } from '../../services/users';
+import { signUpUser } from '../../services/user';
+import { redirectToHomePage } from '../../utils/redirectToHomeView';
 
 const Alert = snackBarAlert;
 
@@ -23,22 +24,11 @@ interface SignupViewsProps {}
 const SignupView: React.FC<SignupViewsProps> = () => {
   const classes = useStyles();
   const { dispatch } = useOmangaContex();
-
-  const checkUserIsAdult = () => {
-    const inputDate = new Date(dateOfBirth);
-    const today = new Date();
-    const minAgeDate = new Date();
-    minAgeDate.setFullYear(today.getFullYear() - 18);
-
-    if (inputDate > minAgeDate) {
-      setOpenWarningMessage(true);
-    }
-  };
+  const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
   const [password, setPassword] = useState('');
   const [city, setCity] = useState<string | null>(null);
   const [zipCode, setZipCode] = useState<number | null>(null);
@@ -47,7 +37,7 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   const [openErrorMessage, setOpenErrorMessage] = React.useState(false);
   const [openWarningMessage, setOpenWarningMessage] = useState(false);
 
-  const { mutate, isLoading, isError, isSuccess, data } = useMutation({
+  const { mutate, isLoading, isError, data } = useMutation({
     mutationKey: [
       'signupUser',
       { firstName, lastName, email, password, city, zipCode },
@@ -56,7 +46,6 @@ const SignupView: React.FC<SignupViewsProps> = () => {
       signUpUser({
         firstName,
         lastName,
-        dateOfBirth,
         email,
         password,
         city,
@@ -64,15 +53,36 @@ const SignupView: React.FC<SignupViewsProps> = () => {
       }),
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    checkUserIsAdult();
+
     mutate();
-    if (isSuccess) {
-      console.log(data, 'data');
+    console.log(data);
+    if (data) {
+      await dispatch({
+        type: 'SET_LOGGED_USER',
+        id: data.data.user.id,
+        firstname: data.data.user.firstname,
+        lastname: data.data.user.lastname,
+        email: data.data.user.email,
+        image_url: data.data.user.image_url,
+        role: data.data.user.role,
+        city: data.data.user.city,
+        zip_code: data.data.user.zip_code,
+      });
+      localStorage.setItem('userIsLogged', 'true');
+      localStorage.setItem(
+        `accessToken/${data.data.user.email}`,
+        `${data.data.accessToken}`
+      );
+      localStorage.setItem(
+        `refreshToken/${data.data.user.email}`,
+        `${data.data.refreshToken}`
+      );
       handleClick('success');
-      setTimeout(() => redirect('/'), 2000);
+      setTimeout(() => navigate(`/`), 2500);
     }
+
     if (isError) {
       handleClick('error');
     }
@@ -81,6 +91,7 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   const handleClick = (e: string) => {
     if (e === 'success') {
       setOpenSuccessMessage(true);
+      return redirect('/');
     }
     if (e === 'error') {
       setOpenErrorMessage(true);
@@ -108,7 +119,24 @@ const SignupView: React.FC<SignupViewsProps> = () => {
       setOpenWarningMessage(false);
     }
   };
-  // if (isLoading) return <CircularProgress />;
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <Grid container className={`${classes.signupView} ${classes.flexCenter}`}>
@@ -139,20 +167,6 @@ const SignupView: React.FC<SignupViewsProps> = () => {
           fullWidth
           required
           sx={{ mb: 3 }}
-        />
-        <TextField
-          type='date'
-          variant='outlined'
-          color='primary'
-          label='Date de naissance'
-          onChange={(e) => setDateOfBirth(e.target.value)}
-          value={dateOfBirth}
-          fullWidth
-          required
-          sx={{ mb: 3 }}
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
         <TextField
           type='email'

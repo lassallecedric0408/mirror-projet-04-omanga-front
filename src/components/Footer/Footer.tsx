@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Grid from '@material-ui/core/Grid';
+import { Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router-dom';
 import { openingHoursData } from './openingHoursData';

@@ -85,18 +85,18 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
   };
 
   const getFitleredRows = () => {
-    let filteredRows = [...data];
+    let filteredRows = [...(data?.data ?? [])];
     if (idCategory) {
       filteredRows = filteredRows.filter(
         (row) => row.id === Number(idCategory)
       );
     }
     if (date) {
-      filteredRows = filteredRows.filter((row) => row.date === date);
+      filteredRows = filteredRows.filter((row) => row.created_at === date);
     }
     if (category) {
       filteredRows = filteredRows.filter((row) =>
-        removeAccents(row.category).includes(removeAccents(category))
+        removeAccents(row.name).includes(removeAccents(category))
       );
     }
 
@@ -106,7 +106,21 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
   const AllData = getFitleredRows();
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (error) {
@@ -167,8 +181,8 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
                   <TableCell>ID</TableCell>
                   <TableCell>Date de création</TableCell>
                   <TableCell>Catégorie</TableCell>
-                  <TableCell>Nb Univers</TableCell>
-                  <TableCell>Nb Produits</TableCell>
+                  {/* <TableCell>Nb Univers</TableCell>
+                  <TableCell>Nb Produits</TableCell> */}
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -176,10 +190,10 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
                 {AllData.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.category}</TableCell>
-                    <TableCell>{row.universeNumber}</TableCell>
-                    <TableCell>{row.productNumber}</TableCell>
+                    <TableCell>{row.created_at}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    {/* <TableCell>{row.universeNumber}</TableCell>
+                    <TableCell>{row.productNumber}</TableCell> */}
                     <TableCell>
                       <Button
                         variant='outlined'
@@ -220,6 +234,7 @@ const CategoriesTableView: React.FC<CategoriesTableViewProps> = () => {
           item={'la catégorie'}
           onClose={handleCloseDeleteModal}
           deleteRow={(idItem: number) => deleteOneCategory(idItem)}
+          userMail={''}
         />
       </ModalTable>
     </>

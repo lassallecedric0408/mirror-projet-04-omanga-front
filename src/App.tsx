@@ -21,7 +21,9 @@ import ProtectedRoute from './utils/protectedRoute';
 
 function App() {
   const { OmangaState } = useOmangaContex();
-  const { isAdmin } = OmangaState;
+  const { user } = OmangaState;
+  const isAdmin = user?.user.role === 'ADMIN';
+  localStorage.setItem('userIsLogged', 'false');
 
   return (
     <>

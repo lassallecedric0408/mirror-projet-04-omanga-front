@@ -1,31 +1,17 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Tabs, Tab, Stack } from '@mui/material';
+import { Link } from 'react-router-dom';
+
 import { AccountInformtions } from './AccountInformation';
 import { BookingsDetails } from './BookingsDetails';
 import { Preference } from './Preference';
 
-const useStyles = makeStyles((theme) => ({
-  accountView: {
-    height: '77vh',
-    width: '90%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  tabContainer: {
-    height: '7vh',
-  },
-}));
+import { Box, Tabs, Tab, Stack, Typography } from '@mui/material';
 
-interface AccountViewsProps {
-}
+interface AccountViewsProps {}
 
 type TabComponentKey = 'one' | 'two' | 'three';
 
 const AccountView: React.FC<AccountViewsProps> = () => {
-
-  const classes = useStyles();
-
   const [value, setValue] = React.useState('one');
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -38,25 +24,72 @@ const AccountView: React.FC<AccountViewsProps> = () => {
     three: <Preference />,
   };
 
-  return (
-    <Stack className={classes.accountView}>
-      <Box className={classes.tabContainer}>
-        <Tabs
-          value={value}
-          onChange={handleTabChange}
-          textColor="primary"
-          indicatorColor="primary"
-          aria-label="secondary tabs example"
-          centered
-        >
-          <Tab value="one" label="Informations du compte" sx={{ width: '33%' }} />
-          <Tab value="two" label="Mes réservations" sx={{ width: '33%' }} />
-          <Tab value="three" label="Mes préférences" sx={{ width: '34%' }} />
-        </Tabs>
-      </Box>
-      {tabComponents[value as TabComponentKey]}
-    </Stack>
+  const userIsLogged = localStorage.getItem('userIsLogged') === 'true';
 
+  return (
+    <>
+      {userIsLogged ? (
+        <Stack
+          sx={{
+            accountView: {
+              height: '77vh',
+              width: '90%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            },
+          }}
+        >
+          <Box
+            sx={{
+              tabContainer: {
+                height: '7vh',
+              },
+            }}
+          >
+            <Tabs
+              value={value}
+              onChange={handleTabChange}
+              textColor='primary'
+              indicatorColor='primary'
+              aria-label='secondary tabs example'
+              centered
+            >
+              <Tab
+                value='one'
+                label='Informations du compte'
+                sx={{ width: '33%' }}
+              />
+              <Tab value='two' label='Mes réservations' sx={{ width: '33%' }} />
+              <Tab
+                value='three'
+                label='Mes préférences'
+                sx={{ width: '34%' }}
+              />
+            </Tabs>
+          </Box>
+          {tabComponents[value as TabComponentKey]}
+        </Stack>
+      ) : (
+        <Stack
+          sx={{
+            height: '77vh',
+            width: '90%',
+            ml: 'auto',
+            mr: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography variant='h4' gutterBottom color='primary'>
+            Vous êtes déjà dans la communauté?
+          </Typography>
+          <Link to='/login' color='primary'>
+            Connectez-vous ici
+          </Link>
+        </Stack>
+      )}
+    </>
   );
 };
 

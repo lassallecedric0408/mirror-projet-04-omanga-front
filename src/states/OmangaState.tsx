@@ -2,34 +2,25 @@ import { User } from '../models/User';
 
 export type OmangaState = {
   user: User | undefined;
-  productsSelectCategory: string[];
-  productsSelectUniverse: string[];
-  productSort: string;
-  isLogged: boolean;
-  isAdmin: boolean;
 };
 
 const OmangaDefaultState = (): OmangaState => {
   const defaultState: OmangaState = {
     user: {
-      message: 'Connected user',
+      message: '',
       user: {
-        id: 31,
-        firstname: 'Cedric',
-        lastname: 'Lassalle',
-        email: 'test@email.com',
-        image_url: null,
+        id: 1,
+        firstname: '',
+        lastname: '',
+        email: '',
+        image_url: '',
         role: 'USER',
-        city: null,
-        zip_code: null,
+        city: '',
+        zip_code: '',
       },
+      accessToken: '',
+      refreshToken: '',
     },
-    productsSelectCategory: [],
-    productsSelectUniverse: [],
-
-    productSort: '',
-    isLogged: false,
-    isAdmin: true,
   };
   return defaultState;
 };

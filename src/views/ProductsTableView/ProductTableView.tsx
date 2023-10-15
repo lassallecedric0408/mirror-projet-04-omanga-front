@@ -101,7 +101,21 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
   // if (!user.isAdmin) {redirect('/error')};
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (error) {
@@ -213,6 +227,7 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
           item={'le produit'}
           onClose={handleCloseDeleteModal}
           deleteRow={(idItem: number) => deleteOneProduct(idItem)}
+          userMail={''}
         />
       </ModalTable>
     </>

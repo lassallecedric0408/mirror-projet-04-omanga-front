@@ -2,34 +2,39 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { redirect } from 'react-router-dom';
 
-import { productsViewStyle } from './productsViewStyle';
+import { getAllProducts } from '../../services/products';
 import { MultipleSelect } from '../../components/multipleSelect';
 import { SingleSelect } from '../../components/singleSelect';
 import { ProductCard } from '../../components/productCard';
 import { productsItemsSelect } from './productItemsSelect';
 
-import Grid from '@material-ui/core/Grid';
-import { getAllProducts } from '../../services/products';
-import { CircularProgress } from '@mui/material';
-
-const useStyles = productsViewStyle;
-
-const categories = ['Statuette', 'Arme', 'Livre', 'Carte'];
-
-const universe = ['Japon1', 'Japon2', 'Japon3', 'Japon4'];
+import { CircularProgress, Grid, Typography, Stack } from '@mui/material';
+import { getAllUniverses } from '../../services/universes';
+import { getAllCategories } from '../../services/categories';
 
 interface ProductsViewProps {}
 
 const ProductsView: React.FC<ProductsViewProps> = () => {
-  const classes = useStyles();
-
   const { data, isLoading, error } = useQuery({
     queryKey: ['getAllProducts'],
     queryFn: () => getAllProducts(),
   });
+  const categories = useQuery({
+    queryKey: ['getAllCategories'],
+    queryFn: () => getAllCategories(),
+  });
+  const universes = useQuery({
+    queryKey: ['getAllUniverses'],
+    queryFn: () => getAllUniverses(),
+  });
 
   const productsData = data?.data || [];
-
+  const categoriesSelect = categories?.data
+    ? categories.data.data.map((category) => category.name)
+    : [];
+  const universesSelect = universes?.data
+    ? universes.data.data.map((universe) => universe.name)
+    : [];
   const [productsSelectCategories, setProductsSelectCategories] = useState<
     string[]
   >([]);
@@ -81,7 +86,21 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
   };
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <div
+        style={{
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (error) {
@@ -89,24 +108,32 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
   }
 
   return (
-    <Grid container className={`${classes.productsView}`}>
-      <Grid
-        item
-        className={`${classes.productTitle} ${classes.flexVertCenter}`}
-      >
-        <p> Découvrer les articles dans notre boutique</p>
+    <Stack
+      sx={{
+        height: '77vh',
+        width: '80%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Grid item xs={12} sm={12} md={12} sx={{ margin: '1rem 0 1rem 0' }}>
+        <Typography variant='h5' color='primary'>
+          Découvrer les articles dans notre boutique
+        </Typography>
       </Grid>
-      <Grid container spacing={2} className={`${classes.productSelect}`}>
+      <Grid container spacing={2} sx={{ marginBottom: '3rem', flex: '0' }}>
         <Grid item xs={4}>
           <MultipleSelect
-            selectItems={categories}
+            selectItems={categoriesSelect}
             selectName={'Catégories'}
             onChange={handleCategoriesChange}
           />
         </Grid>
         <Grid item xs={4}>
           <MultipleSelect
-            selectItems={universe}
+            selectItems={universesSelect}
             selectName={'Univers'}
             onChange={handleUniversChange}
           />
@@ -119,7 +146,16 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
           />
         </Grid>
       </Grid>
-      <Grid container spacing={3} className={classes.productItems}>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          flex: '1',
+          overflowY: 'auto',
+          maxHeight: '100%',
+          marginBottom: '1rem',
+        }}
+      >
         {AllProducts.map((product, index) => {
           return (
             <Grid item xs={12} sm={6} md={2}>
@@ -133,7 +169,7 @@ const ProductsView: React.FC<ProductsViewProps> = () => {
           );
         })}
       </Grid>
-    </Grid>
+    </Stack>
   );
 };
 
