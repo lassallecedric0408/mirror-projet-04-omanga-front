@@ -1,46 +1,65 @@
-# Getting Started with Create React App
+# Welcome to the O'Manga Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+At O'Manga, we invite you to embark on an exciting project that delves into the vast world of manga and Japanese culture. 🎌
 
-## Available Scripts
+Discover our project, Omanga, a unique experience that will take you on a journey through a diverse collection of manga, creative merchandise, elements of traditional Japanese culture, and much more. 📚✨
 
-In the project directory, you can run:
+Our dedicated team is here to guide you throughout this adventure and share our love for Japan. Whether you're a long-time fan or a curious newcomer, there's always something new to explore at O'Manga. 🌟
 
-### `npm start`
+So, get ready to immerse yourself in the fascinating universe of manga and Japanization. Join us today for an unforgettable experience! 🚀
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## General Information
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Project Name**: Omanga
+- **Version**: 0.1.0
+- **Status**: Private Project
 
-### `npm test`
+## Key Dependencies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The project relies on various libraries and dependencies. Here are some of the key dependencies:
 
-### `npm run build`
+- [React](https://reactjs.org/): A JavaScript library for building user interfaces.
+- [React-Router](https://reactrouter.com/): A routing library for React.
+- [React-Query](https://react-query.tanstack.com/): A library for managing queries and data in React.
+- [Material-UI](https://mui.com/): A React component library based on Material Design.
+- [Leaflet](https://leafletjs.com/): An interactive mapping library for the web.
+- [dotenv](https://www.npmjs.com/package/dotenv): A module for managing environment variables.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Scripts
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The project includes scripts for development, testing, and building. Here are some of the commonly used scripts:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `start`: Launches the application in development mode.
+- `lint`: Runs ESLint for code linting.
+- `build`: Generates a production version of the application.
+- `test`: Runs tests for the application.
+- `eject`: Ejects the application from Create React App for advanced configuration.
 
-### `npm run eject`
+## Browserslist
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The `browserslist` file defines the supported browser versions for production and development.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Development Dependencies
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+In addition to the main dependencies, the project uses development dependencies for linting and code management. Here are some of the development dependencies:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- [ESLint](https://eslint.org/): A code linting tool for JavaScript and TypeScript.
+- [Prettier](https://prettier.io/): A code formatter.
+- [Husky](https://typicode.github.io/husky/): A tool for adding Git hooks.
+- [TypeScript](https://www.typescriptlang.org/): A typed programming language.
 
-## Learn More
+## Lint-Staged
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The project uses `lint-staged` to run ESLint on modified files before committing changes.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Note
+
+Make sure to install the necessary dependencies before running the project's scripts.
+
+For more details on installation and usage, consult the official documentation for each dependency.
+
+---
+
+This is a high-level overview of the "Omanga" React project. For more detailed information about configuration, components, and project features, please explore the source code and accompanying documentation.
+
+Enjoy creating and developing!
