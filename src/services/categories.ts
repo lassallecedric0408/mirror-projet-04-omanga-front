@@ -42,7 +42,6 @@ const createOneCategory = async (
     body: JSON.stringify(category)
   })
   const data: CategoryResponse = await response.json()
-  console.log(data, 'creteOneProduct')
   return { data }
 }
 

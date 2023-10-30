@@ -6,9 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL
 const getAllUsers = async (userMail: string | undefined): Promise<{
   data: UserResponse[]
 }> => {
-  console.log(userMail, 'userMail')
   const token = await refreshToken(userMail)
-  console.log(token, 'token')
   const response = await fetch(API_URL + '/users', {
     method: 'GET',
     headers: {
@@ -93,7 +91,6 @@ const signUpUser = async ({
   })
 
   const data: User = await response.json()
-  console.log(data)
   return { data }
 }
 
@@ -157,7 +154,6 @@ const updateUser = async ({
   })
 
   const data: userUpdateReturn = await response.json()
-  console.log(data)
   return { data }
 }
 

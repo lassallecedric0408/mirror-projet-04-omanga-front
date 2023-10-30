@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useOmangaContex } from "../../context/OmangaContext";
-import { useMutation } from "react-query";
+import React, { useState } from 'react';
+import { useOmangaContex } from '../../context/OmangaContext';
+import { useMutation } from 'react-query';
 import {
   TextField,
   Button,
@@ -9,10 +9,10 @@ import {
   Grid,
   CircularProgress,
   Typography,
-} from "@mui/material";
-import { snackBarAlert } from "../../utils/snackBarAlert";
+} from '@mui/material';
+import { snackBarAlert } from '../../utils/snackBarAlert';
 
-import { createOneReview } from "../../services/reviews";
+import { createOneReview } from '../../services/reviews';
 
 interface AddReviewFormProps {
   onClose: () => void;
@@ -29,17 +29,17 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
     useState(false);
 
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const productId = Number(id);
   const userId = user?.user.id;
   const userMail = user?.user.email;
 
   const handleClick = (e: string) => {
-    if (e === "success") {
+    if (e === 'success') {
       setOpenSuccessCreateMessage(true);
     }
-    if (e === "error") {
+    if (e === 'error') {
       setOpenErrorMessage(true);
     }
   };
@@ -47,21 +47,21 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
-    state?: string,
+    state?: string
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
-    if (state === "success") {
+    if (state === 'success') {
       setOpenSuccessCreateMessage(false);
     }
-    if (state === "error") {
+    if (state === 'error') {
       setOpenErrorMessage(false);
     }
   };
 
   const { mutate, isLoading } = useMutation({
-    mutationKey: ["loginUser", { comment, productId, userId, userMail }],
+    mutationKey: ['loginUser', { comment, productId, userId, userMail }],
     mutationFn: () =>
       createOneReview({
         comment,
@@ -71,11 +71,10 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
       }),
     onSettled: (data, error) => {
       if (error) {
-        handleClick("error");
+        handleClick('error');
       }
       if (data) {
-        console.log(data);
-        handleClick("success");
+        handleClick('success');
         setTimeout(onClose, 2500);
       }
     },
@@ -90,13 +89,13 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
     return (
       <div
         style={{
-          height: "77vh",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
@@ -109,27 +108,27 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
       <Grid
         container
         sx={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
         }}
       >
         <form
-          autoComplete="off"
+          autoComplete='off'
           onSubmit={handleSubmit}
-          style={{ width: "80%" }}
+          style={{ width: '80%' }}
         >
-          <Typography variant="h5" color="primary" gutterBottom>
+          <Typography variant='h5' color='primary' gutterBottom>
             Votre avis nous intéresse
           </Typography>
           <TextField
-            type="text"
-            variant="outlined"
-            color="primary"
-            label="Votre Avis"
+            type='text'
+            variant='outlined'
+            color='primary'
+            label='Votre Avis'
             onChange={(e) => setComment(e.target.value)}
             value={comment}
             fullWidth
@@ -140,22 +139,22 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
           />
           <Stack
             spacing={10}
-            direction="row"
+            direction='row'
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}
           >
             <Button
-              variant="outlined"
-              color="primary"
-              type="submit"
-              sx={{ mt: "2rem" }}
+              variant='outlined'
+              color='primary'
+              type='submit'
+              sx={{ mt: '2rem' }}
             >
               Envoyer votre avis
             </Button>
-            <Button variant="outlined" onClick={onClose}>
+            <Button variant='outlined' onClick={onClose}>
               Annuler
             </Button>
           </Stack>
@@ -165,18 +164,18 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
       <Snackbar
         open={openSuccessCreateMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "success")}
+        onClose={(event, reason) => handleClose(event, reason, 'success')}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           Votre avis a bien été ajouté!
         </Alert>
       </Snackbar>
       <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "error")}
+        onClose={(event, reason) => handleClose(event, reason, 'error')}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>

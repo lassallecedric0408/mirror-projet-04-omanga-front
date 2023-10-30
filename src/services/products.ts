@@ -8,7 +8,6 @@ interface GetAllProductsReturn {
 }
 
 const getAllProducts = async (): Promise<GetAllProductsReturn> => {
-  console.log(API_URL, 'API_URL')
   const response = await fetch(`${API_URL}/products`, {
     method: 'GET',
     headers: {
@@ -67,7 +66,7 @@ const createOneProduct = async (
   data: productResponse
 }> => {
   const token = await refreshToken(userMail)
-  console.log(productRequest, 'productRequest')
+
   const response = await fetch(`${API_URL}/products`, {
     method: 'POST',
     headers: {
@@ -78,7 +77,7 @@ const createOneProduct = async (
     body: JSON.stringify(productRequest)
   })
   const data: productResponse = await response.json()
-  console.log(data, 'creteOneProduct')
+
   return { data }
 }
 
@@ -102,7 +101,6 @@ const updateOneProduct = async (
     body: JSON.stringify(productRequest)
   })
   const data: productResponse = await response.json()
-  console.log(data)
   return { data }
 }
 
@@ -119,7 +117,6 @@ const deleteOneProduct = async (id: number, userMail: string | undefined): Promi
     }
   })
   const data: productResponse = await response.json()
-  console.log(data)
   return { data }
 }
 

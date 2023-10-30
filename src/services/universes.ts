@@ -42,7 +42,6 @@ const createOneUniverse = async (
     body: JSON.stringify(universe)
   })
   const data: UniverseResponse = await response.json()
-  console.log(data, 'creteOneProduct')
   return { data }
 }
 

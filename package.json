@@ -8,41 +8,33 @@
     "@mui/icons-material": "^5.14.15",
     "@mui/material": "^5.14.15",
     "@tanstack/react-query": "^4.35.3",
+    "@testing-library/dom": "^7.31.2",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/node": "^16.18.59",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
-    "@typescript-eslint/parser": "^6.9.0",
     "dotenv": "^16.3.1",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.11.0",
     "react-leaflet": "^4.2.1",
     "react-query": "^3.39.3",
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
+    "swiper": "^11.0.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "dev": "react-scripts start",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
-    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky install"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -59,22 +51,11 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.2",
     "@types/leaflet": "^1.9.7",
+    "@types/react-slick": "^0.23.11",
     "@types/react-swipeable-views": "^0.13.4",
     "@types/react-swipeable-views-utils": "^0.13.6",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "eslint": "^8.52.0",
-    "eslint-config-standard-with-typescript": "^39.1.1",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-n": "^16.2.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-sonarjs": "^0.21.0",
     "husky": "^8.0.0",
     "prettier": "^3.0.3",
-    "prettier-eslint": "^16.1.2",
-    "typescript": "^4.0.5"
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --cache"
+    "typescript": "^5.2.2"
   }
 }

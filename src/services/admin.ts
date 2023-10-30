@@ -19,7 +19,6 @@ const getAdminDashBoard = async (userMail: string | undefined): Promise<{
   data: AdminDashBoardReturn
 }> => {
   const token = await refreshToken(userMail)
-  console.log(token, 'token')
   const response = await fetch(`${API_URL}/admin/dashboard`, {
     method: 'GET',
     headers: {

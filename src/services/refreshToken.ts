@@ -13,7 +13,7 @@ const refreshToken = async (email: string | undefined): Promise<{
   const refreshTokenBody = {
     refreshToken
   }
-  console.log(refreshTokenBody, 'refreshTokenBody')
+
   const refreshUserToken = await fetch(`${API_URL}/refreshToken`, {
     method: 'POST',
     headers: {
@@ -33,7 +33,6 @@ const refreshToken = async (email: string | undefined): Promise<{
     `refreshToken/${email}`,
     dataRefreshToken.refreshToken
   )
-  console.log(dataRefreshToken.accessToken, 'dataRefreshToken.accessToken')
   return { data: dataRefreshToken.accessToken }
 }
 

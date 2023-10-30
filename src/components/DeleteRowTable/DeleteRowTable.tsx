@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useMutation } from "react-query";
-import { Stack, Button, Snackbar, CircularProgress, Grid } from "@mui/material";
-import { materialUITheme } from "../../utils/materialUITheme";
-import { snackBarAlert } from "../../utils/snackBarAlert";
-import { deleteOneBooking } from "../../services/bookings";
+import React, { useState } from 'react';
+import { useMutation } from 'react-query';
+import { Stack, Button, Snackbar, CircularProgress, Grid } from '@mui/material';
+import { materialUITheme } from '../../utils/materialUITheme';
+import { snackBarAlert } from '../../utils/snackBarAlert';
+import { deleteOneBooking } from '../../services/bookings';
 
 interface DeleteRawTableProps {
   rowId: number;
@@ -26,10 +26,10 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
   const handleClick = (e: string) => {
-    if (e === "success") {
+    if (e === 'success') {
       setOpenSuccessMessage(true);
     }
-    if (e === "error") {
+    if (e === 'error') {
       setOpenErrorMessage(true);
     }
   };
@@ -37,33 +37,32 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
-    state?: string,
+    state?: string
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
-    if (state === "success") {
+    if (state === 'success') {
       setOpenSuccessMessage(false);
     }
-    if (state === "error") {
+    if (state === 'error') {
       setOpenErrorMessage(false);
     }
   };
 
   const { mutate, isLoading, isError, data } = useMutation({
-    mutationKey: ["deleteRow", { rowId, userMail }],
+    mutationKey: ['deleteRow', { rowId, userMail }],
     mutationFn: () => deleteOneBooking(rowId, rowId, userMail),
   });
 
   const HandleDeleteRow = async () => {
     await mutate();
-    console.log(data);
     if (data) {
-      handleClick("success");
+      handleClick('success');
       setTimeout(() => onClose, 2500);
     }
     if (isError) {
-      handleClick("error");
+      handleClick('error');
     }
   };
   const capitalizeFirstLetter = (str: string): string => {
@@ -74,13 +73,13 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
     return (
       <div
         style={{
-          height: "77vh",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
@@ -93,30 +92,30 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
       <Grid
         container
         sx={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
         }}
       >
         <Grid item>
           <h2
             style={{
               color: `${materialUITheme.palette.primary.main}`,
-              fontSize: "1.6rem",
-              marginBottom: "2rem",
+              fontSize: '1.6rem',
+              marginBottom: '2rem',
             }}
           >
             Voulez-vous supprimer {item}
           </h2>
         </Grid>
-        <Stack spacing={10} direction="row">
-          <Button variant="contained" onClick={HandleDeleteRow}>
+        <Stack spacing={10} direction='row'>
+          <Button variant='contained' onClick={HandleDeleteRow}>
             Supprimer
           </Button>
-          <Button variant="outlined" onClick={onClose}>
+          <Button variant='outlined' onClick={onClose}>
             Annuler
           </Button>
         </Stack>
@@ -125,18 +124,18 @@ const DeleteRawTable: React.FC<DeleteRawTableProps> = ({
       <Snackbar
         open={openSuccessMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "success")}
+        onClose={(event, reason) => handleClose(event, reason, 'success')}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           {capitalizeFirstLetter(item)} a bien été supprimé!
         </Alert>
       </Snackbar>
       <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "error")}
+        onClose={(event, reason) => handleClose(event, reason, 'error')}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>

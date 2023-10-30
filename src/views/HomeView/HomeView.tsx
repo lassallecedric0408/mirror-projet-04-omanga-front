@@ -7,26 +7,11 @@ import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import mapPoint from '../../assets/map-point-wave-svgrepo-com.svg';
 import L from 'leaflet';
-import { images } from './images';
 import 'leaflet/dist/leaflet.css';
 import { Carousel } from '../../components/Carousel/Carousel';
 
 const HomeView: React.FC = () => {
   const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const maxSteps = images.length;
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
-  };
 
   const position: LatLngExpression = [48.897899, 2.096092];
 
@@ -129,14 +114,14 @@ const HomeView: React.FC = () => {
               elevation={5}
               sx={{
                 height: '100%',
-                border: `0.1rem solid ${materialUITheme.palette.primary.main}`,
-                borderRadius: '40px',
+                border: `0.2rem solid ${materialUITheme.palette.primary.main}`,
+                borderRadius: '5px',
               }}
             >
               <MapContainer
                 center={position}
                 zoom={13}
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: '100%', height: '100%', borderRadius: '40px' }}
                 scrollWheelZoom={false}
               >
                 <TileLayer
@@ -170,7 +155,7 @@ const HomeView: React.FC = () => {
             },
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'left',
           }}
         >
           <p> Produit bientôt dans la boutique</p>
@@ -184,7 +169,7 @@ const HomeView: React.FC = () => {
             justifyContent: 'center',
           }}
         >
-          {/* <Carousel /> */}
+          <Carousel />
         </Grid>
       </Grid>
     </Grid>

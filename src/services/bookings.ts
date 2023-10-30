@@ -15,7 +15,6 @@ const getAllBookings = async (email: string) => {
     mode: 'cors'
   });
   const data: Booking[] = await response.json();
-  console.log(data, "getAllBookings");
   return { data: data };
 };
 
@@ -25,8 +24,7 @@ const getUserBookings = async (
 ) => {
   await refreshToken(email);
   const token = localStorage.getItem(`accessToken/${email}`);
-  console.log(`${API_URL}/orders/${id}`);
-  const response = await fetch(`${API_URL}/orders/${id}`, {
+  const response = await fetch(`${API_URL}/orders/users/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -35,7 +33,6 @@ const getUserBookings = async (
     mode: 'cors'
   });
   const data: Booking[] = await response.json();
-  console.log(data, "getUserBookings");
   return { data: data };
 };
 
