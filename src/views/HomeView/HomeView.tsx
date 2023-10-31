@@ -1,7 +1,7 @@
 import React from 'react';
 import { materialUITheme } from '../../utils/materialUITheme';
 
-import { Paper, Grid, useTheme } from '@mui/material';
+import { Paper, Grid, useTheme, Typography } from '@mui/material';
 
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
@@ -71,20 +71,18 @@ const HomeView: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              overflow: 'hidden',
             }}
           >
-            <p
-              style={{
-                fontWeight: 'lighter',
-                fontFamily: 'Caveat',
-                [theme.breakpoints.down('lg')]: {
-                  fontSize: '1.2rem',
-                },
-                [theme.breakpoints.down('sm')]: {
-                  fontSize: '1.1rem',
-                },
-                [theme.breakpoints.down('xs')]: {
-                  fontSize: '0.7rem',
+            <Typography
+              variant='h5'
+              gutterBottom
+              sx={{
+                typography: {
+                  lg: 'body1',
+                  md: 'body1',
+                  sm: 'caption',
+                  xs: 'caption',
                 },
               }}
             >
@@ -97,7 +95,7 @@ const HomeView: React.FC = () => {
               amour pour le Japon. <br />
               Explorez O'Manga et plongez dans l'univers fascinant du manga et
               de la japanisation dès aujourd'hui !
-            </p>
+            </Typography>
           </Grid>
           <Grid
             item
@@ -105,7 +103,7 @@ const HomeView: React.FC = () => {
             sx={{
               height: '25vh',
               width: '100%',
-              [theme.breakpoints.down('sm')]: {
+              [theme.breakpoints.down('md')]: {
                 display: 'none',
               },
             }}

@@ -66,7 +66,6 @@ const SignupView: React.FC<SignupViewsProps> = () => {
           isLogged: true,
           isAdmin: data?.data.user.role === 'ADMIN' ? true : false,
         });
-        localStorage.setItem('userIsLogged', 'true');
         localStorage.setItem(
           `accessToken/${data?.data.user.email}`,
           `${data?.data.accessToken}`

@@ -78,7 +78,11 @@ const ProductView: React.FC<ProductViewProps> = () => {
           width: '90%',
           marginLeft: 'auto',
           marginRight: 'auto',
-          overflow: 'hidden',
+          overflowY: 'auto',
+          maxHeight: '100%',
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
         }}
       >
         <Grid
@@ -197,7 +201,7 @@ const ProductView: React.FC<ProductViewProps> = () => {
           <Grid item>
             <Stack
               spacing={2}
-              sx={{ width: '100%', height: '100%', overflowY: 'auto' }}
+              sx={{ width: '100%', height: '100%', marginBottom: '1rem' }}
             >
               {data?.data.reviews.map((review, index) => {
                 return (

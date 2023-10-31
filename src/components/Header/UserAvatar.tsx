@@ -1,8 +1,8 @@
-import React from "react";
-import { Tooltip, IconButton, Avatar } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Tooltip, IconButton, Avatar } from '@mui/material';
 
-import { materialUITheme } from "../../utils/materialUITheme";
-import { useOmangaContex } from "../../context/OmangaContext";
+import { materialUITheme } from '../../utils/materialUITheme';
+import { useOmangaContex } from '../../context/OmangaContext';
 
 interface UserAvatarProps {
   handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void;
@@ -12,22 +12,36 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ handleOpenUserMenu }) => {
   const { OmangaState } = useOmangaContex();
   const { user } = OmangaState;
 
+  // const userInitial =
+  //   user?.user?.firstname && user?.user?.lastname
+  //     ? user?.user.firstname.charAt(0) + user?.user.lastname.charAt(0)
+  //     : null;
+  const [userInitial, setUserInitial] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user?.user?.firstname && user?.user?.lastname) {
+      const initials =
+        user?.user.firstname.charAt(0) + user?.user.lastname.charAt(0);
+      setUserInitial(initials);
+    } else {
+      setUserInitial(null);
+    }
+  }, [user]);
+
   return (
     <>
-      <Tooltip title="Paramètre utilisateur">
+      <Tooltip title='Paramètre utilisateur'>
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar
             style={{
               backgroundColor: `${materialUITheme.palette.secondary.main}`,
               color: `${materialUITheme.palette.primary.main}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {user?.user?.firstname && user?.user?.lastname
-              ? user?.user.firstname.charAt(0) + user?.user.lastname.charAt(0)
-              : null}
+            {userInitial}
           </Avatar>
         </IconButton>
       </Tooltip>

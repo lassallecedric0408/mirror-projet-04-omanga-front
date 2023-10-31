@@ -1,8 +1,8 @@
-import React from "react";
-import { useQuery } from "react-query";
-import { redirect } from "react-router";
-import { materialUITheme } from "../../utils/materialUITheme";
-import { useOmangaContex } from "../../context/OmangaContext";
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
+import { redirect } from 'react-router';
+import { materialUITheme } from '../../utils/materialUITheme';
+import { useOmangaContex } from '../../context/OmangaContext';
 import {
   Button,
   Table,
@@ -14,18 +14,18 @@ import {
   Grid,
   useTheme,
   CircularProgress,
-} from "@mui/material";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+} from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-import { TextFieldTable } from "../../components/TextFieldTable";
-import { SingleSelect } from "../../components/singleSelect";
-import { ModalTable } from "../../components/ModalTable/ModalTable";
-import { selectStatus } from "./selectStatus";
-import { DeleteUser } from "./DeleteUser";
+import { TextFieldTable } from '../../components/TextFieldTable';
+import { SingleSelect } from '../../components/singleSelect';
+import { ModalTable } from '../../components/ModalTable/ModalTable';
+import { selectStatus } from './selectStatus';
+import { DeleteUser } from './DeleteUser';
 
-import { removeAccents } from "../../utils/removeAccents";
-import { getAllUsers } from "../../services/user";
-import { UserResponse } from "../../models/User";
+import { removeAccents } from '../../utils/removeAccents';
+import { getAllUsers } from '../../services/user';
+import { UserResponse } from '../../models/User';
 
 interface UsersTableViewProps {}
 
@@ -35,26 +35,26 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
   const { user } = OmangaState;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["getAllUsers", { user }],
+    queryKey: ['getAllUsers', { user }],
     queryFn: () => getAllUsers(user?.user?.email),
   });
-  const [userRow, setUserRow] = React.useState<UserResponse>({
+  const [userRow, setUserRow] = useState<UserResponse>({
     id: 0,
-    firstname: "",
-    lastname: "",
-    email: "",
-    image_url: "",
-    role: "USER",
-    city: "",
-    zip_code: "",
+    firstname: '',
+    lastname: '',
+    email: '',
+    image_url: '',
+    role: 'USER',
+    city: '',
+    zip_code: '',
   });
-  const [userName, setUserName] = React.useState<string | null>("");
-  const [city, setCity] = React.useState<string | null>("");
-  const [isAdminUser, setIsAdminUser] = React.useState<
-    string | "USERS" | "ADMIN" | "USER"
-  >("USERS");
+  const [userName, setUserName] = useState<string | null>('');
+  const [city, setCity] = useState<string | null>('');
+  const [isAdminUser, setIsAdminUser] = useState<
+    string | 'USERS' | 'ADMIN' | 'USER'
+  >('USERS');
 
-  const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
   const handleCloseDeleteModal = () => setOpenDeleteModal(false);
 
@@ -71,20 +71,20 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
     setCity(value as string);
   };
 
-  const handleIsAdminChange = (value: string | "USERS" | "ADMIN" | "USER") => {
+  const handleIsAdminChange = (value: string | 'USERS' | 'ADMIN' | 'USER') => {
     setIsAdminUser(value);
   };
 
   const getFitleredRows = () => {
     let filteredRows = [...(data?.data ?? [])];
 
-    if (userName !== null) {
+    if (userName !== null && userName !== '') {
       const cityWithoutAccents = removeAccents(userName);
       filteredRows = filteredRows.filter((row) =>
-        removeAccents(row.lastname).startsWith(cityWithoutAccents),
+        removeAccents(row.lastname).startsWith(cityWithoutAccents)
       );
     }
-    if (city !== null) {
+    if (city !== null && city !== '') {
       const cityWithoutAccents = removeAccents(city);
       filteredRows = filteredRows.filter((row) => {
         if (row.city !== null) {
@@ -92,29 +92,29 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
         }
       });
     }
-    if (isAdminUser === "ADMIN") {
-      filteredRows = filteredRows.filter((row) => row.role === "ADMIN");
+    if (isAdminUser === 'ADMIN') {
+      filteredRows = filteredRows.filter((row) => row.role === 'ADMIN');
     }
-    if (isAdminUser === "USER") {
-      filteredRows = filteredRows.filter((row) => row.role === "USER");
+    if (isAdminUser === 'USER') {
+      filteredRows = filteredRows.filter((row) => row.role === 'USER');
     }
 
     return filteredRows;
   };
 
-  const AllUsers = getFitleredRows();
+  const allUsers = getFitleredRows();
 
   if (isLoading) {
     return (
       <div
         style={{
-          height: "77vh",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
@@ -123,7 +123,7 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
   }
 
   if (error) {
-    redirect("/error");
+    redirect('/error');
   }
 
   return (
@@ -131,28 +131,28 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
       <Grid
         container
         style={{
-          height: "77vh",
-          width: "85%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          flexDirection: "column",
+          height: '77vh',
+          width: '85%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <Grid
           item
           sx={{
-            height: "7vh",
-            fontSize: "1.6rem",
+            height: '7vh',
+            fontSize: '1.6rem',
             color: `${materialUITheme.palette.primary.main}`,
-            [theme.breakpoints.down("md")]: {
-              fontSize: "1.3rem",
+            [theme.breakpoints.down('md')]: {
+              fontSize: '1.3rem',
             },
-            [theme.breakpoints.down("sm")]: {
-              fontSize: "1rem",
+            [theme.breakpoints.down('sm')]: {
+              fontSize: '1rem',
             },
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <p> Utilisateur </p>
@@ -161,30 +161,30 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
           container
           spacing={2}
           sx={{
-            marginTop: "3rem",
-            marginBottom: "1rem",
-            width: "100%",
-            flex: "0",
+            marginTop: '3rem',
+            marginBottom: '1rem',
+            width: '100%',
+            flex: '0',
           }}
         >
           <Grid item xs={4}>
             <TextFieldTable
-              label={"Nom"}
-              value={userName === null ? "" : userName}
+              label={'Nom'}
+              value={userName === null ? '' : userName}
               onChange={handleUserNameChange}
             />
           </Grid>
           <Grid item xs={4}>
             <TextFieldTable
-              label={"Ville"}
-              value={city === null ? "" : city}
+              label={'Ville'}
+              value={city === null ? '' : city}
               onChange={handleCityChange}
             />
           </Grid>
           <Grid item xs={4}>
             <SingleSelect
               selectItems={selectStatus}
-              selectName={"Admin et utilisateurs"}
+              selectName={'Admin et utilisateurs'}
               onChange={handleIsAdminChange}
             />
           </Grid>
@@ -192,11 +192,11 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
         <Grid
           item
           sx={{
-            width: "100%",
-            flex: "1",
-            overflowY: "auto",
-            maxHeight: "100%",
-            marginBottom: "1rem",
+            width: '100%',
+            flex: '1',
+            overflowY: 'auto',
+            maxHeight: '100%',
+            marginBottom: '1rem',
           }}
         >
           <TableContainer>
@@ -213,7 +213,7 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {AllUsers.map((row) => (
+                {allUsers.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
                     <TableCell>{row.firstname}</TableCell>
@@ -221,12 +221,12 @@ const UsersTableView: React.FC<UsersTableViewProps> = () => {
                     <TableCell>{row.email}</TableCell>
                     <TableCell>{row.city}</TableCell>
                     <TableCell>
-                      {row.role === "ADMIN" ? "Administrateur" : "Utilisateur"}
+                      {row.role === 'ADMIN' ? 'Administrateur' : 'Utilisateur'}
                     </TableCell>
                     <TableCell>
                       <Button
-                        variant="outlined"
-                        size="small"
+                        variant='outlined'
+                        size='small'
                         onClick={() => handleDeleteUser(row)}
                       >
                         <DeleteOutlineIcon />

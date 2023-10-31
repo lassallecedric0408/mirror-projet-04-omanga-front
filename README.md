@@ -30,7 +30,6 @@ The project relies on various libraries and dependencies. Here are some of the k
 The project includes scripts for development, testing, and building. Here are some of the commonly used scripts:
 
 - `start`: Launches the application in development mode.
-- `lint`: Runs ESLint for code linting.
 - `build`: Generates a production version of the application.
 - `test`: Runs tests for the application.
 - `eject`: Ejects the application from Create React App for advanced configuration.
@@ -43,14 +42,8 @@ The `browserslist` file defines the supported browser versions for production an
 
 In addition to the main dependencies, the project uses development dependencies for linting and code management. Here are some of the development dependencies:
 
-- [ESLint](https://eslint.org/): A code linting tool for JavaScript and TypeScript.
-- [Prettier](https://prettier.io/): A code formatter.
 - [Husky](https://typicode.github.io/husky/): A tool for adding Git hooks.
 - [TypeScript](https://www.typescriptlang.org/): A typed programming language.
-
-## Lint-Staged
-
-The project uses `lint-staged` to run ESLint on modified files before committing changes.
 
 ## Note
 

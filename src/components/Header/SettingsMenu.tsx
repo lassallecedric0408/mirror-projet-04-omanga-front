@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { Menu, MenuItem, Snackbar } from "@mui/material";
-import { Link as RouterLink, Navigate } from "react-router-dom";
-import { useOmangaContex } from "../../context/OmangaContext";
-import { snackBarAlert } from "../../utils/snackBarAlert";
-import { materialUITheme } from "../../utils/materialUITheme";
+import React, { useState } from 'react';
+import { Menu, MenuItem, Snackbar } from '@mui/material';
+import { Link as RouterLink, Navigate } from 'react-router-dom';
+import { useOmangaContex } from '../../context/OmangaContext';
+import { snackBarAlert } from '../../utils/snackBarAlert';
+import { materialUITheme } from '../../utils/materialUITheme';
+import { deleteUserData } from '../../hooks/DBConfig';
 
 const settings = [
-  { name: "Mon compte", link: "/account" },
-  { name: "Déconnexion", link: "/" },
-  { name: "Inscription", link: "/signup" },
-  { name: "Connexion", link: "/login" },
+  { name: 'Mon compte', link: '/account' },
+  { name: 'Déconnexion', link: '/' },
+  { name: 'Inscription', link: '/signup' },
+  { name: 'Connexion', link: '/login' },
 ];
 
 interface SettingsLinksProps {
@@ -21,7 +22,7 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
   anchorElUser,
   setAnchorElUser,
 }) => {
-  const { OmangaState } = useOmangaContex();
+  const { OmangaState, dispatch } = useOmangaContex();
   const { isLogged } = OmangaState;
 
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
@@ -34,16 +35,29 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
     setAnchorElUser(null);
   };
   const handleDisconnectUser = () => {
-    localStorage.setItem("userIsLogged", "false");
-    handleClick("success");
+    dispatch({
+      type: 'SET_LOGOUT_USER',
+      id: 0,
+      firstname: '',
+      lastname: '',
+      email: '',
+      image_url: '',
+      role: 'USER',
+      city: '',
+      zip_code: '',
+      isLogged: false,
+      isAdmin: false,
+    });
+    deleteUserData();
+    handleClick('success');
     setTimeout(() => setRedirectUser(true), 2500);
   };
 
   const handleClick = (e: string) => {
-    if (e === "success") {
+    if (e === 'success') {
       setOpenSuccessMessage(true);
     }
-    if (e === "error") {
+    if (e === 'error') {
       setOpenErrorMessage(true);
     }
   };
@@ -51,15 +65,15 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
-    state?: string,
+    state?: string
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
-    if (state === "success") {
+    if (state === 'success') {
       setOpenSuccessMessage(false);
     }
-    if (state === "error") {
+    if (state === 'error') {
       setOpenErrorMessage(false);
     }
   };
@@ -67,17 +81,17 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
   return (
     <>
       <Menu
-        sx={{ mt: "45px" }}
-        id="menu-appbar"
+        sx={{ mt: '45px' }}
+        id='menu-appbar'
         anchorEl={anchorElUser}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         keepMounted
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
@@ -89,10 +103,10 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
                 to={settings[0].link}
                 style={{
                   color: `${materialUITheme.palette.primary.main}`,
-                  textDecoration: "none",
-                  fontSize: "1.2rem",
-                  fontWeight: "500",
-                  fontFamily: "Caveat",
+                  textDecoration: 'none',
+                  fontSize: '1.2rem',
+                  fontWeight: '500',
+                  fontFamily: 'Caveat',
                 }}
               >
                 {settings[0].name}
@@ -103,10 +117,10 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
                 to={settings[1].link}
                 style={{
                   color: `${materialUITheme.palette.primary.main}`,
-                  textDecoration: "none",
-                  fontSize: "1.2rem",
-                  fontWeight: "500",
-                  fontFamily: "Caveat",
+                  textDecoration: 'none',
+                  fontSize: '1.2rem',
+                  fontWeight: '500',
+                  fontFamily: 'Caveat',
                 }}
               >
                 {settings[1].name}
@@ -120,10 +134,10 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
                 to={settings[2].link}
                 style={{
                   color: `${materialUITheme.palette.primary.main}`,
-                  textDecoration: "none",
-                  fontSize: "1.2rem",
-                  fontWeight: "500",
-                  fontFamily: "Caveat",
+                  textDecoration: 'none',
+                  fontSize: '1.2rem',
+                  fontWeight: '500',
+                  fontFamily: 'Caveat',
                 }}
               >
                 {settings[2].name}
@@ -134,10 +148,10 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
                 to={settings[3].link}
                 style={{
                   color: `${materialUITheme.palette.primary.main}`,
-                  textDecoration: "none",
-                  fontSize: "1.2rem",
-                  fontWeight: "500",
-                  fontFamily: "Caveat",
+                  textDecoration: 'none',
+                  fontSize: '1.2rem',
+                  fontWeight: '500',
+                  fontFamily: 'Caveat',
                 }}
               >
                 {settings[3].name}
@@ -149,22 +163,22 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
       <Snackbar
         open={openSuccessMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "success")}
+        onClose={(event, reason) => handleClose(event, reason, 'success')}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           Vous venez de vous déconnecter. Au revoir!
         </Alert>
       </Snackbar>
       <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "error")}
+        onClose={(event, reason) => handleClose(event, reason, 'error')}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>
-      {redirectUser && <Navigate to="/" />}
+      {redirectUser && <Navigate to='/' />}
     </>
   );
 };

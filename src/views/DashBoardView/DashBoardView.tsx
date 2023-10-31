@@ -1,7 +1,7 @@
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { redirect } from "react-router";
-import { useQuery } from "react-query";
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { redirect } from 'react-router';
+import { useQuery } from 'react-query';
 import {
   Grid,
   Stack,
@@ -10,11 +10,11 @@ import {
   Box,
   useTheme,
   CircularProgress,
-} from "@mui/material";
+} from '@mui/material';
 
-import { getAdminDashBoard } from "../../services/admin";
-import { useOmangaContex } from "../../context/OmangaContext";
-import { materialUITheme } from "../../utils/materialUITheme";
+import { getAdminDashBoard } from '../../services/admin';
+import { useOmangaContex } from '../../context/OmangaContext';
+import { materialUITheme } from '../../utils/materialUITheme';
 
 interface DashBoardViewProps {}
 
@@ -24,35 +24,35 @@ const DashBoardView: React.FC<DashBoardViewProps> = () => {
   const { user } = OmangaState;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["getDashBoard", user?.user.email],
+    queryKey: ['getDashBoard', user?.user.email],
     queryFn: () => getAdminDashBoard(user?.user.email),
   });
 
   const dashboardItem = [
     {
-      name: "Réservations",
+      name: 'Réservations',
       number: data?.data.orders.length,
-      link: "/bookingstable",
+      link: '/bookingstable',
     },
     {
-      name: "Produits",
+      name: 'Produits',
       number: data?.data.products.length,
-      link: "/productstable",
+      link: '/productstable',
     },
     {
-      name: "Utilisateurs",
+      name: 'Utilisateurs',
       number: data?.data.users.length,
-      link: "/userstable",
+      link: '/userstable',
     },
     {
-      name: " Univers",
+      name: ' Univers',
       number: data?.data.universes.length,
-      link: "/universestable",
+      link: '/universestable',
     },
     {
-      name: "Catégories",
+      name: 'Catégories',
       number: data?.data.categories.length,
-      link: "/categoriestable",
+      link: '/categoriestable',
     },
   ];
 
@@ -60,13 +60,13 @@ const DashBoardView: React.FC<DashBoardViewProps> = () => {
     return (
       <div
         style={{
-          height: "77vh",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
@@ -75,55 +75,55 @@ const DashBoardView: React.FC<DashBoardViewProps> = () => {
   }
 
   if (error) {
-    redirect("/error");
+    redirect('/error');
   }
 
   return (
     <>
       <Box
-        component="div"
+        component='div'
         sx={{
-          height: "77vh",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
         }}
       >
         <Grid
           item
           sx={{
-            height: "10vh",
-            fontSize: "1.6rem",
+            height: '10vh',
+            fontSize: '1.6rem',
             color: `${materialUITheme.palette.primary.main}`,
-            [theme.breakpoints.down("md")]: {
-              fontSize: "1.4rem",
-              height: "5vh",
+            [theme.breakpoints.down('md')]: {
+              fontSize: '1.4rem',
+              height: '5vh',
             },
-            [theme.breakpoints.down("sm")]: {
-              display: "none",
+            [theme.breakpoints.down('sm')]: {
+              display: 'none',
             },
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <p>Tableau de bord O'manga </p>
         </Grid>
         <Grid
           container
-          spacing={5}
+          spacing={7}
           sx={{
-            height: "67vh",
-            paddingTop: "3rem",
-            paddingBottom: "3rem",
-            [theme.breakpoints.down("md")]: {
-              paddingTop: "3rem",
-              paddingBottom: "1rem",
-              height: "72vh",
+            height: '67vh',
+            paddingTop: '3rem',
+            paddingBottom: '3rem',
+            [theme.breakpoints.down('md')]: {
+              paddingTop: '3rem',
+              paddingBottom: '1rem',
+              height: '72vh',
             },
-            [theme.breakpoints.down("sm")]: {
-              paddingTop: "1rem",
-              paddingBottom: "1rem",
-              height: "75vh",
+            [theme.breakpoints.down('sm')]: {
+              paddingTop: '1rem',
+              paddingBottom: '1rem',
+              height: '75vh',
             },
           }}
         >
@@ -133,31 +133,31 @@ const DashBoardView: React.FC<DashBoardViewProps> = () => {
                 <RouterLink
                   to={item.link}
                   style={{
-                    textDecoration: "none",
+                    textDecoration: 'none',
                   }}
                 >
                   <Paper
                     sx={{ p: 2 }}
                     elevation={3}
                     style={{
-                      height: "100%",
-                      width: "100%",
+                      height: '100%',
+                      width: '100%',
                       border: `0.1rem solid ${materialUITheme.palette.primary.main}`,
-                      borderRadius: "40px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      borderRadius: '40px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Stack
                       spacing={5}
-                      direction="row"
+                      direction='row'
                       sx={{
-                        fontSize: "2rem",
+                        fontSize: '2rem',
                         color: `${materialUITheme.palette.primary.main}`,
                       }}
                     >
-                      <Badge badgeContent={item.number} color="primary">
+                      <Badge badgeContent={item.number} color='primary'>
                         <p>{item.name}</p>
                       </Badge>
                     </Stack>

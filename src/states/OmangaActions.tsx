@@ -21,4 +21,19 @@ interface SetUpdateUser {
   city?: string | undefined | null;
   zip_code?: string | undefined | null;
 }
-export type OmangaActions = SetLoggedUser | SetUpdateUser;
+
+interface SetLogoutUser {
+  type: 'SET_LOGOUT_USER';
+  id: number | undefined;
+  firstname: string | undefined;
+  lastname: string | undefined;
+  email: string | undefined;
+  image_url: string | undefined | null;
+  role: 'USER' | 'ADMIN';
+  city?: string | undefined | null;
+  zip_code?: string | undefined | null;
+  isLogged: boolean;
+  isAdmin: boolean;
+}
+
+export type OmangaActions = SetLoggedUser | SetUpdateUser | SetLogoutUser;

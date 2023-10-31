@@ -15,7 +15,7 @@ const getAllUsers = async (userMail: string | undefined): Promise<{
     },
     mode: 'cors'
   })
-  const data: UserResponse[] = await response.json()
+  const data: UserResponse[] = await response.json();
   return { data }
 }
 
