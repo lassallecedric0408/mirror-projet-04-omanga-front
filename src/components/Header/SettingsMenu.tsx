@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
+import useAuthStore from '../../states/OmangaStore';
 import { Menu, MenuItem, Snackbar } from '@mui/material';
 import { Link as RouterLink, Navigate } from 'react-router-dom';
-import { useOmangaContex } from '../../context/OmangaContext';
 import { snackBarAlert } from '../../utils/snackBarAlert';
 import { materialUITheme } from '../../utils/materialUITheme';
-import { deleteUserData } from '../../hooks/DBConfig';
 
 const settings = [
   { name: 'Mon compte', link: '/account' },
@@ -22,9 +21,7 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
   anchorElUser,
   setAnchorElUser,
 }) => {
-  const { OmangaState, dispatch } = useOmangaContex();
-  const { isLogged } = OmangaState;
-
+  const isLogged = useAuthStore((state) => state.isLogged);
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
   const [redirectUser, setRedirectUser] = useState(false);
@@ -35,20 +32,7 @@ const SettingsMenu: React.FC<SettingsLinksProps> = ({
     setAnchorElUser(null);
   };
   const handleDisconnectUser = () => {
-    dispatch({
-      type: 'SET_LOGOUT_USER',
-      id: 0,
-      firstname: '',
-      lastname: '',
-      email: '',
-      image_url: '',
-      role: 'USER',
-      city: '',
-      zip_code: '',
-      isLogged: false,
-      isAdmin: false,
-    });
-    deleteUserData();
+    useAuthStore.getState().logoutUser();
     handleClick('success');
     setTimeout(() => setRedirectUser(true), 2500);
   };

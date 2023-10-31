@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import useAuthStore from '../../states/OmangaStore';
 import { useMutation } from 'react-query';
+
 import {
   TextField,
   Button,
@@ -11,7 +13,6 @@ import {
 } from '@mui/material';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 import { snackBarAlert } from '../../utils/snackBarAlert';
-import { useOmangaContex } from '../../context/OmangaContext';
 
 import { signUpUser } from '../../services/user';
 
@@ -20,7 +21,6 @@ const Alert = snackBarAlert;
 interface SignupViewsProps {}
 
 const SignupView: React.FC<SignupViewsProps> = () => {
-  const { dispatch } = useOmangaContex();
   const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState('');
@@ -53,16 +53,8 @@ const SignupView: React.FC<SignupViewsProps> = () => {
         handleClick('error');
       }
       if (data) {
-        dispatch({
-          type: 'SET_LOGGED_USER',
-          id: data?.data.user.id,
-          firstname: data?.data.user.firstname,
-          lastname: data?.data.user.lastname,
-          email: data?.data.user.email,
-          image_url: data?.data.user.image_url,
-          role: data?.data.user.role ?? 'USER',
-          city: data?.data.user.city,
-          zip_code: data?.data.user.zip_code,
+        useAuthStore.setState({
+          user: data?.data,
           isLogged: true,
           isAdmin: data?.data.user.role === 'ADMIN' ? true : false,
         });

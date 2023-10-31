@@ -1,4 +1,6 @@
 import React from 'react';
+import useAuthStore from '../../states/OmangaStore';
+
 import { Link } from 'react-router-dom';
 
 import { AccountInformtions } from './AccountInformation';
@@ -6,15 +8,11 @@ import { BookingsDetails } from './BookingsDetails';
 import { Preference } from './Preference';
 
 import { Box, Tabs, Tab, Stack, Typography } from '@mui/material';
-import { useOmangaContex } from '../../context/OmangaContext';
-
-interface AccountViewsProps {}
 
 type TabComponentKey = 'one' | 'two' | 'three';
 
-const AccountView: React.FC<AccountViewsProps> = () => {
-  const { OmangaState } = useOmangaContex();
-  const { isLogged } = OmangaState;
+const AccountView: React.FC = () => {
+  const isLogged = useAuthStore((state) => state.isLogged);
 
   const [value, setValue] = React.useState('one');
 

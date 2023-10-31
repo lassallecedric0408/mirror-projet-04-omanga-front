@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useMutation } from "react-query";
+import React, { useState } from 'react';
+import { useMutation } from 'react-query';
 import {
   TextField,
   Button,
@@ -9,25 +9,25 @@ import {
   CircularProgress,
   Typography,
   Switch,
-} from "@mui/material";
+} from '@mui/material';
 
-import { snackBarAlert } from "../../utils/snackBarAlert";
-import { useOmangaContex } from "../../context/OmangaContext";
+import { snackBarAlert } from '../../utils/snackBarAlert';
+import { useOmangaContex } from '../../context/OmangaContext';
 
-import { updateUser } from "../../services/user";
+import { updateUser } from '../../services/user';
+import useAuthStore from '../../states/OmangaStore';
 
 const Alert = snackBarAlert;
 
 interface ViewsProps {}
 
 const AccountInformtions: React.FC<ViewsProps> = () => {
-  const { dispatch, OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
+  const user = useAuthStore((state) => state.user);
 
-  const [firstName, setFirstName] = useState(user?.user?.firstname ?? "");
-  const [lastName, setLastName] = useState(user?.user?.lastname ?? "");
-  const [email, setEmail] = useState(user?.user?.email ?? "");
-  const [city, setCity] = useState(user?.user?.city ?? "");
+  const [firstName, setFirstName] = useState(user?.user?.firstname ?? '');
+  const [lastName, setLastName] = useState(user?.user?.lastname ?? '');
+  const [email, setEmail] = useState(user?.user?.email ?? '');
+  const [city, setCity] = useState(user?.user?.city ?? '');
   const [zipCode, setZipCode] = useState(user?.user?.zip_code ?? 0);
 
   const [openSuccessMessage, setOpenSuccessMessage] = React.useState(false);
@@ -42,10 +42,10 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
   };
 
   const handleInitInput = () => {
-    setFirstName(user?.user?.firstname ?? "");
-    setLastName(user?.user?.lastname ?? "");
-    setEmail(user?.user?.email ?? "");
-    setCity(user?.user?.city ?? "");
+    setFirstName(user?.user?.firstname ?? '');
+    setLastName(user?.user?.lastname ?? '');
+    setEmail(user?.user?.email ?? '');
+    setCity(user?.user?.city ?? '');
     setZipCode(user?.user?.zip_code ?? 0);
     setEnableInput(!enableInput);
     setChecked(!checked);
@@ -55,7 +55,7 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
 
   const { mutate, isLoading } = useMutation({
     mutationKey: [
-      "signupUser",
+      'signupUser',
       { firstName, lastName, email, city, zipCode, id },
     ],
     mutationFn: () =>
@@ -68,20 +68,23 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
         id,
       }),
     onSettled: (data, error) => {
-      if (error) {
-        handleClick("error");
-      } else {
-        dispatch({
-          type: "SET_UPDATE_USER",
-          firstname: data?.data.result.firstname,
-          lastname: data?.data.result.lastname,
-          email: data?.data.result.email,
-          image_url: data?.data.result.image_url,
-          city: data?.data.result.city,
-          zip_code: data?.data.result.zip_code,
-        });
-        handleClick("success");
+      if (data) {
+        useAuthStore
+          .getState()
+          .updateUser(
+            data.data.result.firstname,
+            data.data.result.lastname,
+            data.data.result.email,
+            data.data.result.image_url,
+            data.data.result.role,
+            data.data.result.city,
+            data.data.result.zip_code
+          );
+        handleClick('success');
         handleToogleInput();
+      }
+      if (error) {
+        handleClick('error');
       }
     },
   });
@@ -92,10 +95,10 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
   };
 
   const handleClick = (e: string) => {
-    if (e === "success") {
+    if (e === 'success') {
       setOpenSuccessMessage(true);
     }
-    if (e === "error") {
+    if (e === 'error') {
       setOpenErrorMessage(true);
     }
   };
@@ -103,15 +106,15 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
-    state?: string,
+    state?: string
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
-    if (state === "success") {
+    if (state === 'success') {
       setOpenSuccessMessage(false);
     }
-    if (state === "error") {
+    if (state === 'error') {
       setOpenErrorMessage(false);
     }
   };
@@ -120,13 +123,13 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
     return (
       <div
         style={{
-          height: "77vh",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
@@ -137,24 +140,24 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
   return (
     <Stack
       sx={{
-        height: "70vh",
-        width: "100%",
-        marginLeft: "auto",
-        marginRight: "auto",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        height: '70vh',
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <Grid container sx={{ width: "80%", ml: "auto", mr: "auto", mb: 3 }}>
+      <Grid container sx={{ width: '80%', ml: 'auto', mr: 'auto', mb: 3 }}>
         <Grid item xs={6}>
-          <Typography variant="h5" gutterBottom color="primary">
+          <Typography variant='h5' gutterBottom color='primary'>
             Mettre à jour mes informations
           </Typography>
         </Grid>
         <Grid item xs={6}>
           <Switch
-            color="primary"
+            color='primary'
             checked={checked}
             onChange={handleToogleInput}
           />
@@ -162,28 +165,28 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
       </Grid>
 
       <form
-        autoComplete="off"
+        autoComplete='off'
         onSubmit={handleSubmit}
-        style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}
+        style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto' }}
       >
         <TextField
-          type="text"
-          variant="outlined"
-          color="primary"
-          label="Nom"
+          type='text'
+          variant='outlined'
+          color='primary'
+          label='Nom'
           onChange={(e) => setFirstName(e.target.value)}
           value={firstName}
-          defaultValue={user?.user?.firstname ?? ""}
+          defaultValue={user?.user?.firstname ?? ''}
           fullWidth
           required
           disabled={enableInput}
           sx={{ mb: 3 }}
         />
         <TextField
-          type="text"
-          variant="outlined"
-          color="primary"
-          label="Prénom"
+          type='text'
+          variant='outlined'
+          color='primary'
+          label='Prénom'
           onChange={(e) => setLastName(e.target.value)}
           value={lastName}
           fullWidth
@@ -192,10 +195,10 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
           sx={{ mb: 3 }}
         />
         <TextField
-          type="email"
-          variant="outlined"
-          color="primary"
-          label="Email"
+          type='email'
+          variant='outlined'
+          color='primary'
+          label='Email'
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           fullWidth
@@ -203,34 +206,34 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
           required
           sx={{ mb: 3 }}
         />
-        <Stack spacing={2} direction="row" sx={{ mb: 3 }}>
+        <Stack spacing={2} direction='row' sx={{ mb: 3 }}>
           <TextField
-            type="text"
-            variant="outlined"
-            color="primary"
-            label="Ville"
+            type='text'
+            variant='outlined'
+            color='primary'
+            label='Ville'
             onChange={(e) => setCity(e.target.value)}
             value={city}
             fullWidth
             disabled={enableInput}
           />
           <TextField
-            type="number"
-            variant="outlined"
-            color="primary"
-            label="Code postal"
+            type='number'
+            variant='outlined'
+            color='primary'
+            label='Code postal'
             onChange={(e) => setZipCode(parseInt(e.target.value))}
             value={zipCode}
             fullWidth
             disabled={enableInput}
           />
         </Stack>
-        <Grid container sx={{ display: "flex", flexDirection: "row" }}>
+        <Grid container sx={{ display: 'flex', flexDirection: 'row' }}>
           <Grid item xs={6}>
             <Button
-              variant="outlined"
-              color="primary"
-              type="submit"
+              variant='outlined'
+              color='primary'
+              type='submit'
               disabled={enableInput}
             >
               Envoyer
@@ -238,9 +241,9 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
           </Grid>
           <Grid item xs={6}>
             <Button
-              variant="outlined"
-              color="primary"
-              type="button"
+              variant='outlined'
+              color='primary'
+              type='button'
               onClick={handleInitInput}
               disabled={enableInput}
             >
@@ -252,18 +255,18 @@ const AccountInformtions: React.FC<ViewsProps> = () => {
       <Snackbar
         open={openSuccessMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "success")}
+        onClose={(event, reason) => handleClose(event, reason, 'success')}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           Votre profil a bien été mis à jour !
         </Alert>
       </Snackbar>
       <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, "error")}
+        onClose={(event, reason) => handleClose(event, reason, 'error')}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
           Un prolème est survenu, veuillez réessayer plus tard.
         </Alert>
       </Snackbar>

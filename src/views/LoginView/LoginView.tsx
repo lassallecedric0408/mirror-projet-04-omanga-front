@@ -12,7 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useOmangaContex } from '../../context/OmangaContext';
 import { loginUser } from '../../services/user';
 import { materialUITheme } from '../../utils/materialUITheme';
-import { saveUserData } from '../../hooks/DBConfig';
+import useAuthStore from '../../states/OmangaStore';
 
 interface LoginViewsProps {}
 
@@ -40,17 +40,8 @@ const LoginView: React.FC<LoginViewsProps> = () => {
         handleClick('error');
       }
       if (data) {
-        saveUserData(data.data);
-        dispatch({
-          type: 'SET_LOGGED_USER',
-          id: data?.data.user.id,
-          firstname: data?.data.user.firstname,
-          lastname: data?.data.user.lastname,
-          email: data?.data.user.email,
-          image_url: data?.data.user.image_url,
-          role: data?.data.user.role ?? 'USER',
-          city: data?.data.user.city,
-          zip_code: data?.data.user.zip_code,
+        useAuthStore.setState({
+          user: data?.data,
           isLogged: true,
           isAdmin: data?.data.user.role === 'ADMIN' ? true : false,
         });

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { materialUITheme } from '../../utils/materialUITheme';
-import { useOmangaContex } from '../../context/OmangaContext';
 import { useQuery } from 'react-query';
 import { Link, redirect, useParams } from 'react-router-dom';
 import {
@@ -19,6 +18,7 @@ import { getOneProduct } from '../../services/products';
 import { ModalTable } from '../../components/ModalTable';
 import { AddReviewForm } from './AddReviewForm';
 import { OrderProductForm } from './OrderProductForm';
+import useAuthStore from '../../states/OmangaStore';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: `${materialUITheme.palette.primary.main}`,
@@ -30,8 +30,7 @@ interface ProductViewProps {}
 
 const ProductView: React.FC<ProductViewProps> = () => {
   const theme = useTheme();
-  const { OmangaState } = useOmangaContex();
-  const { isLogged } = OmangaState;
+  const isLogged = useAuthStore((state) => state.isLogged);
   let { id } = useParams();
 
   const { data, isLoading, error } = useQuery({

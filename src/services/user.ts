@@ -103,11 +103,11 @@ interface UpdateUser {
   id: number
 }
 interface UserUpdateBody {
-  firstname: string
-  lastname: string
-  email: string
-  city?: null | string
-  zip_code?: number | string
+  firstname: string;
+  lastname: string;
+  email: string;
+  city?: null | string;
+  zip_code?: number | string;
 }
 
 interface userUpdateReturn {

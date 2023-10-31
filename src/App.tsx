@@ -18,11 +18,11 @@ import { UniversesTableView } from './views/UniversesTableView';
 import { useOmangaContex } from './context/OmangaContext';
 import { ErrorView } from './views/ErrorView';
 import ProtectedRoute from './utils/protectedRoute';
+import useAuthStore from './states/OmangaStore';
 
 function App() {
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
-  const isAdmin = user?.user.role === 'ADMIN';
+  const isAdmin = useAuthStore((state) => state.isAdmin);
+
   return (
     <>
       <Header />

@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Tooltip, IconButton, Avatar } from '@mui/material';
 
+import { Tooltip, IconButton, Avatar } from '@mui/material';
 import { materialUITheme } from '../../utils/materialUITheme';
-import { useOmangaContex } from '../../context/OmangaContext';
+
+import useAuthStore from '../../states/OmangaStore';
 
 interface UserAvatarProps {
   handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({ handleOpenUserMenu }) => {
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
+  const user = useAuthStore((state) => state.user);
 
-  // const userInitial =
-  //   user?.user?.firstname && user?.user?.lastname
-  //     ? user?.user.firstname.charAt(0) + user?.user.lastname.charAt(0)
-  //     : null;
   const [userInitial, setUserInitial] = useState<string | null>(null);
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import mapPoint from '../../assets/map-point-wave-svgrepo-com.svg';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Carousel } from '../../components/Carousel/Carousel';
+import useAuthStore from '../../states/OmangaStore';
 
 const HomeView: React.FC = () => {
   const theme = useTheme();
