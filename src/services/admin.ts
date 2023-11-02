@@ -16,16 +16,17 @@ type AdminDashBoardReturn = {
 };
 
 const getAdminDashBoard = async (
-  userMail: string | undefined,
+  accessToken: string | undefined,
 ): Promise<{
   data: AdminDashBoardReturn;
 }> => {
-  const token = await refreshToken(userMail);
+  // const token = await refreshToken(userMail);
+  console.log(accessToken);
   const response = await fetch(`${API_URL}/admin/dashboard`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token.data}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     mode: "cors",
   });

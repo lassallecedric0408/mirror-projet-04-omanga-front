@@ -32,4 +32,28 @@ const refreshToken = async (
   return { data: dataRefreshToken.accessToken };
 };
 
-export { refreshToken };
+const refreshAccessToken = async (
+  refreshToken: string | undefined,
+): Promise<{
+  data: refreshTokenUserReturn;
+}> => {
+  const refreshTokenBody = {
+    refreshToken,
+  };
+  const refreshUserToken = await fetch(`${API_URL}/refreshToken`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    mode: "cors",
+    body: JSON.stringify(refreshTokenBody),
+  });
+
+  const dataRefreshToken: refreshTokenUserReturn =
+    await refreshUserToken.json();
+
+  return { data: dataRefreshToken };
+};
+
+
+export { refreshToken, refreshAccessToken };

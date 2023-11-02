@@ -20,13 +20,13 @@ import useAuthStore from '../../states/OmangaStore';
 const DashBoardView: React.FC = () => {
   const theme = useTheme();
 
-  const user = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user.accessToken);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['getDashBoard', user],
-    queryFn: () => getAdminDashBoard(user.user.email),
+    queryFn: () => getAdminDashBoard(user),
   });
-
+  console.log(data);
   const dashboardItem = [
     {
       name: 'Réservations',
