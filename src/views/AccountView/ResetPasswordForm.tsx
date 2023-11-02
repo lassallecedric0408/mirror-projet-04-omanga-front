@@ -13,21 +13,13 @@ import {
 import { snackBarAlert } from '../../utils/snackBarAlert';
 
 import { createOneReview } from '../../services/reviews';
-import { Review } from '../../models/Review';
+import { resetPassword } from '../../services/password';
 
 type AddReviewFormProps = {
   onClose: () => void;
-  id: string | undefined;
-  allReviews: Review[];
-  setAllReviews: React.Dispatch<React.SetStateAction<Review[]>>;
 };
 
-const AddReviewForm: React.FC<AddReviewFormProps> = ({
-  onClose,
-  id,
-  allReviews,
-  setAllReviews,
-}) => {
+const ResetPasswordForm: React.FC<AddReviewFormProps> = ({ onClose }) => {
   const user = useAuthStore((state) => state.user);
 
   const Alert = snackBarAlert;
@@ -36,15 +28,20 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
     useState(false);
 
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
-  const [comment, setComment] = useState('');
 
-  const productId = Number(id);
-  const userId = user.user.id;
+  const [openWarningMessage, setOpenWarningMessage] = useState(false);
+
+  const [password, setPassWord] = useState('');
+  const [controlPassword, setControlPassword] = useState('');
+
   const userMail = user.user.email;
 
   const handleClick = (e: string) => {
     if (e === 'success') {
       setOpenSuccessCreateMessage(true);
+    }
+    if (e === 'warning') {
+      setOpenWarningMessage(true);
     }
     if (e === 'error') {
       setOpenErrorMessage(true);
@@ -62,26 +59,22 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
     if (state === 'success') {
       setOpenSuccessCreateMessage(false);
     }
+    if (state === 'warning') {
+      setOpenWarningMessage(false);
+    }
     if (state === 'error') {
       setOpenErrorMessage(false);
     }
   };
 
   const { mutate, isLoading } = useMutation({
-    mutationKey: ['loginUser', { comment, productId, userId, userMail }],
-    mutationFn: () =>
-      createOneReview({
-        comment,
-        productId,
-        userId,
-        userMail,
-      }),
+    mutationKey: ['reset-password', { userMail, password }],
+    mutationFn: () => resetPassword(userMail, password),
     onSettled: (data, error) => {
       if (error) {
         handleClick('error');
       }
       if (data) {
-        setAllReviews([...allReviews, data.data]);
         handleClick('success');
         setTimeout(onClose, 2500);
       }
@@ -90,7 +83,11 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    mutate();
+    if (password === controlPassword) {
+      mutate();
+    } else {
+      handleClick('warning');
+    }
   };
 
   if (isLoading) {
@@ -130,19 +127,28 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
           style={{ width: '80%' }}
         >
           <Typography variant='h5' color='primary' gutterBottom>
-            Votre avis nous intéresse
+            Mettre à jour votre mot de passe
           </Typography>
           <TextField
-            type='text'
+            type='password'
             variant='outlined'
             color='primary'
-            label='Votre Avis'
-            onChange={(e) => setComment(e.target.value)}
-            value={comment}
+            label='Votre mot de passe'
+            onChange={(e) => setPassWord(e.target.value)}
+            value={password}
             fullWidth
             required
-            multiline
-            rows={6}
+            sx={{ mb: 3 }}
+          />
+          <TextField
+            type='password'
+            variant='outlined'
+            color='primary'
+            label='Contrôle du mot de passe'
+            onChange={(e) => setControlPassword(e.target.value)}
+            value={controlPassword}
+            fullWidth
+            required
             sx={{ mb: 3 }}
           />
           <Stack
@@ -160,7 +166,7 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
               type='submit'
               sx={{ mt: '2rem' }}
             >
-              Envoyer votre avis
+              Envoyer votre mot de passe
             </Button>
             <Button variant='outlined' onClick={onClose}>
               Annuler
@@ -179,6 +185,15 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
         </Alert>
       </Snackbar>
       <Snackbar
+        open={openWarningMessage}
+        autoHideDuration={2000}
+        onClose={(event, reason) => handleClose(event, reason, 'warning')}
+      >
+        <Alert onClose={handleClose} severity='warning' sx={{ width: '100%' }}>
+          Les mots de passe ne sont pas identiques!
+        </Alert>
+      </Snackbar>
+      <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
         onClose={(event, reason) => handleClose(event, reason, 'error')}
@@ -191,4 +206,4 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({
   );
 };
 
-export { AddReviewForm };
+export { ResetPasswordForm };

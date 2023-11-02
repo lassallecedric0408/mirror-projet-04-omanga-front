@@ -11,7 +11,6 @@ type CreateOneReview = {
 };
 type UserReview = {
   content: string;
-  product_id: number | undefined;
   user_id: number | undefined;
   rating: number | undefined;
 };
@@ -26,7 +25,6 @@ const createOneReview = async ({
 }> => {
   const userReview: UserReview = {
     content: comment,
-    product_id: productId,
     user_id: userId,
     rating: 0,
   };

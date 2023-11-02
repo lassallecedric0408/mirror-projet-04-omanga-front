@@ -18,10 +18,6 @@ import { UniversesTableView } from './views/UniversesTableView';
 import { ErrorView } from './views/ErrorView';
 import ProtectedRoute from './utils/protectedRoute';
 import useAuthStore from './states/OmangaStore';
-import { jwtDecode } from 'jwt-decode';
-import { useEffect } from 'react';
-import { useMutation } from 'react-query';
-import { refreshAccessToken } from './services/refreshToken';
 
 function App() {
   const isAdmin = useAuthStore((state) => state.isAdmin);

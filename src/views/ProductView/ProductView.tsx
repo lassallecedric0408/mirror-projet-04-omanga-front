@@ -1,31 +1,24 @@
-import React, { useState } from "react";
-import useAuthStore from "../../states/OmangaStore";
-import { Link, redirect, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from 'react';
+import useAuthStore from '../../states/OmangaStore';
+import { Link, redirect, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 
-import { getOneProduct } from "../../services/products";
-import { ModalTable } from "../../components/ModalTable";
-import { AddReviewForm } from "./AddReviewForm";
-import { OrderProductForm } from "./OrderProductForm";
+import { getOneProduct } from '../../services/products';
+import { ModalTable } from '../../components/ModalTable';
+import { AddReviewForm } from './AddReviewForm';
+import { OrderProductForm } from './OrderProductForm';
+import { ReviewDetails } from './ReviewDetails';
 
 import {
   Button,
   Stack,
-  Paper,
   CircularProgress,
   Grid,
   useTheme,
   Typography,
-  styled,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { materialUITheme } from "../../utils/materialUITheme";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: `${materialUITheme.palette.primary.main}`,
-  padding: theme.spacing(1),
-  color: `${materialUITheme.palette.secondary.main}`,
-}));
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { materialUITheme } from '../../utils/materialUITheme';
 
 const ProductView: React.FC = () => {
   const theme = useTheme();
@@ -34,7 +27,7 @@ const ProductView: React.FC = () => {
   let { id } = useParams();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["getOneProduct", id],
+    queryKey: ['getOneProduct', id],
     queryFn: () => getOneProduct(Number(id)),
   });
 
@@ -45,18 +38,20 @@ const ProductView: React.FC = () => {
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const handleOpenOrderModal = () => setOpenOrderModal(true);
   const handleCloseOrderModal = () => setOpenOrderModal(false);
-
+  const [allReviews, setAllReviews] = useState(
+    data?.data?.reviews ? [...data?.data?.reviews] : []
+  );
   if (isLoading) {
     return (
       <div
         style={{
-          height: "77vh",
-          width: "80%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '77vh',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
@@ -65,7 +60,7 @@ const ProductView: React.FC = () => {
   }
 
   if (error) {
-    redirect("/error");
+    redirect('/error');
   }
 
   return (
@@ -73,14 +68,14 @@ const ProductView: React.FC = () => {
       <Grid
         container
         sx={{
-          height: "77vh",
-          width: "90%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          overflowY: "auto",
-          maxHeight: "100%",
-          "&::-webkit-scrollbar": {
-            display: "none",
+          height: '77vh',
+          width: '90%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          overflowY: 'auto',
+          maxHeight: '100%',
+          '&::-webkit-scrollbar': {
+            display: 'none',
           },
         }}
       >
@@ -90,17 +85,17 @@ const ProductView: React.FC = () => {
           sm={12}
           md={12}
           sx={{
-            height: "10vh",
-            fontSize: "1.6rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            height: '10vh',
+            fontSize: '1.6rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             color: `${materialUITheme.palette.primary.main}`,
-            [theme.breakpoints.down("md")]: {
-              fontSize: "1.3rem",
+            [theme.breakpoints.down('md')]: {
+              fontSize: '1.3rem',
             },
-            [theme.breakpoints.down("sm")]: {
-              fontSize: "1rem",
+            [theme.breakpoints.down('sm')]: {
+              fontSize: '1rem',
             },
           }}
         >
@@ -109,18 +104,18 @@ const ProductView: React.FC = () => {
         <Grid
           container
           sx={{
-            marginBottom: "2rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            marginBottom: '2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Grid item xs={12} sm={12} md={8}>
             <p
               style={{
-                lineHeight: "2.5rem",
-                fontSize: "1.3rem",
-                fontFamily: "Caveat",
+                lineHeight: '2.5rem',
+                fontSize: '1.3rem',
+                fontFamily: 'Caveat',
               }}
             >
               {data?.data.description}
@@ -132,30 +127,30 @@ const ProductView: React.FC = () => {
             sm={12}
             md={4}
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
             }}
           >
             <img
               src={data?.data.image_url}
               alt={data?.data.name}
-              width="300"
-              height="300"
+              width='300'
+              height='300'
             />
             <Typography
-              variant="h6"
-              color="primary"
-              sx={{ margin: "1rem 0 1rem 0" }}
+              variant='h6'
+              color='primary'
+              sx={{ margin: '1rem 0 1rem 0' }}
             >
               {data?.data.price} €
             </Typography>
             {isLogged ? (
               <Button
-                variant="contained"
-                color="primary"
-                style={{ marginTop: "2rem" }}
+                variant='contained' // product_id: number | undefined;
+                color='primary'
+                style={{ marginTop: '2rem' }}
                 onClick={handleOpenOrderModal}
               >
                 Réserver le produit
@@ -163,7 +158,7 @@ const ProductView: React.FC = () => {
             ) : (
               <small>
                 Vous voulez réserver ce produit?&nbsp;
-                <Link to="/login">Connectez-vous</Link>
+                <Link to='/login'>Connectez-vous</Link>
               </small>
             )}
           </Grid>
@@ -171,23 +166,23 @@ const ProductView: React.FC = () => {
         <Grid
           container
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           <Grid
             item
             sx={{
-              width: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              width: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}
           >
             <Typography
-              variant="h5"
-              color="primary"
-              sx={{ margin: "0 0 1rem 0" }}
+              variant='h5'
+              color='primary'
+              sx={{ margin: '0 0 1rem 0' }}
             >
               Avis
             </Typography>
@@ -200,38 +195,26 @@ const ProductView: React.FC = () => {
           <Grid item>
             <Stack
               spacing={2}
-              sx={{ width: "100%", height: "100%", marginBottom: "1rem" }}
+              sx={{ width: '100%', height: '100%', marginBottom: '1rem' }}
             >
-              {data?.data.reviews.map((review, index) => {
-                return (
-                  <Item key={index}>
-                    <Stack>
-                      <Typography
-                        variant="h6"
-                        display="block"
-                        gutterBottom
-                        sx={{ fontFamily: "Caveat" }}
-                      >
-                        {review.user_id}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        display="block"
-                        gutterBottom
-                        sx={{ fontFamily: "Caveat" }}
-                      >
-                        {review.content}
-                      </Typography>
-                    </Stack>
-                  </Item>
-                );
-              })}
+              {allReviews.map((review, index) => (
+                <ReviewDetails
+                  index={index}
+                  userId={review.user_id}
+                  content={review.content}
+                />
+              ))}
             </Stack>
           </Grid>
         </Grid>
       </Grid>
       <ModalTable open={openReviewModal} handleClose={handleCloseReviewModal}>
-        <AddReviewForm onClose={handleCloseReviewModal} id={id} />
+        <AddReviewForm
+          onClose={handleCloseReviewModal}
+          id={id}
+          allReviews={allReviews}
+          setAllReviews={setAllReviews}
+        />
       </ModalTable>
       <ModalTable open={openOrderModal} handleClose={handleCloseOrderModal}>
         <OrderProductForm
