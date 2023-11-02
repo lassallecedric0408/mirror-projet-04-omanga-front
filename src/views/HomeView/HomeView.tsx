@@ -1,15 +1,14 @@
-import React from 'react';
-import { materialUITheme } from '../../utils/materialUITheme';
+import React from "react";
 
-import { Paper, Grid, useTheme, Typography } from '@mui/material';
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { LatLngExpression } from "leaflet";
+import mapPoint from "../../assets/map-point-wave-svgrepo-com.svg";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Carousel } from "../../components/Carousel/Carousel";
 
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-import { LatLngExpression } from 'leaflet';
-import mapPoint from '../../assets/map-point-wave-svgrepo-com.svg';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Carousel } from '../../components/Carousel/Carousel';
-import useAuthStore from '../../states/OmangaStore';
+import { Paper, Grid, useTheme, Typography } from "@mui/material";
+import { materialUITheme } from "../../utils/materialUITheme";
 
 const HomeView: React.FC = () => {
   const theme = useTheme();
@@ -26,31 +25,31 @@ const HomeView: React.FC = () => {
     <Grid
       container
       sx={{
-        height: '77vh',
-        width: '90%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        height: "77vh",
+        width: "90%",
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
       <Grid
         item
         xs={12}
-        sx={{ height: '32vh', display: 'flex', flexDirection: 'column' }}
+        sx={{ height: "32vh", display: "flex", flexDirection: "column" }}
       >
         <Grid
           container
           sx={{
-            height: '7vh',
-            fontSize: '1.6rem',
+            height: "7vh",
+            fontSize: "1.6rem",
             color: `${materialUITheme.palette.primary.main}`,
-            [theme.breakpoints.down('md')]: {
-              fontSize: '1.3rem',
+            [theme.breakpoints.down("md")]: {
+              fontSize: "1.3rem",
             },
-            [theme.breakpoints.down('sm')]: {
-              fontSize: '1rem',
+            [theme.breakpoints.down("sm")]: {
+              fontSize: "1rem",
             },
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <p>
@@ -61,29 +60,29 @@ const HomeView: React.FC = () => {
         <Grid
           container
           sx={{
-            height: '25vh',
+            height: "25vh",
           }}
         >
           <Grid
             item
             md={8}
             sx={{
-              padding: '0 2rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              overflow: 'hidden',
+              padding: "0 2rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
             }}
           >
             <Typography
-              variant='h5'
+              variant="h5"
               gutterBottom
               sx={{
                 typography: {
-                  lg: 'body1',
-                  md: 'body1',
-                  sm: 'caption',
-                  xs: 'caption',
+                  lg: "body1",
+                  md: "body1",
+                  sm: "caption",
+                  xs: "caption",
                 },
               }}
             >
@@ -102,30 +101,30 @@ const HomeView: React.FC = () => {
             item
             md={4}
             sx={{
-              height: '25vh',
-              width: '100%',
-              [theme.breakpoints.down('md')]: {
-                display: 'none',
+              height: "25vh",
+              width: "100%",
+              [theme.breakpoints.down("md")]: {
+                display: "none",
               },
             }}
           >
             <Paper
               elevation={5}
               sx={{
-                height: '100%',
+                height: "100%",
                 border: `0.2rem solid ${materialUITheme.palette.primary.main}`,
-                borderRadius: '5px',
+                borderRadius: "5px",
               }}
             >
               <MapContainer
                 center={position}
                 zoom={13}
-                style={{ width: '100%', height: '100%', borderRadius: '40px' }}
+                style={{ width: "100%", height: "100%", borderRadius: "40px" }}
                 scrollWheelZoom={false}
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <Marker position={position} icon={mapIcon}></Marker>
               </MapContainer>
@@ -137,24 +136,24 @@ const HomeView: React.FC = () => {
         item
         xs={12}
         sx={{
-          height: '45vh',
+          height: "45vh",
         }}
       >
         <Grid
           container
           sx={{
-            height: '5vh',
-            fontSize: '1.6rem',
+            height: "5vh",
+            fontSize: "1.6rem",
             color: `${materialUITheme.palette.primary.main}`,
-            [theme.breakpoints.down('md')]: {
-              fontSize: '1.3rem',
+            [theme.breakpoints.down("md")]: {
+              fontSize: "1.3rem",
             },
-            [theme.breakpoints.down('sm')]: {
-              fontSize: '1rem',
+            [theme.breakpoints.down("sm")]: {
+              fontSize: "1rem",
             },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'left',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "left",
           }}
         >
           <p> Produit bientôt dans la boutique</p>
@@ -162,10 +161,10 @@ const HomeView: React.FC = () => {
         <Grid
           container
           sx={{
-            height: '40vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            height: "40vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Carousel />

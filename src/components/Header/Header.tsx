@@ -1,10 +1,11 @@
 import * as React from "react";
-import { AppBar, Box, Toolbar, Container } from "@mui/material";
 
 import { SettingsMenu } from "./SettingsMenu";
 import { DesktopMenu } from "./DeskopMenu";
 import { MobileMenu } from "./MobileMenu";
 import { UserAvatar } from "./UserAvatar";
+
+import { AppBar, Box, Toolbar, Container } from "@mui/material";
 
 const Header: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(

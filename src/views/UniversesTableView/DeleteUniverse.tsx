@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useMutation } from "react-query";
 
+import { snackBarAlert } from "../../utils/snackBarAlert";
+import { Universe } from "../../models/Universe";
+import { deleteOneUniverse } from "../../services/universes";
+
 import {
   Stack,
   Button,
@@ -9,15 +13,12 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { snackBarAlert } from "../../utils/snackBarAlert";
-import { Universe } from "../../models/Universe";
-import { deleteOneUniverse } from "../../services/universes";
 
-interface DeleteUniverseProps {
+type DeleteUniverseProps = {
   row: Universe;
   onClose: () => void;
   userMail: string | undefined;
-}
+};
 
 const DeleteUniverse: React.FC<DeleteUniverseProps> = ({
   row,
@@ -55,7 +56,7 @@ const DeleteUniverse: React.FC<DeleteUniverseProps> = ({
   };
 
   const { mutate, isLoading } = useMutation({
-    mutationKey: ["deleteUniverse", { row, userMail }],
+    mutationKey: ["deleteUniverse", { row }],
     mutationFn: () => deleteOneUniverse(row.id, userMail),
     onSettled: (error) => {
       if (error) {

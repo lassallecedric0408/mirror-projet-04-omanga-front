@@ -2,9 +2,7 @@ import React from "react";
 import { Stack, Typography } from "@mui/material";
 import construction from "../../assets/under-construction.jpg";
 
-interface ViewsProps {}
-
-const Preference: React.FC<ViewsProps> = () => {
+const Preference: React.FC = () => {
   return (
     <Stack
       sx={{

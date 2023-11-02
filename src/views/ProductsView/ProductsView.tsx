@@ -3,18 +3,16 @@ import { useQuery } from 'react-query';
 import { redirect } from 'react-router-dom';
 
 import { getAllProducts } from '../../services/products';
+import { getAllUniverses } from '../../services/universes';
+import { getAllCategories } from '../../services/categories';
 import { MultipleSelect } from '../../components/multipleSelect';
 import { SingleSelect } from '../../components/singleSelect';
 import { ProductCard } from '../../components/productCard';
 import { productsItemsSelect } from './productItemsSelect';
 
 import { CircularProgress, Grid, Typography, Stack } from '@mui/material';
-import { getAllUniverses } from '../../services/universes';
-import { getAllCategories } from '../../services/categories';
 
-interface ProductsViewProps {}
-
-const ProductsView: React.FC<ProductsViewProps> = () => {
+const ProductsView: React.FC = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['getAllProducts'],
     queryFn: () => getAllProducts(),

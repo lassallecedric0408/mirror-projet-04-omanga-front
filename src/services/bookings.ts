@@ -3,37 +3,41 @@ import { refreshToken } from "./refreshToken";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const getAllBookings = async (email: string) => {
-  await refreshToken(email);
-  const token = localStorage.getItem(`accessToken/${email}`);
+const getAllBookings = async (
+  email: string | undefined,
+): Promise<{
+  data: Booking[];
+}> => {
+  const token = await refreshToken(email);
   const response = await fetch(`${API_URL}/orders`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token.data}`,
     },
-    mode: 'cors'
+    mode: "cors",
   });
   const data: Booking[] = await response.json();
-  return { data: data };
+  return { data };
 };
 
 const getUserBookings = async (
-  email: string | undefined,
   id: number | undefined,
-) => {
-  await refreshToken(email);
-  const token = localStorage.getItem(`accessToken/${email}`);
+  email: string | undefined,
+): Promise<{
+  data: Booking[];
+}> => {
+  const token = await refreshToken(email);
   const response = await fetch(`${API_URL}/orders/users/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token.data}`,
     },
-    mode: 'cors'
+    mode: "cors",
   });
   const data: Booking[] = await response.json();
-  return { data: data };
+  return { data };
 };
 
 type CreateOneBooking = {
@@ -47,12 +51,15 @@ type UserBooking = {
   product_id: number | undefined;
   user_id: number | undefined;
 };
+
 const createOneBooking = async ({
   productQuantity,
   productId,
   userId,
   userMail,
-}: CreateOneBooking) => {
+}: CreateOneBooking): Promise<{
+  data: Booking;
+}> => {
   const userBooking: UserBooking = {
     product_quantity: productQuantity,
     product_id: productId,
@@ -65,9 +72,9 @@ const createOneBooking = async ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token.data}`,
     },
-    mode: 'cors',
+    mode: "cors",
     body: JSON.stringify(userBooking),
   });
 
@@ -79,35 +86,39 @@ const createOneBooking = async ({
 const updateOneBooking = async (
   id: number,
   order: any,
-  userMail: string | undefined,
-) => {
-  const token = await refreshToken(userMail);
+  email: string | undefined,
+): Promise<{
+  data: any;
+}> => {
+  const token = await refreshToken(email);
   const response = await fetch(`${API_URL}/orders/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token.data}`
+      Authorization: `Bearer ${token.data}`,
     },
-    mode: 'cors',
+    mode: "cors",
     body: JSON.stringify(order),
   });
   const data = await response.json();
-  return data;
+  return { data };
 };
 
 const deleteOneBooking = async (
   id: number,
   userId: number,
-  userMail: string | undefined,
-) => {
-  const token = await refreshToken(userMail);
+  email: string | undefined,
+): Promise<{
+  data: any;
+}> => {
+  const token = await refreshToken(email);
   const response = await fetch(`${API_URL}/orders/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token.data}`
+      Authorization: `Bearer ${token.data}`,
     },
-    mode: 'cors',
+    mode: "cors",
     body: JSON.stringify({ user_id: userId }),
   });
   const data = await response.json();

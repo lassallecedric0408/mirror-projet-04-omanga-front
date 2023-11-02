@@ -14,12 +14,12 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Universe } from "../../models/Universe";
 import { createOneUniverse, updateOneUniverse } from "../../services/universes";
 
-interface CategoryFormProps {
+type CategoryFormProps = {
   row?: Universe;
   userMail: string | undefined;
   onClose: () => void;
   status: "create" | "update";
-}
+};
 
 const UniverseForm: React.FC<CategoryFormProps> = ({
   row,
@@ -91,7 +91,7 @@ const UniverseForm: React.FC<CategoryFormProps> = ({
   };
 
   const createUniverse = useMutation({
-    mutationKey: ["createUniverse", { universeBodyRequest, userMail }],
+    mutationKey: ["createUniverse", { universeBodyRequest }],
     mutationFn: () => createOneUniverse(universeBodyRequest, userMail),
     onSettled: (data, error) => {
       if (error) {

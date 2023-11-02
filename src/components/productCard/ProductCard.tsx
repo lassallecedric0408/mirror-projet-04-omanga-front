@@ -11,12 +11,12 @@ import {
 
 import { materialUITheme } from "../../utils/materialUITheme";
 
-interface ProductsCardProps {
+type ProductsCardProps = {
   index: number;
   name: string;
   price: number;
   imageLink: string;
-}
+};
 
 const ProductCard: React.FC<ProductsCardProps> = ({
   index,
@@ -24,7 +24,6 @@ const ProductCard: React.FC<ProductsCardProps> = ({
   price,
   imageLink,
 }) => {
-  const roundedPrice = (price * 100).toFixed(2);
   return (
     <Paper
       elevation={5}
@@ -88,7 +87,7 @@ const ProductCard: React.FC<ProductsCardProps> = ({
                 }}
                 color={"primary"}
               >
-                {roundedPrice}€
+                {price}€
               </Typography>
             </CardContent>
           </CardActionArea>

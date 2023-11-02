@@ -4,11 +4,9 @@ import { Box, Stack, Tab, Tabs } from "@mui/material";
 import { Faq } from "./Faq";
 import { LegalNotice } from "./LegalNotice";
 
-interface AboutUsViewsProps {}
-
 type TabComponentKey = "one" | "two";
 
-const AboutUsView: React.FC<AboutUsViewsProps> = () => {
+const AboutUsView: React.FC = () => {
   const tabComponents: Record<TabComponentKey, JSX.Element> = {
     one: <Faq />,
     two: <LegalNotice />,

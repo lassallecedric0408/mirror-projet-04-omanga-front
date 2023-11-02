@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
-import { useMutation } from 'react-query';
+import React, { useState } from "react";
+import { useMutation } from "react-query";
+
+import { snackBarAlert } from "../../utils/snackBarAlert";
+import { deleteOneBooking } from "../../services/bookings";
+import { Booking } from "../../models/Booking";
 
 import {
   Stack,
@@ -8,16 +12,13 @@ import {
   CircularProgress,
   Grid,
   Typography,
-} from '@mui/material';
-import { snackBarAlert } from '../../utils/snackBarAlert';
-import { deleteOneBooking } from '../../services/bookings';
-import { Booking } from '../../models/Booking';
+} from "@mui/material";
 
-interface DeleteBookingProps {
+type DeleteBookingProps = {
   row: Booking;
   onClose: () => void;
   userMail: string | undefined;
-}
+};
 
 const DeleteBooking: React.FC<DeleteBookingProps> = ({
   row,
@@ -30,10 +31,10 @@ const DeleteBooking: React.FC<DeleteBookingProps> = ({
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
   const handleClick = (e: string) => {
-    if (e === 'success') {
+    if (e === "success") {
       setOpenSuccessMessage(true);
     }
-    if (e === 'error') {
+    if (e === "error") {
       setOpenErrorMessage(true);
     }
   };
@@ -41,28 +42,28 @@ const DeleteBooking: React.FC<DeleteBookingProps> = ({
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
-    state?: string
+    state?: string,
   ) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
-    if (state === 'success') {
+    if (state === "success") {
       setOpenSuccessMessage(false);
     }
-    if (state === 'error') {
+    if (state === "error") {
       setOpenErrorMessage(false);
     }
   };
 
   const { mutate, isLoading } = useMutation({
-    mutationKey: ['deleteRow', { row, userMail }],
+    mutationKey: ["deleteRow", { row, userMail }],
     mutationFn: () => deleteOneBooking(row.id, row.user_id, userMail),
     onSettled: (error) => {
       if (error) {
-        handleClick('error');
+        handleClick("error");
       }
       if (!error) {
-        handleClick('success');
+        handleClick("success");
         setTimeout(() => onClose(), 2500);
       }
     },
@@ -76,13 +77,13 @@ const DeleteBooking: React.FC<DeleteBookingProps> = ({
     return (
       <div
         style={{
-          height: '77vh',
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "77vh",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <CircularProgress />
@@ -94,14 +95,14 @@ const DeleteBooking: React.FC<DeleteBookingProps> = ({
     <>
       <Stack
         sx={{
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Typography variant='h5' color='primary' gutterBottom>
+        <Typography variant="h5" color="primary" gutterBottom>
           Voulez-vous supprimer la reservation
         </Typography>
 
@@ -112,12 +113,12 @@ const DeleteBooking: React.FC<DeleteBookingProps> = ({
             sm={6}
             md={6}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Button variant='contained' onClick={HandleDeleteRow}>
+            <Button variant="contained" onClick={HandleDeleteRow}>
               Supprimer
             </Button>
           </Grid>
@@ -127,12 +128,12 @@ const DeleteBooking: React.FC<DeleteBookingProps> = ({
             sm={6}
             md={6}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Button variant='outlined' onClick={onClose}>
+            <Button variant="outlined" onClick={onClose}>
               Annuler
             </Button>
           </Grid>
@@ -142,18 +143,18 @@ const DeleteBooking: React.FC<DeleteBookingProps> = ({
       <Snackbar
         open={openSuccessMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, 'success')}
+        onClose={(event, reason) => handleClose(event, reason, "success")}
       >
-        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           La réservation a bien été supprimé!
         </Alert>
       </Snackbar>
       <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, 'error')}
+        onClose={(event, reason) => handleClose(event, reason, "error")}
       >
-        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>

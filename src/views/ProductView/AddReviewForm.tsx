@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useOmangaContex } from '../../context/OmangaContext';
+import useAuthStore from '../../states/OmangaStore';
 import { useMutation } from 'react-query';
 import {
   TextField,
@@ -14,14 +14,13 @@ import { snackBarAlert } from '../../utils/snackBarAlert';
 
 import { createOneReview } from '../../services/reviews';
 
-interface AddReviewFormProps {
+type AddReviewFormProps = {
   onClose: () => void;
   id: string | undefined;
-}
+};
 
 const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
+  const user = useAuthStore((state) => state.user);
 
   const Alert = snackBarAlert;
 
@@ -32,8 +31,8 @@ const AddReviewForm: React.FC<AddReviewFormProps> = ({ onClose, id }) => {
   const [comment, setComment] = useState('');
 
   const productId = Number(id);
-  const userId = user?.user.id;
-  const userMail = user?.user.email;
+  const userId = user.user.id;
+  const userMail = user.user.email;
 
   const handleClick = (e: string) => {
     if (e === 'success') {

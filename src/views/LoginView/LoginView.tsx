@@ -1,35 +1,33 @@
-import React, { useState } from 'react';
-import { useMutation } from 'react-query';
+import React, { useState } from "react";
+import { useMutation } from "react-query";
+import { Link, useNavigate } from "react-router-dom";
+
+import { loginUser } from "../../services/user";
+import { materialUITheme } from "../../utils/materialUITheme";
+import useAuthStore from "../../states/OmangaStore";
+import { snackBarAlert } from "../../utils/snackBarAlert";
+
 import {
   TextField,
   Button,
   Snackbar,
   Grid,
   CircularProgress,
-} from '@mui/material';
-import { snackBarAlert } from '../../utils/snackBarAlert';
-import { Link, useNavigate } from 'react-router-dom';
-import { useOmangaContex } from '../../context/OmangaContext';
-import { loginUser } from '../../services/user';
-import { materialUITheme } from '../../utils/materialUITheme';
-import useAuthStore from '../../states/OmangaStore';
+} from "@mui/material";
 
-interface LoginViewsProps {}
-
-const LoginView: React.FC<LoginViewsProps> = () => {
+const LoginView: React.FC = () => {
   const navigate = useNavigate();
-  const { dispatch } = useOmangaContex();
 
   const Alert = snackBarAlert;
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false);
   const [openErrorMessage, setOpenErrorMessage] = useState(false);
 
   const { mutate, isLoading } = useMutation({
-    mutationKey: ['loginUser', { email, password }],
+    mutationKey: ["loginUser", { email, password }],
     mutationFn: () =>
       loginUser({
         email,
@@ -37,17 +35,17 @@ const LoginView: React.FC<LoginViewsProps> = () => {
       }),
     onSettled: (data, error) => {
       if (error) {
-        handleClick('error');
+        handleClick("error");
       }
       if (data) {
         useAuthStore.setState({
           user: data?.data,
           isLogged: true,
-          isAdmin: data?.data.user.role === 'ADMIN' ? true : false,
+          isAdmin: data?.data.user.role === "ADMIN" ? true : false,
         });
         localStorage.setItem(`accessToken/${email}`, data?.data.accessToken);
         localStorage.setItem(`refreshToken/${email}`, data?.data.refreshToken);
-        handleClick('success');
+        handleClick("success");
         setTimeout(() => navigate(`/`), 2500);
       }
     },
@@ -59,10 +57,10 @@ const LoginView: React.FC<LoginViewsProps> = () => {
   };
 
   const handleClick = (e: string) => {
-    if (e === 'success') {
+    if (e === "success") {
       setOpenSuccessMessage(true);
     }
-    if (e === 'error') {
+    if (e === "error") {
       setOpenErrorMessage(true);
     }
   };
@@ -70,15 +68,15 @@ const LoginView: React.FC<LoginViewsProps> = () => {
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
-    state?: string
+    state?: string,
   ) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
-    if (state === 'success') {
+    if (state === "success") {
       setOpenSuccessMessage(false);
     }
-    if (state === 'error') {
+    if (state === "error") {
       setOpenErrorMessage(false);
     }
   };
@@ -87,13 +85,13 @@ const LoginView: React.FC<LoginViewsProps> = () => {
     return (
       <div
         style={{
-          height: '77vh',
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "77vh",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <CircularProgress />
@@ -106,37 +104,37 @@ const LoginView: React.FC<LoginViewsProps> = () => {
       <Grid
         container
         sx={{
-          height: '77vh',
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "77vh",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <form
-          autoComplete='off'
+          autoComplete="off"
           onSubmit={handleSubmit}
           style={{
-            width: '80%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            width: "80%",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           <h2
             style={{
               color: `${materialUITheme.palette.primary.main}`,
-              paddingBottom: '2rem',
+              paddingBottom: "2rem",
             }}
           >
             Connectez vous à la communauté O'manga
           </h2>
           <TextField
-            type='email'
-            variant='outlined'
-            color='primary'
-            label='Email'
+            type="email"
+            variant="outlined"
+            color="primary"
+            label="Email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             fullWidth
@@ -144,10 +142,10 @@ const LoginView: React.FC<LoginViewsProps> = () => {
             sx={{ mb: 3 }}
           />
           <TextField
-            type='password'
-            variant='outlined'
-            color='primary'
-            label='Mot de passe'
+            type="password"
+            variant="outlined"
+            color="primary"
+            label="Mot de passe"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             required
@@ -156,12 +154,12 @@ const LoginView: React.FC<LoginViewsProps> = () => {
           />
           <Grid
             sx={{
-              display: 'flex',
-              flexDirection: 'row',
+              display: "flex",
+              flexDirection: "row",
             }}
           >
             <Grid item xs={6}>
-              <Button variant='outlined' color='primary' type='submit'>
+              <Button variant="outlined" color="primary" type="submit">
                 Connexion
               </Button>
             </Grid>
@@ -169,14 +167,14 @@ const LoginView: React.FC<LoginViewsProps> = () => {
               item
               xs={6}
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <small>
                 Pas encore de compte?
-                <Link to='/signup'>Inscrivez-vous ici</Link>
+                <Link to="/signup">Inscrivez-vous ici</Link>
               </small>
             </Grid>
           </Grid>
@@ -185,18 +183,18 @@ const LoginView: React.FC<LoginViewsProps> = () => {
       <Snackbar
         open={openSuccessMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, 'success')}
+        onClose={(event, reason) => handleClose(event, reason, "success")}
       >
-        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           La connexion est validée. Ravis de vous revoir!
         </Alert>
       </Snackbar>
       <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, 'error')}
+        onClose={(event, reason) => handleClose(event, reason, "error")}
       >
-        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Une erreur s'est produit. Veuillez essayer à nouveau!
         </Alert>
       </Snackbar>

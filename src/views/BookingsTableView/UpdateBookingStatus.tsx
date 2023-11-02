@@ -3,14 +3,12 @@ import { Stack, Button, Snackbar, Grid } from "@mui/material";
 import { materialUITheme } from "../../utils/materialUITheme";
 import { snackBarAlert } from "../../utils/snackBarAlert";
 
-interface UpdateBookingStatusProps {
-  rowId: number;
+type UpdateBookingStatusProps = {
   item: string;
   onClose: () => void;
-}
+};
 
 const UpdateBookingStatus: React.FC<UpdateBookingStatusProps> = ({
-  rowId,
   item,
   onClose,
 }) => {

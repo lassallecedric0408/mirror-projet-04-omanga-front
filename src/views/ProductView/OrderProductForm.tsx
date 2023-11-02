@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import useAuthStore from "../../states/OmangaStore";
 import { useMutation } from "react-query";
-import { useOmangaContex } from "../../context/OmangaContext";
+
+import { createOneBooking } from "../../services/bookings";
+
 import {
   Button,
   Snackbar,
@@ -15,23 +18,18 @@ import {
 import { materialUITheme } from "../../utils/materialUITheme";
 import { snackBarAlert } from "../../utils/snackBarAlert";
 
-import { createOneBooking } from "../../services/bookings";
-
-interface OrderProductFormProps {
-  row?: any;
+type OrderProductFormProps = {
   name: string | undefined;
   onClose: () => void;
   id: string | undefined;
-}
+};
 
 const OrderProductForm: React.FC<OrderProductFormProps> = ({
-  row,
   name,
   onClose,
   id,
 }) => {
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
+  const user = useAuthStore((state) => state.user.user);
 
   const Alert = snackBarAlert;
 
@@ -48,8 +46,8 @@ const OrderProductForm: React.FC<OrderProductFormProps> = ({
 
   const productQuantity = Number(orderProductNumber);
   const productId = Number(id);
-  const userId = user?.user.id;
-  const userMail = user?.user.email;
+  const userId = user.id;
+  const userMail = user.email;
 
   const { mutate, isLoading } = useMutation({
     mutationKey: [

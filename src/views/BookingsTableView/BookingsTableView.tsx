@@ -1,7 +1,15 @@
 import React from "react";
-import { useQuery } from "react-query";
-import { useOmangaContex } from "../../context/OmangaContext";
 import { redirect } from "react-router-dom";
+import useAuthStore from "../../states/OmangaStore";
+import { useQuery } from "react-query";
+
+import { TextFieldTable } from "../../components/TextFieldTable";
+import { DateFieldTable } from "../../components/DateFieldTable";
+import { ModalTable } from "../../components/ModalTable/ModalTable";
+import { getAllBookings } from "../../services/bookings";
+import { Booking } from "../../models/Booking";
+import { DeleteBooking } from "./DeleteBooking";
+
 import {
   Button,
   Table,
@@ -16,28 +24,21 @@ import {
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-import { TextFieldTable } from "../../components/TextFieldTable";
-import { DateFieldTable } from "../../components/DateFieldTable";
-import { ModalTable } from "../../components/ModalTable/ModalTable";
-import { getAllBookings } from "../../services/bookings";
-import { Booking } from "../../models/Booking";
-import { DeleteBooking } from "./DeleteBooking";
 import { materialUITheme } from "../../utils/materialUITheme";
 
-interface BookingsTableViewProps {}
-
-const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
+const BookingsTableView: React.FC = () => {
   const theme = useTheme();
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
 
-  if (!user?.user) {
+  const user = useAuthStore((state) => state.user.user);
+  const isAdmin = useAuthStore((state) => state.isAdmin);
+
+  if (!user) {
     throw new Error("User not found");
   }
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["getAllBookings", user?.user.email ?? ""],
-    queryFn: () => getAllBookings(user.user.email ?? ""),
+    queryKey: ["getAllBookings", user],
+    queryFn: () => getAllBookings(user.email),
   });
 
   const [booking, setBooking] = React.useState<Booking>({
@@ -79,7 +80,9 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
 
   const AllBookings = getFitleredBookings();
 
-  // if (!user.isAdmin) {redirect('/error')};
+  if (user.role === "USER") {
+    redirect("/error");
+  }
 
   if (isLoading) {
     return (
@@ -100,6 +103,10 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
   }
 
   if (error) {
+    redirect("/error");
+  }
+
+  if (!isAdmin) {
     redirect("/error");
   }
 
@@ -205,7 +212,7 @@ const BookingsTableView: React.FC<BookingsTableViewProps> = () => {
         <DeleteBooking
           row={booking}
           onClose={handleCloseDeleteModal}
-          userMail={user?.user.email}
+          userMail={user.email}
         />
       </ModalTable>
     </>

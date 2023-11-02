@@ -15,11 +15,11 @@ const style = {
   p: 4,
 };
 
-interface ModalTableProps {
+type ModalTableProps = {
   open: boolean;
   handleClose: () => void;
   children: React.ReactElement;
-}
+};
 
 const ModalTable: React.FC<ModalTableProps> = ({
   open,

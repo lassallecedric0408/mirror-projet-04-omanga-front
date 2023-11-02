@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import useAuthStore from '../../states/OmangaStore';
-import { useMutation } from 'react-query';
+import React, { useState } from "react";
+import useAuthStore from "../../states/OmangaStore";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+
+import { snackBarAlert } from "../../utils/snackBarAlert";
+import { signUpUser } from "../../services/user";
 
 import {
   TextField,
@@ -10,23 +14,17 @@ import {
   Snackbar,
   CircularProgress,
   Typography,
-} from '@mui/material';
-import { Link, redirect, useNavigate } from 'react-router-dom';
-import { snackBarAlert } from '../../utils/snackBarAlert';
-
-import { signUpUser } from '../../services/user';
+} from "@mui/material";
 
 const Alert = snackBarAlert;
 
-interface SignupViewsProps {}
-
-const SignupView: React.FC<SignupViewsProps> = () => {
+const SignupView: React.FC = () => {
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [city, setCity] = useState<string | null>(null);
   const [zipCode, setZipCode] = useState<number | null>(null);
 
@@ -36,7 +34,7 @@ const SignupView: React.FC<SignupViewsProps> = () => {
 
   const { mutate, isLoading } = useMutation({
     mutationKey: [
-      'signupUser',
+      "signupUser",
       { firstName, lastName, email, password, city, zipCode },
     ],
     mutationFn: () =>
@@ -50,23 +48,17 @@ const SignupView: React.FC<SignupViewsProps> = () => {
       }),
     onSettled: (data, error) => {
       if (error) {
-        handleClick('error');
+        handleClick("error");
       }
       if (data) {
         useAuthStore.setState({
           user: data?.data,
           isLogged: true,
-          isAdmin: data?.data.user.role === 'ADMIN' ? true : false,
+          isAdmin: data?.data.user.role === "ADMIN" ? true : false,
         });
-        localStorage.setItem(
-          `accessToken/${data?.data.user.email}`,
-          `${data?.data.accessToken}`
-        );
-        localStorage.setItem(
-          `refreshToken/${data?.data.user.email}`,
-          `${data?.data.refreshToken}`
-        );
-        handleClick('success');
+        localStorage.setItem(`accessToken/${email}`, data?.data.accessToken);
+        localStorage.setItem(`refreshToken/${email}`, data?.data.refreshToken);
+        handleClick("success");
         setTimeout(() => navigate(`/`), 2500);
       }
     },
@@ -78,14 +70,14 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   };
 
   const handleClick = (e: string) => {
-    if (e === 'success') {
+    if (e === "success") {
       setOpenSuccessMessage(true);
-      return redirect('/');
+      return redirect("/");
     }
-    if (e === 'error') {
+    if (e === "error") {
       setOpenErrorMessage(true);
     }
-    if (e === 'warning') {
+    if (e === "warning") {
       setOpenWarningMessage(true);
     }
   };
@@ -93,18 +85,18 @@ const SignupView: React.FC<SignupViewsProps> = () => {
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string,
-    state?: string
+    state?: string,
   ) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
-    if (state === 'success') {
+    if (state === "success") {
       setOpenSuccessMessage(false);
     }
-    if (state === 'error') {
+    if (state === "error") {
       setOpenErrorMessage(false);
     }
-    if (state === 'warning') {
+    if (state === "warning") {
       setOpenWarningMessage(false);
     }
   };
@@ -113,13 +105,13 @@ const SignupView: React.FC<SignupViewsProps> = () => {
     return (
       <div
         style={{
-          height: '77vh',
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "77vh",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <CircularProgress />
@@ -131,32 +123,32 @@ const SignupView: React.FC<SignupViewsProps> = () => {
     <Grid
       container
       sx={{
-        height: '77vh',
-        width: '80%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        height: "77vh",
+        width: "80%",
+        marginLeft: "auto",
+        marginRight: "auto",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <form
-        autoComplete='off'
+        autoComplete="off"
         onSubmit={handleSubmit}
         style={{
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
-        <Typography variant='h5' color='primary' gutterBottom>
+        <Typography variant="h5" color="primary" gutterBottom>
           Rejoindre la communauté O'manga
         </Typography>
         <TextField
-          type='text'
-          variant='outlined'
-          color='primary'
-          label='Nom'
+          type="text"
+          variant="outlined"
+          color="primary"
+          label="Nom"
           onChange={(e) => setFirstName(e.target.value)}
           value={firstName}
           fullWidth
@@ -164,10 +156,10 @@ const SignupView: React.FC<SignupViewsProps> = () => {
           sx={{ mb: 3 }}
         />
         <TextField
-          type='text'
-          variant='outlined'
-          color='primary'
-          label='Prénom'
+          type="text"
+          variant="outlined"
+          color="primary"
+          label="Prénom"
           onChange={(e) => setLastName(e.target.value)}
           value={lastName}
           fullWidth
@@ -175,10 +167,10 @@ const SignupView: React.FC<SignupViewsProps> = () => {
           sx={{ mb: 3 }}
         />
         <TextField
-          type='email'
-          variant='outlined'
-          color='primary'
-          label='Email'
+          type="email"
+          variant="outlined"
+          color="primary"
+          label="Email"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           fullWidth
@@ -186,39 +178,39 @@ const SignupView: React.FC<SignupViewsProps> = () => {
           sx={{ mb: 3 }}
         />
         <TextField
-          type='password'
-          variant='outlined'
-          color='primary'
-          label='Mot de passe'
+          type="password"
+          variant="outlined"
+          color="primary"
+          label="Mot de passe"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           required
           fullWidth
           sx={{ mb: 3 }}
         />
-        <Stack spacing={2} direction='row' sx={{ mb: 3 }}>
+        <Stack spacing={2} direction="row" sx={{ mb: 3 }}>
           <TextField
-            type='text'
-            variant='outlined'
-            color='primary'
-            label='Ville'
+            type="text"
+            variant="outlined"
+            color="primary"
+            label="Ville"
             onChange={(e) => setCity(e.target.value)}
             value={city}
             fullWidth
           />
           <TextField
-            type='number'
-            variant='outlined'
-            color='primary'
-            label='Code postal'
+            type="number"
+            variant="outlined"
+            color="primary"
+            label="Code postal"
             onChange={(e) => setZipCode(parseInt(e.target.value))}
             value={zipCode}
             fullWidth
           />
         </Stack>
-        <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Grid sx={{ display: "flex", flexDirection: "row" }}>
           <Grid item xs={6}>
-            <Button variant='outlined' color='primary' type='submit'>
+            <Button variant="outlined" color="primary" type="submit">
               Nous Rejoindre
             </Button>
           </Grid>
@@ -226,14 +218,14 @@ const SignupView: React.FC<SignupViewsProps> = () => {
             item
             xs={6}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <small>
-              Vous êtes déjà dans la communauté?{' '}
-              <Link to='/login'>Connectez-vous ici</Link>
+              Vous êtes déjà dans la communauté?{" "}
+              <Link to="/login">Connectez-vous ici</Link>
             </small>
           </Grid>
         </Grid>
@@ -241,27 +233,27 @@ const SignupView: React.FC<SignupViewsProps> = () => {
       <Snackbar
         open={openSuccessMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, 'success')}
+        onClose={(event, reason) => handleClose(event, reason, "success")}
       >
-        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           Merci d'avoir rejoins notre communauté !
         </Alert>
       </Snackbar>
       <Snackbar
         open={openErrorMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, 'error')}
+        onClose={(event, reason) => handleClose(event, reason, "error")}
       >
-        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Un prolème est survenu, veuillez réessayer plus tard.
         </Alert>
       </Snackbar>
       <Snackbar
         open={openWarningMessage}
         autoHideDuration={2000}
-        onClose={(event, reason) => handleClose(event, reason, 'warning')}
+        onClose={(event, reason) => handleClose(event, reason, "warning")}
       >
-        <Alert onClose={handleClose} severity='warning' sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
           Votre age ne vous permet pas de vous inscrire !
         </Alert>
       </Snackbar>

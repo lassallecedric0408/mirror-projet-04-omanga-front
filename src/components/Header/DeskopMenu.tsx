@@ -1,11 +1,13 @@
 import React from "react";
-import { Typography, Box } from "@mui/material";
 import { NavLinks } from "./NavLinks";
+
+import { Typography, Box } from "@mui/material";
+
 import logo from "../../assets/logo.png";
 
-interface DesktopMenuProps {
+type DesktopMenuProps = {
   handleCloseNavMenu: () => void;
-}
+};
 
 const DesktopMenu: React.FC<DesktopMenuProps> = ({ handleCloseNavMenu }) => {
   return (

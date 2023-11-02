@@ -1,11 +1,11 @@
 import React from "react";
 import { TextField, FormControl, Grid } from "@mui/material";
 
-interface ViewsProps {
+type ViewsProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
-}
+};
 
 const DateFieldTable: React.FC<ViewsProps> = ({ label, value, onChange }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

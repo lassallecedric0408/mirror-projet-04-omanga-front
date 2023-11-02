@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { redirect } from "react-router-dom";
+import useAuthStore from "../../states/OmangaStore";
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
-import { useOmangaContex } from '../../context/OmangaContext';
-
-import { TextFieldTable } from '../../components/TextFieldTable';
-import { DateFieldTable } from '../../components/DateFieldTable';
-import { ModalTable } from '../../components/ModalTable/ModalTable';
+import { TextFieldTable } from "../../components/TextFieldTable";
+import { ModalTable } from "../../components/ModalTable/ModalTable";
+import { DeleteUserBooking } from "./DeleteUserBooking";
+import { getUserBookings } from "../../services/bookings";
+import { Booking } from "../../models/Booking";
 
 import {
   Button,
@@ -19,33 +21,29 @@ import {
   Grid,
   Typography,
   CircularProgress,
-} from '@mui/material';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
-import { DeleteUserBooking } from './DeleteUserBooking';
-import { getUserBookings } from '../../services/bookings';
-import { Booking } from '../../models/Booking';
+} from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 const BookingsDetails: React.FC = () => {
   const navigate = useNavigate();
 
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
+  const user = useAuthStore((state) => state.user.user);
+  const isLogged = useAuthStore((state) => state.isLogged);
 
-  if (!user?.user) {
-    throw new Error('User not found');
+  if (!user) {
+    throw new Error("User not found");
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['getAllBookings', user],
-    queryFn: () => getUserBookings(user.user.email, user.user.id),
+    queryKey: ["getAllBookings", user],
+    queryFn: () => getUserBookings(user.id, user.email),
   });
 
   const AllBookings = data?.data ?? [];
   const [booking, setBooking] = React.useState<Booking>({
     id: 0,
-    order_date: '',
-    archeving_date: '',
+    order_date: "",
+    archeving_date: "",
     product_quantity: 0,
     product_id: 0,
     user_id: 0,
@@ -72,7 +70,7 @@ const BookingsDetails: React.FC = () => {
     let filteredBookings = [...AllBookings];
     if (idProduct) {
       filteredBookings = filteredBookings.filter(
-        (booking) => booking.id === Number(idProduct)
+        (booking) => booking.id === Number(idProduct),
       );
     }
     return filteredBookings;
@@ -84,13 +82,13 @@ const BookingsDetails: React.FC = () => {
     return (
       <div
         style={{
-          height: '77vh',
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "77vh",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <CircularProgress />
@@ -98,35 +96,39 @@ const BookingsDetails: React.FC = () => {
     );
   }
 
+  if (!isLogged) {
+    redirect("/");
+  }
+
   return (
     <>
       <Grid
         container
         style={{
-          height: '67vh',
-          width: '90%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
+          height: "67vh",
+          width: "90%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <Typography variant='h5' color='primary' gutterBottom>
+        <Typography variant="h5" color="primary" gutterBottom>
           Réservations
         </Typography>
         <Grid
           container
           spacing={2}
           sx={{
-            marginTop: '3rem',
-            marginBottom: '1rem',
-            width: '100%',
-            flex: '0',
+            marginTop: "3rem",
+            marginBottom: "1rem",
+            width: "100%",
+            flex: "0",
           }}
         >
           <Grid item xs={4}>
             <TextFieldTable
-              label={'ID commande'}
+              label={"ID commande"}
               value={idProduct}
               onChange={handleIdProductChange}
             />
@@ -135,11 +137,11 @@ const BookingsDetails: React.FC = () => {
         <Grid
           item
           sx={{
-            width: '100%',
-            flex: '1',
-            overflowY: 'auto',
-            maxHeight: '100%',
-            marginBottom: '1rem',
+            width: "100%",
+            flex: "1",
+            overflowY: "auto",
+            maxHeight: "100%",
+            marginBottom: "1rem",
           }}
         >
           <TableContainer>
@@ -156,10 +158,10 @@ const BookingsDetails: React.FC = () => {
                 {filteredBookings.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.order_date.split('T')[0]}</TableCell>
+                    <TableCell>{row.order_date.split("T")[0]}</TableCell>
                     <TableCell>
                       <Button
-                        variant='text'
+                        variant="text"
                         onClick={() => navigateToProductId(row.id)}
                       >
                         Afficher le produit
@@ -167,8 +169,8 @@ const BookingsDetails: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <Button
-                        variant='outlined'
-                        size='small'
+                        variant="outlined"
+                        size="small"
                         onClick={() => handleDeleteBooking(row)}
                       >
                         <DeleteOutlineIcon />
@@ -185,7 +187,7 @@ const BookingsDetails: React.FC = () => {
         <DeleteUserBooking
           row={booking}
           onClose={handleCloseDeleteModal}
-          userMail={user?.user.email}
+          userMail={user?.email}
         />
       </ModalTable>
     </>

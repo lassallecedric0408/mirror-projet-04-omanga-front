@@ -1,16 +1,14 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { images } from './images';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import { images } from "./images";
 
-import './carousel.css';
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "./carousel.css";
 
-// import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-
-const Carousel = () => {
+const Carousel: React.FC = () => {
   return (
     <>
       <Swiper
@@ -25,7 +23,7 @@ const Carousel = () => {
         }}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
-        className='mySwiper'
+        className="mySwiper"
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>

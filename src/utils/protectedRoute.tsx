@@ -2,10 +2,10 @@ import React from "react";
 
 import { Navigate, useLocation } from "react-router-dom";
 
-interface SignupViewsProps {
+type SignupViewsProps = {
   children: React.ReactElement;
   admin?: boolean;
-}
+};
 
 const ProtectedRoute: React.FC<SignupViewsProps> = ({ children, admin }) => {
   let location = useLocation();

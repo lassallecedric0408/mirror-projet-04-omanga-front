@@ -1,11 +1,11 @@
 import React from "react";
 import { TextField, FormControl, Grid } from "@mui/material";
 
-interface ViewsProps {
+type ViewsProps = {
   label: string;
   value: string | number | undefined;
   onChange: (value: string | number) => void;
-}
+};
 
 const TextFieldTable: React.FC<ViewsProps> = ({ label, value, onChange }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

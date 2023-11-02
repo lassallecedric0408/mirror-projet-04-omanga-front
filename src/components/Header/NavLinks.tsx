@@ -1,20 +1,20 @@
 import React from 'react';
-import { Button } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import { useOmangaContex } from '../../context/OmangaContext';
-
-import { materialUITheme } from '../../utils/materialUITheme';
 import useAuthStore from '../../states/OmangaStore';
+import { Link as RouterLink } from 'react-router-dom';
+
+import { Button } from '@mui/material';
+import { materialUITheme } from '../../utils/materialUITheme';
 
 const pages = [
   { name: 'Acceuil', link: '/' },
   { name: 'Produits', link: '/products' },
   { name: 'Nous contacter', link: '/contactUs' },
 ];
-interface NavLinksProps {
+
+type NavLinksProps = {
   handleCloseNavMenu: () => void;
   state: 'mobile' | 'desktop';
-}
+};
 
 const NavLinks: React.FC<NavLinksProps> = ({ handleCloseNavMenu, state }) => {
   const isAdmin = useAuthStore((state) => state.isAdmin);
@@ -64,7 +64,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ handleCloseNavMenu, state }) => {
               fontFamily: 'Caveat',
             }}
           >
-            Tableaud de bord
+            Tableau de bord
           </RouterLink>
         </Button>
       )}

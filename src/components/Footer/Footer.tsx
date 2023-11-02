@@ -1,15 +1,16 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
-import { Grid, Typography } from "@mui/material";
-
 import { openingHoursData } from "./openingHoursData";
 import { servicesLinks } from "./servicesLinks";
 import { socialMediaLinks } from "./socialMediaLinks";
 import { contactInformations } from "./contactInformations";
 import { materialUITheme } from "../../utils/materialUITheme";
 
+import { Grid, Typography, useTheme } from "@mui/material";
+
 const Footer: React.FC = () => {
+  const theme = useTheme();
   return (
     <footer
       style={{
@@ -73,6 +74,9 @@ const Footer: React.FC = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            [theme.breakpoints.down("sm")]: {
+              display: "none",
+            },
           }}
         >
           <Typography
@@ -107,6 +111,11 @@ const Footer: React.FC = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            hideOnMobile: {
+              [theme.breakpoints.down("sm")]: {
+                display: "none",
+              },
+            },
           }}
         >
           <Typography

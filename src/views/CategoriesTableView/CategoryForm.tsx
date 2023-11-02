@@ -1,5 +1,12 @@
 import React, { ChangeEvent, useState } from "react";
 import { useMutation } from "react-query";
+
+import {
+  createOneCategory,
+  updateOneCategory,
+} from "../../services/categories";
+import { Category } from "../../models/Category";
+
 import {
   TextField,
   Button,
@@ -10,18 +17,13 @@ import {
 } from "@mui/material";
 import { snackBarAlert } from "../../utils/snackBarAlert";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { Category } from "../../models/Category";
-import {
-  createOneCategory,
-  updateOneCategory,
-} from "../../services/categories";
 
-interface CategoryFormProps {
+type CategoryFormProps = {
   row?: Category;
   userMail: string | undefined;
   onClose: () => void;
   status: "create" | "update";
-}
+};
 
 const CategoryForm: React.FC<CategoryFormProps> = ({
   row,
@@ -107,7 +109,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   });
 
   const updateCategory = useMutation({
-    mutationKey: ["updateProduct", { row, categoryBodyRequest, userMail }],
+    mutationKey: ["updateProduct", { row, categoryBodyRequest }],
     mutationFn: () => updateOneCategory(row?.id, categoryBodyRequest, userMail),
     onSettled: (data, error) => {
       if (error) {

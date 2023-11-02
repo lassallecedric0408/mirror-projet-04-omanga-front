@@ -1,78 +1,107 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { type User } from '../models/User';
-
+import { type User } from "../models/User";
 
 type OmangaAuthStore = {
   user: User;
   isLogged: boolean;
   isAdmin: boolean;
-  updateUser: (firstname: string, lastname: string, email: string, image_url: string | null, role: "USER" | "ADMIN", city: string | null, zip_code?: string | null) => void;
-  logoutUser: () => void; // Fonction de déconnexion
+  updateUser: (
+    firstname: string,
+    lastname: string,
+    email: string,
+    image_url: string | null,
+    role: "USER" | "ADMIN",
+    city: string | null,
+    zip_code?: string | null,
+  ) => void;
+  logoutUser: () => void;
+  updateToken: (accessToken: string, refreshToken: string) => void;
 };
 
 const useAuthStore = create<OmangaAuthStore>()(
   persist(
     (set) => ({
       user: {
-        message: '',
+        message: "",
         user: {
           id: 1,
-          firstname: '',
-          lastname: '',
-          email: '',
-          image_url: '',
-          role: 'USER',
-          city: '',
-          zip_code: '',
+          firstname: "",
+          lastname: "",
+          email: "",
+          image_url: "",
+          role: "USER",
+          city: "",
+          zip_code: "",
         },
-        accessToken: '',
-        refreshToken: '',
+        accessToken: "",
+        refreshToken: "",
       },
       isLogged: false,
       isAdmin: false,
-      updateUser: (firstname: string, lastname: string, email: string, image_url: string | null, role: "USER" | "ADMIN", city?: string | null, zip_code?: string | null) => set((state) => ({
-        ...state,
-        user: {
-          ...state.user,
+      updateUser: (
+        firstname: string,
+        lastname: string,
+        email: string,
+        image_url: string | null,
+        role: "USER" | "ADMIN",
+        city?: string | null,
+        zip_code?: string | null,
+      ) =>
+        set((state) => ({
+          ...state,
           user: {
-            ...state.user.user,
-            firstname,
-            lastname,
-            email,
-            image_url,
-            role,
-            city,
-            zip_code
+            ...state.user,
+            user: {
+              ...state.user.user,
+              firstname,
+              lastname,
+              email,
+              image_url,
+              role,
+              city,
+              zip_code,
+            },
           },
-        },
-      })),
+        })),
       logoutUser: () => {
         set({
           user: {
-            message: '',
+            message: "",
             user: {
               id: 1,
-              firstname: '',
-              lastname: '',
-              email: '',
-              image_url: '',
-              role: 'USER',
-              city: '',
-              zip_code: '',
+              firstname: "",
+              lastname: "",
+              email: "",
+              image_url: "",
+              role: "USER",
+              city: "",
+              zip_code: "",
             },
-            accessToken: '',
-            refreshToken: '',
+            accessToken: "",
+            refreshToken: "",
           },
           isLogged: false,
           isAdmin: false,
         });
       },
+      updateToken: (accessToken: string, refreshToken: string) =>
+        set((state) => ({
+          ...state,
+          user: {
+            ...state.user,
+            user: {
+              ...state.user.user,
+              accessToken,
+              refreshToken,
+            },
+          },
+        })),
     }),
     {
       name: "auth",
-    }
-  )
+    },
+  ),
 );
 
 export default useAuthStore;

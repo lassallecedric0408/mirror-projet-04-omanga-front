@@ -2,6 +2,10 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { redirect } from 'react-router';
 import { useQuery } from 'react-query';
+
+import { getAdminDashBoard } from '../../services/admin';
+import { materialUITheme } from '../../utils/materialUITheme';
+
 import {
   Grid,
   Stack,
@@ -11,21 +15,16 @@ import {
   useTheme,
   CircularProgress,
 } from '@mui/material';
+import useAuthStore from '../../states/OmangaStore';
 
-import { getAdminDashBoard } from '../../services/admin';
-import { useOmangaContex } from '../../context/OmangaContext';
-import { materialUITheme } from '../../utils/materialUITheme';
-
-interface DashBoardViewProps {}
-
-const DashBoardView: React.FC<DashBoardViewProps> = () => {
+const DashBoardView: React.FC = () => {
   const theme = useTheme();
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
+
+  const user = useAuthStore((state) => state.user);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['getDashBoard', user?.user.email],
-    queryFn: () => getAdminDashBoard(user?.user.email),
+    queryKey: ['getDashBoard', user],
+    queryFn: () => getAdminDashBoard(user.user.email),
   });
 
   const dashboardItem = [

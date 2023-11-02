@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { useOmangaContex } from "../../context/OmangaContext";
 import { redirect, useNavigate } from "react-router-dom";
+import useAuthStore from "../../states/OmangaStore";
+import { useQuery } from "react-query";
+
+import { DeleteProduct } from "./DeleteProduct";
+import { Product } from "../../models/Product";
+import { getAllProducts } from "../../services/products";
+import { TextFieldTable } from "../../components/TextFieldTable";
+import { ModalTable } from "../../components/ModalTable/ModalTable";
+import { ProductForm } from "./ProductForm";
+import { removeAccents } from "../../utils/removeAccents";
+
 import {
   Button,
   Table,
@@ -15,27 +24,19 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { materialUITheme } from "../../utils/materialUITheme";
-
-import { getAllProducts } from "../../services/products";
-import { TextFieldTable } from "../../components/TextFieldTable";
-import { ModalTable } from "../../components/ModalTable/ModalTable";
-import { ProductForm } from "./ProductForm";
-import { removeAccents } from "../../utils/removeAccents";
-
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
 import AddIcon from "@mui/icons-material/Add";
-import { DeleteProduct } from "./DeleteProduct";
-import { Product } from "../../models/Product";
 
 interface ProductsTableViewProps {}
 
 const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
   const theme = useTheme();
 
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
-  if (!user?.user) {
+  const user = useAuthStore((state) => state.user.user);
+  const isAdmin = useAuthStore((state) => state.isAdmin);
+
+  if (!user) {
     throw new Error("User not found");
   }
 
@@ -122,8 +123,6 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
 
   const AllData = getFitleredRows();
 
-  // if (!user.isAdmin) {redirect('/error')};
-
   if (isLoading) {
     return (
       <div
@@ -143,6 +142,10 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
   }
 
   if (error) {
+    redirect("/error");
+  }
+
+  if (!isAdmin) {
     redirect("/error");
   }
 
@@ -271,28 +274,24 @@ const ProductsTableView: React.FC<ProductsTableViewProps> = () => {
       </Grid>
       <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal}>
         <ProductForm
-          item={"le produit"}
           onClose={handleCloseCreateModal}
-          userId={user?.user.id}
-          userMail={user?.user.email}
           status="create"
+          userMail={user.email}
         />
       </ModalTable>
       <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal}>
         <ProductForm
           row={rowItem}
-          item={"le produit"}
           onClose={handleCloseUpdateModal}
-          userId={user?.user.id}
-          userMail={user?.user.email}
           status="update"
+          userMail={user.email}
         />
       </ModalTable>
       <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
         <DeleteProduct
           row={product}
           onClose={handleCloseDeleteModal}
-          userMail={user?.user.email}
+          userMail={user.email}
         />
       </ModalTable>
     </>

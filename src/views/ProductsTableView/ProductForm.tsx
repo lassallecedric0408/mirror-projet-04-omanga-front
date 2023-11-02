@@ -1,8 +1,10 @@
 import React, { ChangeEvent, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+
 import { getAllCategories } from "../../services/categories";
 import { getAllUniverses } from "../../services/universes";
 import { Product } from "../../models/Product";
+import { createOneProduct, updateOneProduct } from "../../services/products";
 
 import {
   TextField,
@@ -17,24 +19,19 @@ import {
 } from "@mui/material";
 import { snackBarAlert } from "../../utils/snackBarAlert";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { createOneProduct, updateOneProduct } from "../../services/products";
 
-interface CategoryFormProps {
+type CategoryFormProps = {
   row?: Product;
-  item: string;
-  userId: number | undefined;
-  userMail: string | undefined;
   onClose: () => void;
   status: "create" | "update";
-}
+  userMail: string | undefined;
+};
 
 const ProductForm: React.FC<CategoryFormProps> = ({
   row,
-  item,
   onClose,
-  userId,
-  userMail,
   status,
+  userMail,
 }) => {
   const Alert = snackBarAlert;
 
@@ -140,8 +137,8 @@ const ProductForm: React.FC<CategoryFormProps> = ({
     universe_id: categorySelect,
   };
   const createProduct = useMutation({
-    mutationKey: ["createProduct", { productBodyRequest, userMail, userId }],
-    mutationFn: () => createOneProduct(productBodyRequest, userMail, userId),
+    mutationKey: ["createProduct", { productBodyRequest }],
+    mutationFn: () => createOneProduct(productBodyRequest, userMail),
     onSettled: (data, error) => {
       if (error) {
         handleClick("error");
@@ -154,12 +151,8 @@ const ProductForm: React.FC<CategoryFormProps> = ({
   });
 
   const updateProduct = useMutation({
-    mutationKey: [
-      "updateProduct",
-      { row, productBodyRequest, userMail, userId },
-    ],
-    mutationFn: () =>
-      updateOneProduct(row?.id, productBodyRequest, userMail, userId),
+    mutationKey: ["updateProduct", { row, productBodyRequest }],
+    mutationFn: () => updateOneProduct(row?.id, userMail, productBodyRequest),
     onSettled: (data, error) => {
       if (error) {
         handleClick("error");

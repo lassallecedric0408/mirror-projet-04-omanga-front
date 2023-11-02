@@ -1,20 +1,19 @@
-import React from 'react';
-import useAuthStore from '../../states/OmangaStore';
+import React from "react";
+import useAuthStore from "../../states/OmangaStore";
+import { Link } from "react-router-dom";
 
-import { Link } from 'react-router-dom';
+import { AccountInformtions } from "./AccountInformation";
+import { BookingsDetails } from "./BookingsDetails";
+import { Preference } from "./Preference";
 
-import { AccountInformtions } from './AccountInformation';
-import { BookingsDetails } from './BookingsDetails';
-import { Preference } from './Preference';
+import { Box, Tabs, Tab, Stack, Typography } from "@mui/material";
 
-import { Box, Tabs, Tab, Stack, Typography } from '@mui/material';
-
-type TabComponentKey = 'one' | 'two' | 'three';
+type TabComponentKey = "one" | "two" | "three";
 
 const AccountView: React.FC = () => {
   const isLogged = useAuthStore((state) => state.isLogged);
 
-  const [value, setValue] = React.useState('one');
+  const [value, setValue] = React.useState("one");
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -32,38 +31,38 @@ const AccountView: React.FC = () => {
         <Stack
           sx={{
             accountView: {
-              height: '77vh',
-              width: '90%',
-              marginLeft: 'auto',
-              marginRight: 'auto',
+              height: "77vh",
+              width: "90%",
+              marginLeft: "auto",
+              marginRight: "auto",
             },
           }}
         >
           <Box
             sx={{
               tabContainer: {
-                height: '7vh',
+                height: "7vh",
               },
             }}
           >
             <Tabs
               value={value}
               onChange={handleTabChange}
-              textColor='primary'
-              indicatorColor='primary'
-              aria-label='secondary tabs example'
+              textColor="primary"
+              indicatorColor="primary"
+              aria-label="secondary tabs example"
               centered
             >
               <Tab
-                value='one'
-                label='Informations du compte'
-                sx={{ width: '33%' }}
+                value="one"
+                label="Informations du compte"
+                sx={{ width: "33%" }}
               />
-              <Tab value='two' label='Mes réservations' sx={{ width: '33%' }} />
+              <Tab value="two" label="Mes réservations" sx={{ width: "33%" }} />
               <Tab
-                value='three'
-                label='Mes préférences'
-                sx={{ width: '34%' }}
+                value="three"
+                label="Mes préférences"
+                sx={{ width: "34%" }}
               />
             </Tabs>
           </Box>
@@ -72,19 +71,19 @@ const AccountView: React.FC = () => {
       ) : (
         <Stack
           sx={{
-            height: '77vh',
-            width: '90%',
-            ml: 'auto',
-            mr: 'auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            height: "77vh",
+            width: "90%",
+            ml: "auto",
+            mr: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Typography variant='h4' gutterBottom color='primary'>
+          <Typography variant="h4" gutterBottom color="primary">
             Vous êtes déjà dans la communauté?
           </Typography>
-          <Link to='/login' color='primary'>
+          <Link to="/login" color="primary">
             Connectez-vous ici
           </Link>
         </Stack>

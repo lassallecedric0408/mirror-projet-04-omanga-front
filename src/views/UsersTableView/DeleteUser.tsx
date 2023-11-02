@@ -13,11 +13,11 @@ import { snackBarAlert } from "../../utils/snackBarAlert";
 import { deleteOneUser } from "../../services/user";
 import { UserResponse } from "../../models/User";
 
-interface DeleteUserProps {
+type DeleteUserProps = {
   row: UserResponse;
   onClose: () => void;
   userMail: string | undefined;
-}
+};
 
 const DeleteUser: React.FC<DeleteUserProps> = ({ row, onClose, userMail }) => {
   const Alert = snackBarAlert;

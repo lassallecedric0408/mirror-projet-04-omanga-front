@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { useOmangaContex } from '../../context/OmangaContext';
-import { redirect } from 'react-router';
-import { useQuery } from 'react-query';
-import { materialUITheme } from '../../utils/materialUITheme';
+import React, { useState } from "react";
+import { redirect } from "react-router-dom";
+import useAuthStore from "../../states/OmangaStore";
+import { useQuery } from "react-query";
+
+import { TextFieldTable } from "../../components/TextFieldTable";
+import { ModalTable } from "../../components/ModalTable/ModalTable";
+import { MultipleSelect } from "../../components/multipleSelect";
+import { UniverseForm } from "./UniverseForm";
+import { getAllUniverses } from "../../services/universes";
+import { DeleteUniverse } from "./DeleteUniverse";
+import { Universe } from "../../models/Universe";
+
 import {
   Button,
   Table,
@@ -14,29 +22,24 @@ import {
   Grid,
   useTheme,
   CircularProgress,
-} from '@mui/material';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
-import AddIcon from '@mui/icons-material/Add';
+} from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
+import AddIcon from "@mui/icons-material/Add";
+import { materialUITheme } from "../../utils/materialUITheme";
 
-import { TextFieldTable } from '../../components/TextFieldTable';
-import { ModalTable } from '../../components/ModalTable/ModalTable';
-import { MultipleSelect } from '../../components/multipleSelect';
-
-import { UniverseForm } from './UniverseForm';
-import { getAllUniverses } from '../../services/universes';
-import { DeleteUniverse } from './DeleteUniverse';
-import { Universe } from '../../models/Universe';
-
-interface UniversesTableViewProps {}
-
-const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
+const UniversesTableView: React.FC = () => {
   const theme = useTheme();
-  const { OmangaState } = useOmangaContex();
-  const { user } = OmangaState;
+
+  const user = useAuthStore((state) => state.user.user);
+  const isAdmin = useAuthStore((state) => state.isAdmin);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['getAllUniverses'],
+    queryKey: ["getAllUniverses"],
     queryFn: () => getAllUniverses(),
   });
 
@@ -52,9 +55,9 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
   const [idProduct, setIdProduct] = useState<number>();
   const [universeRow, setUniverseRow] = useState<Universe>({
     id: 1,
-    name: '',
-    image_url: '',
-    created_at: '',
+    name: "",
+    image_url: "",
+    created_at: "",
   });
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -98,7 +101,7 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
     }
     if (productsSelectUniverses.length > 0) {
       filteredRows = filteredRows.filter((row) =>
-        productsSelectUniverses.includes(row.name)
+        productsSelectUniverses.includes(row.name),
       );
     }
 
@@ -111,13 +114,13 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
     return (
       <div
         style={{
-          height: '77vh',
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "77vh",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <CircularProgress />
@@ -126,7 +129,11 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
   }
 
   if (error) {
-    redirect('/error');
+    redirect("/error");
+  }
+
+  if (!isAdmin) {
+    redirect("/error");
   }
 
   return (
@@ -134,35 +141,35 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
       <Grid
         container
         sx={{
-          height: '77vh',
-          width: '85%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
+          height: "77vh",
+          width: "85%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <Grid
           item
           sx={{
-            height: '7vh',
-            fontSize: '1.6rem',
+            height: "7vh",
+            fontSize: "1.6rem",
             color: `${materialUITheme.palette.primary.main}`,
-            [theme.breakpoints.down('md')]: {
-              fontSize: '1.3rem',
+            [theme.breakpoints.down("md")]: {
+              fontSize: "1.3rem",
             },
-            [theme.breakpoints.down('sm')]: {
-              fontSize: '1rem',
+            [theme.breakpoints.down("sm")]: {
+              fontSize: "1rem",
             },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           <p> Univers </p>
           <Button
-            variant='outlined'
-            size='small'
+            variant="outlined"
+            size="small"
             onClick={() => handleCreate()}
           >
             <AddIcon /> Ajouter un univers
@@ -172,15 +179,15 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
           container
           spacing={2}
           sx={{
-            marginTop: '3rem',
-            marginBottom: '1rem',
-            width: '100%',
-            flex: '0',
+            marginTop: "3rem",
+            marginBottom: "1rem",
+            width: "100%",
+            flex: "0",
           }}
         >
           <Grid item xs={6}>
             <TextFieldTable
-              label={'ID commande'}
+              label={"ID commande"}
               value={idProduct}
               onChange={handleIdProductChange}
             />
@@ -188,7 +195,7 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
           <Grid item xs={6}>
             <MultipleSelect
               selectItems={universesSelect}
-              selectName={'Univers'}
+              selectName={"Univers"}
               onChange={handleUniversChange}
             />
           </Grid>
@@ -196,11 +203,11 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
         <Grid
           item
           sx={{
-            width: '100%',
-            flex: '1',
-            overflowY: 'auto',
-            maxHeight: '100%',
-            marginBottom: '1rem',
+            width: "100%",
+            flex: "1",
+            overflowY: "auto",
+            maxHeight: "100%",
+            marginBottom: "1rem",
           }}
         >
           <TableContainer>
@@ -221,16 +228,16 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
                     <TableCell>{row.name}</TableCell>
                     <TableCell>
                       <Button
-                        variant='outlined'
-                        size='small'
+                        variant="outlined"
+                        size="small"
                         onClick={() => handleUpdate(row)}
-                        style={{ marginRight: '1rem' }}
+                        style={{ marginRight: "1rem" }}
                       >
                         <SystemUpdateAltIcon />
                       </Button>
                       <Button
-                        variant='outlined'
-                        size='small'
+                        variant="outlined"
+                        size="small"
                         onClick={() => handleDelete(row)}
                       >
                         <DeleteOutlineIcon />
@@ -246,23 +253,23 @@ const UniversesTableView: React.FC<UniversesTableViewProps> = () => {
       <ModalTable open={openCreateModal} handleClose={handleCloseCreateModal}>
         <UniverseForm
           onClose={handleCloseCreateModal}
-          userMail={user?.user.email}
-          status='create'
+          userMail={user.email}
+          status="create"
         />
       </ModalTable>
       <ModalTable open={openUpdateModal} handleClose={handleCloseUpdateModal}>
         <UniverseForm
           row={rowItem}
           onClose={handleCloseUpdateModal}
-          userMail={user?.user.email}
-          status='update'
+          userMail={user.email}
+          status="update"
         />
       </ModalTable>
       <ModalTable open={openDeleteModal} handleClose={handleCloseDeleteModal}>
         <DeleteUniverse
           row={universeRow}
           onClose={handleCloseDeleteModal}
-          userMail={user?.user.email}
+          userMail={user.email}
         />
       </ModalTable>
     </>

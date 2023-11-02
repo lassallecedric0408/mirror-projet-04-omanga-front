@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { Theme, useTheme } from "@mui/material/styles";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -30,11 +33,11 @@ const getStyles = (
   };
 };
 
-interface MultipleSelectProps {
+type MultipleSelectProps = {
   selectItems: string[];
   selectName: string;
   onChange: (value: string[]) => void;
-}
+};
 
 const MultipleSelect: React.FC<MultipleSelectProps> = ({
   selectItems,

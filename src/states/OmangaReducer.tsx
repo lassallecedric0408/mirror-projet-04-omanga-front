@@ -1,14 +1,14 @@
-import { Reducer } from 'react';
-import { OmangaActions } from './OmangaActions';
-import { OmangaState } from './OmangaState';
+import { Reducer } from "react";
+import { OmangaActions } from "./OmangaActions";
+import { OmangaState } from "./OmangaState";
 
 const OmangaReducer: Reducer<OmangaState, OmangaActions> = (
   prevState,
-  action
+  action,
 ) => {
   const newState = { ...prevState };
   switch (action.type) {
-    case 'SET_LOGGED_USER': {
+    case "SET_LOGGED_USER": {
       if (newState.user) {
         newState.user.user.id = action.id;
         newState.user.user.firstname = action.firstname;
@@ -23,7 +23,7 @@ const OmangaReducer: Reducer<OmangaState, OmangaActions> = (
       }
       break;
     }
-    case 'SET_UPDATE_USER': {
+    case "SET_UPDATE_USER": {
       if (newState.user) {
         newState.user.user.firstname = action.firstname;
         newState.user.user.lastname = action.lastname;
@@ -34,7 +34,7 @@ const OmangaReducer: Reducer<OmangaState, OmangaActions> = (
       }
       break;
     }
-    case 'SET_LOGOUT_USER': {
+    case "SET_LOGOUT_USER": {
       if (newState.user) {
         newState.user.user.id = action.id;
         newState.user.user.firstname = action.firstname;

@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
-import { materialUITheme } from '../../utils/materialUITheme';
-import { useQuery } from 'react-query';
-import { Link, redirect, useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import useAuthStore from "../../states/OmangaStore";
+import { Link, redirect, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+
+import { getOneProduct } from "../../services/products";
+import { ModalTable } from "../../components/ModalTable";
+import { AddReviewForm } from "./AddReviewForm";
+import { OrderProductForm } from "./OrderProductForm";
+
 import {
   Button,
   Stack,
@@ -11,14 +17,9 @@ import {
   useTheme,
   Typography,
   styled,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-
-import { getOneProduct } from '../../services/products';
-import { ModalTable } from '../../components/ModalTable';
-import { AddReviewForm } from './AddReviewForm';
-import { OrderProductForm } from './OrderProductForm';
-import useAuthStore from '../../states/OmangaStore';
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { materialUITheme } from "../../utils/materialUITheme";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: `${materialUITheme.palette.primary.main}`,
@@ -26,15 +27,14 @@ const Item = styled(Paper)(({ theme }) => ({
   color: `${materialUITheme.palette.secondary.main}`,
 }));
 
-interface ProductViewProps {}
-
-const ProductView: React.FC<ProductViewProps> = () => {
+const ProductView: React.FC = () => {
   const theme = useTheme();
+
   const isLogged = useAuthStore((state) => state.isLogged);
   let { id } = useParams();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['getOneProduct', id],
+    queryKey: ["getOneProduct", id],
     queryFn: () => getOneProduct(Number(id)),
   });
 
@@ -50,13 +50,13 @@ const ProductView: React.FC<ProductViewProps> = () => {
     return (
       <div
         style={{
-          height: '77vh',
-          width: '80%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          height: "77vh",
+          width: "80%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <CircularProgress />
@@ -65,7 +65,7 @@ const ProductView: React.FC<ProductViewProps> = () => {
   }
 
   if (error) {
-    redirect('/error');
+    redirect("/error");
   }
 
   return (
@@ -73,14 +73,14 @@ const ProductView: React.FC<ProductViewProps> = () => {
       <Grid
         container
         sx={{
-          height: '77vh',
-          width: '90%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          overflowY: 'auto',
-          maxHeight: '100%',
-          '&::-webkit-scrollbar': {
-            display: 'none',
+          height: "77vh",
+          width: "90%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          overflowY: "auto",
+          maxHeight: "100%",
+          "&::-webkit-scrollbar": {
+            display: "none",
           },
         }}
       >
@@ -90,17 +90,17 @@ const ProductView: React.FC<ProductViewProps> = () => {
           sm={12}
           md={12}
           sx={{
-            height: '10vh',
-            fontSize: '1.6rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            height: "10vh",
+            fontSize: "1.6rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             color: `${materialUITheme.palette.primary.main}`,
-            [theme.breakpoints.down('md')]: {
-              fontSize: '1.3rem',
+            [theme.breakpoints.down("md")]: {
+              fontSize: "1.3rem",
             },
-            [theme.breakpoints.down('sm')]: {
-              fontSize: '1rem',
+            [theme.breakpoints.down("sm")]: {
+              fontSize: "1rem",
             },
           }}
         >
@@ -109,18 +109,18 @@ const ProductView: React.FC<ProductViewProps> = () => {
         <Grid
           container
           sx={{
-            marginBottom: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            marginBottom: "2rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Grid item xs={12} sm={12} md={8}>
             <p
               style={{
-                lineHeight: '2.5rem',
-                fontSize: '1.3rem',
-                fontFamily: 'Caveat',
+                lineHeight: "2.5rem",
+                fontSize: "1.3rem",
+                fontFamily: "Caveat",
               }}
             >
               {data?.data.description}
@@ -132,30 +132,30 @@ const ProductView: React.FC<ProductViewProps> = () => {
             sm={12}
             md={4}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
             }}
           >
             <img
               src={data?.data.image_url}
               alt={data?.data.name}
-              width='300'
-              height='300'
+              width="300"
+              height="300"
             />
             <Typography
-              variant='h6'
-              color='primary'
-              sx={{ margin: '1rem 0 1rem 0' }}
+              variant="h6"
+              color="primary"
+              sx={{ margin: "1rem 0 1rem 0" }}
             >
               {data?.data.price} €
             </Typography>
             {isLogged ? (
               <Button
-                variant='contained'
-                color='primary'
-                style={{ marginTop: '2rem' }}
+                variant="contained"
+                color="primary"
+                style={{ marginTop: "2rem" }}
                 onClick={handleOpenOrderModal}
               >
                 Réserver le produit
@@ -163,7 +163,7 @@ const ProductView: React.FC<ProductViewProps> = () => {
             ) : (
               <small>
                 Vous voulez réserver ce produit?&nbsp;
-                <Link to='/login'>Connectez-vous</Link>
+                <Link to="/login">Connectez-vous</Link>
               </small>
             )}
           </Grid>
@@ -171,23 +171,23 @@ const ProductView: React.FC<ProductViewProps> = () => {
         <Grid
           container
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Grid
             item
             sx={{
-              width: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              width: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
             <Typography
-              variant='h5'
-              color='primary'
-              sx={{ margin: '0 0 1rem 0' }}
+              variant="h5"
+              color="primary"
+              sx={{ margin: "0 0 1rem 0" }}
             >
               Avis
             </Typography>
@@ -200,25 +200,25 @@ const ProductView: React.FC<ProductViewProps> = () => {
           <Grid item>
             <Stack
               spacing={2}
-              sx={{ width: '100%', height: '100%', marginBottom: '1rem' }}
+              sx={{ width: "100%", height: "100%", marginBottom: "1rem" }}
             >
               {data?.data.reviews.map((review, index) => {
                 return (
                   <Item key={index}>
                     <Stack>
                       <Typography
-                        variant='h6'
-                        display='block'
+                        variant="h6"
+                        display="block"
                         gutterBottom
-                        sx={{ fontFamily: 'Caveat' }}
+                        sx={{ fontFamily: "Caveat" }}
                       >
                         {review.user_id}
                       </Typography>
                       <Typography
-                        variant='subtitle1'
-                        display='block'
+                        variant="subtitle1"
+                        display="block"
                         gutterBottom
-                        sx={{ fontFamily: 'Caveat' }}
+                        sx={{ fontFamily: "Caveat" }}
                       >
                         {review.content}
                       </Typography>

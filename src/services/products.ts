@@ -1,129 +1,130 @@
-import { type Product } from '../models/Product'
-import { refreshToken } from './refreshToken'
+import { type Product } from "../models/Product";
+import { refreshToken } from "./refreshToken";
 
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL = process.env.REACT_APP_API_URL;
 
-interface GetAllProductsReturn {
-  data: Product[]
-}
-
+type GetAllProductsReturn = {
+  data: Product[];
+};
 const getAllProducts = async (): Promise<GetAllProductsReturn> => {
   const response = await fetch(`${API_URL}/products`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': `${API_URL}`
-    }
-  })
-  const data = await response.json()
-  return { data }
-}
+      "Content-Type": "application/json",
+    },
+    mode: "cors",
+  });
+  const data = await response.json();
+  return { data };
+};
 
-const getOneProduct = async (id: number): Promise<{
-  data: Product
+const getOneProduct = async (
+  id: number,
+): Promise<{
+  data: Product;
 }> => {
-  const response = await fetch(API_URL + '/products/' + id, {
-    method: 'GET',
+  const response = await fetch(`${API_URL}/products/${id}`, {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': `${API_URL}`
-    }
-  })
-  const data: Product = await response.json()
-  return { data }
-}
-interface productRequest {
-  stock: number
-  name: string
-  description: string
-  image_url: string | undefined
-  price: number
-  category_id: number
-  universe_id: number
-}
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": `${API_URL}`,
+    },
+    mode: "cors",
+  });
+  const data: Product = await response.json();
+  return { data };
+};
 
-interface productResponse {
-  message: string
+type productRequest = {
+  stock: number;
+  name: string;
+  description: string;
+  image_url: string | undefined;
+  price: number;
+  category_id: number;
+  universe_id: number;
+};
+
+type productResponse = {
+  message: string;
   result: {
-    id: number
-    stock: number
-    name: string
-    description: string
-    image_url: string
-    price: string
-    created_at: string
-    updated_at: string
-    category_id: number
-    universe_id: number
-  }
-}
+    id: number;
+    stock: number;
+    name: string;
+    description: string;
+    image_url: string;
+    price: string;
+    created_at: string;
+    updated_at: string;
+    category_id: number;
+    universe_id: number;
+  };
+};
 
 const createOneProduct = async (
   productRequest: productRequest,
-  userMail: string | undefined,
-  userId: number | undefined
+  email: string | undefined,
 ): Promise<{
-  data: productResponse
+  data: productResponse;
 }> => {
-  const token = await refreshToken(userMail)
-
+  const token = await refreshToken(email);
   const response = await fetch(`${API_URL}/products`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token.data}`,
-      'Access-Control-Allow-Origin': `${API_URL}`
     },
-    body: JSON.stringify(productRequest)
-  })
-  const data: productResponse = await response.json()
-
-  return { data }
-}
+    body: JSON.stringify(productRequest),
+    mode: "cors",
+  });
+  const data: productResponse = await response.json();
+  return { data };
+};
 
 const updateOneProduct = async (
   id: number | undefined,
+  email: string | undefined,
   productRequest: productRequest,
-  userMail: string | undefined,
-  userId: number | undefined
 ): Promise<{
-  data: productResponse
+  data: productResponse;
 }> => {
-  const token = await refreshToken(userMail)
-
+  const token = await refreshToken(email);
   const response = await fetch(`${API_URL}/products/${id}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token.data}`,
-      'Access-Control-Allow-Origin': `${API_URL}`
     },
-    body: JSON.stringify(productRequest)
-  })
-  const data: productResponse = await response.json()
-  return { data }
-}
+    body: JSON.stringify(productRequest),
+    mode: "cors",
+  });
+  const data: productResponse = await response.json();
+  return { data };
+};
 
-const deleteOneProduct = async (id: number, userMail: string | undefined): Promise<{
-  data: productResponse
+const deleteOneProduct = async (
+  id: number,
+  email: string | undefined,
+): Promise<{
+  data: productResponse;
 }> => {
-  const token = await refreshToken(userMail)
+  const token = await refreshToken(email);
   const response = await fetch(`${API_URL}/products/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token.data}`,
-      'Access-Control-Allow-Origin': `${API_URL}`
-    }
-  })
-  const data: productResponse = await response.json()
-  return { data }
-}
+    },
+    mode: "cors",
+  });
+  const data: productResponse = await response.json();
+  return { data };
+};
 
 export {
   getAllProducts,
   getOneProduct,
   createOneProduct,
   updateOneProduct,
-  deleteOneProduct
-}
+  deleteOneProduct,
+};

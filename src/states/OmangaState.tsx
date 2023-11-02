@@ -1,28 +1,28 @@
-import { type User } from '../models/User';
-import useAuthStore from './OmangaStore';
+import { type User } from "../models/User";
+import useAuthStore from "./OmangaStore";
 
-export interface OmangaState {
+export type OmangaState = {
   user: User | undefined;
   isLogged: boolean;
   isAdmin: boolean;
-}
+};
 
 const OmangaDefaultState = (): OmangaState => {
   const defaultState: OmangaState = {
     user: {
-      message: '',
+      message: "",
       user: {
         id: 1,
-        firstname: '',
-        lastname: '',
-        email: '',
-        image_url: '',
-        role: 'USER',
-        city: '',
-        zip_code: '',
+        firstname: "",
+        lastname: "",
+        email: "",
+        image_url: "",
+        role: "USER",
+        city: "",
+        zip_code: "",
       },
-      accessToken: '',
-      refreshToken: '',
+      accessToken: "",
+      refreshToken: "",
     },
     isLogged: false,
     isAdmin: false,

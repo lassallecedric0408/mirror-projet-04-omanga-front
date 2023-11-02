@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { useMutation } from "react-query";
+
+import { snackBarAlert } from "../../utils/snackBarAlert";
+import { Category } from "../../models/Category";
+import { deleteOneCategory } from "../../services/categories";
+
 import {
   Stack,
   Button,
@@ -9,15 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 
-import { snackBarAlert } from "../../utils/snackBarAlert";
-import { Category } from "../../models/Category";
-import { deleteOneCategory } from "../../services/categories";
-
-interface DeleteCategoryProps {
+type DeleteCategoryProps = {
   row: Category;
   onClose: () => void;
   userMail: string | undefined;
-}
+};
 
 const DeleteCategory: React.FC<DeleteCategoryProps> = ({
   row,

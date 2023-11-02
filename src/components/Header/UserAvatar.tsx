@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import useAuthStore from "../../states/OmangaStore";
 
-import { Tooltip, IconButton, Avatar } from '@mui/material';
-import { materialUITheme } from '../../utils/materialUITheme';
+import { Tooltip, IconButton, Avatar } from "@mui/material";
+import { materialUITheme } from "../../utils/materialUITheme";
 
-import useAuthStore from '../../states/OmangaStore';
-
-interface UserAvatarProps {
+type UserAvatarProps = {
   handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void;
-}
+};
 
 const UserAvatar: React.FC<UserAvatarProps> = ({ handleOpenUserMenu }) => {
   const user = useAuthStore((state) => state.user);
@@ -26,15 +25,15 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ handleOpenUserMenu }) => {
 
   return (
     <>
-      <Tooltip title='Paramètre utilisateur'>
+      <Tooltip title="Paramètre utilisateur">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar
             style={{
               backgroundColor: `${materialUITheme.palette.secondary.main}`,
               color: `${materialUITheme.palette.primary.main}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             {userInitial}

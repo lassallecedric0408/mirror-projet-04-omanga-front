@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { useOmangaContex } from "../context/OmangaContext";
 
 const OmangaTestReducerComponent = () => {
@@ -6,15 +6,15 @@ const OmangaTestReducerComponent = () => {
   const { user } = OmangaState;
   const handleClick = () => {
     dispatch({
-      type: 'SET_LOGGED_USER',
+      type: "SET_LOGGED_USER",
       id: 1,
-      firstname: 'John',
-      lastname: 'Doe',
-      email: 'test@example.com',
-      image_url: 'image.jpg',
-      role: 'ADMIN',
-      city: 'Sample City',
-      zip_code: '12345',
+      firstname: "John",
+      lastname: "Doe",
+      email: "test@example.com",
+      image_url: "image.jpg",
+      role: "ADMIN",
+      city: "Sample City",
+      zip_code: "12345",
       isLogged: true,
       isAdmin: false,
     });

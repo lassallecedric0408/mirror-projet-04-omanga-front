@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+
 import { SelectItem } from "../../models/SelectItem";
 
-interface SingleSelectProps {
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+
+type SingleSelectProps = {
   selectItems: SelectItem[];
   selectName: string | "users" | "admin" | "user";
   onChange: (value: string | "users" | "admin" | "user") => void;
-}
+};
 
 const SingleSelect: React.FC<SingleSelectProps> = ({
   selectItems,

@@ -1,11 +1,11 @@
 import React from "react";
-import { Stack, useTheme } from "@mui/material";
+
 import { materialUITheme } from "../../utils/materialUITheme";
+
+import { Stack, useTheme } from "@mui/material";
 import error from "../../assets/error.jpg";
 
-interface ErrorViewProps {}
-
-const ErrorView: React.FC<ErrorViewProps> = () => {
+const ErrorView: React.FC = () => {
   const theme = useTheme();
 
   return (

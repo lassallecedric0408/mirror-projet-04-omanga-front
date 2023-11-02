@@ -1,14 +1,17 @@
 import React from "react";
-import { Typography, Box, IconButton, Menu } from "@mui/material";
+
 import { NavLinks } from "./NavLinks";
-import logo from "../../assets/logo.png";
+
+import { Typography, Box, IconButton, Menu } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-interface MobileMenuProps {
+import logo from "../../assets/logo.png";
+
+type MobileMenuProps = {
   handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void;
   handleCloseNavMenu: () => void;
   anchorElNav: null | HTMLElement;
-}
+};
 
 const MobileMenu: React.FC<MobileMenuProps> = ({
   anchorElNav,
