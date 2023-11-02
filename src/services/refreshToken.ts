@@ -11,7 +11,7 @@ const refreshToken = async (
 ): Promise<{
   data: string;
 }> => {
-  const refreshToken = localStorage.getItem(`refreshToken/${email}`);
+  const refreshToken = await localStorage.getItem(`refreshToken/${email}`);
   const refreshTokenBody = {
     refreshToken,
   };
@@ -27,8 +27,8 @@ const refreshToken = async (
   const dataRefreshToken: refreshTokenUserReturn =
     await refreshUserToken.json();
 
-  localStorage.setItem(`accessToken/${email}`, dataRefreshToken.accessToken);
-  localStorage.setItem(`refreshToken/${email}`, dataRefreshToken.refreshToken);
+  await localStorage.setItem(`accessToken/${email}`, dataRefreshToken.accessToken);
+  await localStorage.setItem(`refreshToken/${email}`, dataRefreshToken.refreshToken);
   return { data: dataRefreshToken.accessToken };
 };
 

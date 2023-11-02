@@ -25,38 +25,6 @@ import { refreshAccessToken } from './services/refreshToken';
 
 function App() {
   const isAdmin = useAuthStore((state) => state.isAdmin);
-  const accessToken = useAuthStore((state) => state.user.accessToken);
-  const refreshToken = useAuthStore((state) => state.user.refreshToken);
-
-  const { mutate } = useMutation({
-    mutationKey: ['deleteRow', { refreshToken }],
-    mutationFn: () => refreshAccessToken(refreshToken),
-    onSettled: (data) => {
-      if (data) {
-        useAuthStore().updateToken(
-          data.data.accessToken,
-          data.data.refreshToken
-        );
-      }
-    },
-  });
-
-  const checkIfTokenIsValid = async () => {
-    if (accessToken) {
-      const jwt = jwtDecode(accessToken);
-      const current_time = Date.now() / 1000;
-      if (jwt && jwt.exp && jwt.exp < current_time) {
-        await mutate();
-      }
-    } else {
-      return;
-    }
-  };
-
-  useEffect(() => {
-    checkIfTokenIsValid();
-    console.log('App mounted');
-  }, []);
 
   return (
     <>
